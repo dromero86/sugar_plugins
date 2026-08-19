@@ -1,0 +1,45 @@
+{
+    "name": "mcp_server",
+    "version": "1.0.0",
+    "description": "Native MCP Server plugin for Sugar Language",
+    "author": "Sugar Team",
+    "license": "MIT",
+    "main_class": "MCPServerPlugin",
+    "module_path": "src.MCPServerPlugin",
+    "dependencies": [],
+    "requirements": [],
+    "system_dependencies": [],
+    "hardware_requirements": {
+        "min_ram_gb": 1,
+        "min_disk_gb": 0.1,
+        "min_cpu_cores": 1
+    },
+    "permission_requirements": {
+        "network_access": true,
+        "write_access": ["/tmp"],
+        "read_access": ["./"]
+    },
+    "commands": [
+        "start_server",
+        "stop_server",
+        "register_tool",
+        "register_resource",
+        "list_tools",
+        "list_resources",
+        "get_server_status",
+        "test_connection"
+    ],
+    "capabilities": {
+        "protocols": ["websocket", "tcp"],
+        "tools": [
+            "execute_sugar_script",
+            "read_file",
+            "write_file",
+            "http_request"
+        ],
+        "resources": [
+            "sugar://docs/language/README.md",
+            "sugar://examples/README.md"
+        ]
+    }
+}

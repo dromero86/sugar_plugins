@@ -1,0 +1,25 @@
+{
+  "name": "rar",
+  "version": "1.0.0",
+  "description": "Plugin RAR para Sugar",
+  "author": "Sugar Team",
+  "main": "src/rar_plugin.py",
+  "dependencies": ["rarfile>=4.0"],
+  "system_dependencies": ["unrar", "rar"],
+  "commands": [
+    "rar_compress",
+    "rar_extract", 
+    "rar_info",
+    "rar_list",
+    "rar_test",
+    "rar_convert",
+    "rar_merge",
+    "rar_split",
+    "sdk_info",
+    "list_formats",
+    "test_sdk",
+    "check_dependencies",
+    "system_info",
+    "test_functionality"
+  ]
+}

@@ -1,0 +1,808 @@
+{
+  "plugin_name": "ssh",
+  "version": "1.0.0",
+  "description": "SSH plugin for Sugar with comprehensive remote server management",
+  "author": "Sugar Team",
+  "license": "MIT",
+  "dependencies": ["paramiko", "cryptography"],
+  "requirements": ["paramiko>=3.0.0", "cryptography>=3.4.0"],
+  
+  "commands": {
+    "connect": {
+      "description": "Establish SSH connection to remote server",
+      "required_params": ["host", "username"],
+      "optional_params": ["password", "private_key", "passphrase", "port", "timeout", "session_name"],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "connect",
+          "host": "192.168.1.100",
+          "username": "admin",
+          "password": "adminpass",
+          "session_name": "server1",
+          "result": "connection_status"
+        }
+      }
+    },
+    
+    "disconnect": {
+      "description": "Close SSH session",
+      "required_params": [],
+      "optional_params": ["session_name"],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "disconnect",
+          "session_name": "server1",
+          "result": "disconnect_status"
+        }
+      }
+    },
+    
+    "list_sessions": {
+      "description": "List all active SSH sessions",
+      "required_params": [],
+      "optional_params": [],
+      "returns": "array",
+      "example": {
+        "ssh": {
+          "operator": "list_sessions",
+          "result": "active_sessions"
+        }
+      }
+    },
+    
+    "close_session": {
+      "description": "Close specific SSH session",
+      "required_params": ["session_name"],
+      "optional_params": [],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "close_session",
+          "session_name": "server1",
+          "result": "close_status"
+        }
+      }
+    },
+    
+    "close_all_sessions": {
+      "description": "Close all active SSH sessions",
+      "required_params": [],
+      "optional_params": [],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "close_all_sessions",
+          "result": "close_all_status"
+        }
+      }
+    },
+    
+    "execute": {
+      "description": "Execute command on remote server",
+      "required_params": ["session", "command"],
+      "optional_params": ["timeout"],
+      "returns": "object",
+      "response_format": {
+        "stdout": "string",
+        "stderr": "string",
+        "exit_code": "integer",
+        "success": "boolean"
+      },
+      "example": {
+        "ssh": {
+          "operator": "execute",
+          "session": "server1",
+          "command": "ls -la /var/www",
+          "timeout": 60,
+          "result": "command_result"
+        }
+      }
+    },
+    
+    "execute_interactive": {
+      "description": "Execute interactive commands on remote server",
+      "required_params": ["session", "commands"],
+      "optional_params": ["timeout"],
+      "returns": "object",
+      "response_format": {
+        "output": "string",
+        "success": "boolean"
+      },
+      "example": {
+        "ssh": {
+          "operator": "execute_interactive",
+          "session": "server1",
+          "commands": ["cd /var/www", "ls -la", "pwd"],
+          "timeout": 120,
+          "result": "interactive_result"
+        }
+      }
+    },
+    
+    "upload": {
+      "description": "Upload file to remote server",
+      "required_params": ["session", "local_path", "remote_path"],
+      "optional_params": [],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "upload",
+          "session": "server1",
+          "local_path": "/local/file.txt",
+          "remote_path": "/remote/file.txt",
+          "result": "upload_status"
+        }
+      }
+    },
+    
+    "download": {
+      "description": "Download file from remote server",
+      "required_params": ["session", "remote_path", "local_path"],
+      "optional_params": [],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "download",
+          "session": "server1",
+          "remote_path": "/remote/file.txt",
+          "local_path": "/local/file.txt",
+          "result": "download_status"
+        }
+      }
+    },
+    
+    "upload_dir": {
+      "description": "Upload directory to remote server",
+      "required_params": ["session", "local_dir", "remote_dir"],
+      "optional_params": ["exclude"],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "upload_dir",
+          "session": "server1",
+          "local_dir": "/local/directory",
+          "remote_dir": "/remote/directory",
+          "exclude": ["*.log", "*.tmp"],
+          "result": "upload_dir_status"
+        }
+      }
+    },
+    
+    "download_dir": {
+      "description": "Download directory from remote server",
+      "required_params": ["session", "remote_dir", "local_dir"],
+      "optional_params": ["exclude"],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "download_dir",
+          "session": "server1",
+          "remote_dir": "/remote/directory",
+          "local_dir": "/local/directory",
+          "exclude": ["*.log", "*.tmp"],
+          "result": "download_dir_status"
+        }
+      }
+    },
+    
+    "mkdir": {
+      "description": "Create directory on remote server",
+      "required_params": ["session", "path"],
+      "optional_params": ["permissions"],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "mkdir",
+          "session": "server1",
+          "path": "/var/www/newdir",
+          "permissions": "755",
+          "result": "mkdir_status"
+        }
+      }
+    },
+    
+    "rm": {
+      "description": "Remove file or directory on remote server",
+      "required_params": ["session", "path"],
+      "optional_params": ["recursive", "force"],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "rm",
+          "session": "server1",
+          "path": "/var/www/oldfile.txt",
+          "recursive": false,
+          "force": true,
+          "result": "rm_status"
+        }
+      }
+    },
+    
+    "ls": {
+      "description": "List files and directories on remote server",
+      "required_params": ["session"],
+      "optional_params": ["path", "detailed"],
+      "returns": "array",
+      "response_format": [
+        {
+          "permissions": "string",
+          "links": "string",
+          "owner": "string",
+          "group": "string",
+          "size": "string",
+          "date": "string",
+          "name": "string"
+        }
+      ],
+      "example": {
+        "ssh": {
+          "operator": "ls",
+          "session": "server1",
+          "path": "/var/www",
+          "detailed": true,
+          "result": "file_list"
+        }
+      }
+    },
+    
+    "chmod": {
+      "description": "Change file permissions on remote server",
+      "required_params": ["session", "path", "permissions"],
+      "optional_params": ["recursive"],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "chmod",
+          "session": "server1",
+          "path": "/var/www/file.txt",
+          "permissions": "644",
+          "recursive": false,
+          "result": "chmod_status"
+        }
+      }
+    },
+    
+    "chown": {
+      "description": "Change file ownership on remote server",
+      "required_params": ["session", "path", "user"],
+      "optional_params": ["group", "recursive"],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "chown",
+          "session": "server1",
+          "path": "/var/www/file.txt",
+          "user": "www-data",
+          "group": "www-data",
+          "recursive": false,
+          "result": "chown_status"
+        }
+      }
+    },
+    
+    "create_tunnel": {
+      "description": "Create local port forwarding tunnel",
+      "required_params": ["session", "tunnel_name", "local_port", "remote_host", "remote_port"],
+      "optional_params": [],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "create_tunnel",
+          "session": "server1",
+          "tunnel_name": "web_tunnel",
+          "local_port": 8080,
+          "remote_host": "localhost",
+          "remote_port": 80,
+          "result": "tunnel_status"
+        }
+      }
+    },
+    
+    "create_reverse_tunnel": {
+      "description": "Create reverse port forwarding tunnel",
+      "required_params": ["session", "tunnel_name", "remote_port", "local_host", "local_port"],
+      "optional_params": [],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "create_reverse_tunnel",
+          "session": "server1",
+          "tunnel_name": "reverse_tunnel",
+          "remote_port": 8080,
+          "local_host": "localhost",
+          "local_port": 80,
+          "result": "reverse_tunnel_status"
+        }
+      }
+    },
+    
+    "close_tunnel": {
+      "description": "Close SSH tunnel",
+      "required_params": ["tunnel_name"],
+      "optional_params": [],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "close_tunnel",
+          "tunnel_name": "web_tunnel",
+          "result": "close_tunnel_status"
+        }
+      }
+    },
+    
+    "list_tunnels": {
+      "description": "List all active SSH tunnels",
+      "required_params": [],
+      "optional_params": [],
+      "returns": "array",
+      "example": {
+        "ssh": {
+          "operator": "list_tunnels",
+          "result": "active_tunnels"
+        }
+      }
+    },
+    
+    "system_info": {
+      "description": "Get system information from remote server",
+      "required_params": ["session"],
+      "optional_params": [],
+      "returns": "object",
+      "response_format": {
+        "uname": "string",
+        "os_release": "string",
+        "kernel": "string",
+        "architecture": "string",
+        "memory": "string",
+        "disk": "string",
+        "uptime": "string",
+        "cpu": "string"
+      },
+      "example": {
+        "ssh": {
+          "operator": "system_info",
+          "session": "server1",
+          "result": "system_info"
+        }
+      }
+    },
+    
+    "list_processes": {
+      "description": "List processes on remote server",
+      "required_params": ["session"],
+      "optional_params": ["user"],
+      "returns": "array",
+      "response_format": [
+        {
+          "user": "string",
+          "pid": "string",
+          "cpu": "string",
+          "mem": "string",
+          "vsz": "string",
+          "rss": "string",
+          "tty": "string",
+          "stat": "string",
+          "start": "string",
+          "time": "string",
+          "command": "string"
+        }
+      ],
+      "example": {
+        "ssh": {
+          "operator": "list_processes",
+          "session": "server1",
+          "user": "www-data",
+          "result": "process_list"
+        }
+      }
+    },
+    
+    "kill_process": {
+      "description": "Kill process on remote server",
+      "required_params": ["session", "pid"],
+      "optional_params": ["signal"],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "kill_process",
+          "session": "server1",
+          "pid": 1234,
+          "signal": "SIGTERM",
+          "result": "kill_status"
+        }
+      }
+    },
+    
+    "service_control": {
+      "description": "Control system services on remote server",
+      "required_params": ["session", "service", "action"],
+      "optional_params": [],
+      "returns": "boolean",
+      "valid_actions": ["start", "stop", "restart", "status", "enable", "disable"],
+      "example": {
+        "ssh": {
+          "operator": "service_control",
+          "session": "server1",
+          "service": "nginx",
+          "action": "restart",
+          "result": "service_status"
+        }
+      }
+    },
+    
+    "test_connection": {
+      "description": "Test SSH connection without establishing session",
+      "required_params": ["host", "username"],
+      "optional_params": ["password", "private_key", "passphrase", "port", "timeout"],
+      "returns": "boolean",
+      "example": {
+        "ssh": {
+          "operator": "test_connection",
+          "host": "192.168.1.100",
+          "username": "admin",
+          "password": "adminpass",
+          "result": "test_result"
+        }
+      }
+    }
+  },
+  
+  "parameter_types": {
+    "host": {
+      "type": "string",
+      "description": "Remote server hostname or IP address",
+      "required": true
+    },
+    "username": {
+      "type": "string",
+      "description": "SSH username",
+      "required": true
+    },
+    "password": {
+      "type": "string",
+      "description": "SSH password",
+      "required": false
+    },
+    "private_key": {
+      "type": "string",
+      "description": "Path to private key file",
+      "required": false
+    },
+    "passphrase": {
+      "type": "string",
+      "description": "Passphrase for private key",
+      "required": false
+    },
+    "port": {
+      "type": "integer",
+      "description": "SSH port",
+      "default": 22,
+      "required": false
+    },
+    "timeout": {
+      "type": "integer",
+      "description": "Connection timeout in seconds",
+      "default": 30,
+      "required": false
+    },
+    "session_name": {
+      "type": "string",
+      "description": "Name for the SSH session",
+      "default": "default",
+      "required": false
+    },
+    "session": {
+      "type": "string",
+      "description": "SSH session name to use",
+      "required": true
+    },
+    "command": {
+      "type": "string",
+      "description": "Command to execute",
+      "required": true
+    },
+    "commands": {
+      "type": "array",
+      "description": "List of commands to execute interactively",
+      "items": {
+        "type": "string"
+      },
+      "required": true
+    },
+    "local_path": {
+      "type": "string",
+      "description": "Local file path",
+      "required": true
+    },
+    "remote_path": {
+      "type": "string",
+      "description": "Remote file path",
+      "required": true
+    },
+    "local_dir": {
+      "type": "string",
+      "description": "Local directory path",
+      "required": true
+    },
+    "remote_dir": {
+      "type": "string",
+      "description": "Remote directory path",
+      "required": true
+    },
+    "exclude": {
+      "type": "array",
+      "description": "File patterns to exclude from transfer",
+      "items": {
+        "type": "string"
+      },
+      "required": false
+    },
+    "path": {
+      "type": "string",
+      "description": "File or directory path",
+      "required": true
+    },
+    "permissions": {
+      "type": "string",
+      "description": "File permissions (e.g., '755', '644')",
+      "required": false
+    },
+    "recursive": {
+      "type": "boolean",
+      "description": "Apply operation recursively",
+      "default": false,
+      "required": false
+    },
+    "force": {
+      "type": "boolean",
+      "description": "Force operation without confirmation",
+      "default": false,
+      "required": false
+    },
+    "detailed": {
+      "type": "boolean",
+      "description": "Include detailed file information",
+      "default": false,
+      "required": false
+    },
+    "user": {
+      "type": "string",
+      "description": "User name",
+      "required": false
+    },
+    "group": {
+      "type": "string",
+      "description": "Group name",
+      "required": false
+    },
+    "tunnel_name": {
+      "type": "string",
+      "description": "Name for the SSH tunnel",
+      "required": true
+    },
+    "local_port": {
+      "type": "integer",
+      "description": "Local port for tunneling",
+      "required": true
+    },
+    "remote_host": {
+      "type": "string",
+      "description": "Remote host for tunneling",
+      "required": true
+    },
+    "remote_port": {
+      "type": "integer",
+      "description": "Remote port for tunneling",
+      "required": true
+    },
+    "local_host": {
+      "type": "string",
+      "description": "Local host for tunneling",
+      "default": "127.0.0.1",
+      "required": false
+    },
+    "pid": {
+      "type": "integer",
+      "description": "Process ID",
+      "required": true
+    },
+    "signal": {
+      "type": "string",
+      "description": "Signal to send to process",
+      "default": "SIGTERM",
+      "required": false
+    },
+    "service": {
+      "type": "string",
+      "description": "Service name",
+      "required": true
+    },
+    "action": {
+      "type": "string",
+      "description": "Service action",
+      "enum": ["start", "stop", "restart", "status", "enable", "disable"],
+      "required": true
+    }
+  },
+  
+  "error_codes": {
+    "authentication_failed": {
+      "code": "SSH_AUTH_FAILED",
+      "description": "SSH authentication failed",
+      "solution": "Check username, password, and key permissions"
+    },
+    "connection_timeout": {
+      "code": "SSH_TIMEOUT",
+      "description": "SSH connection timeout",
+      "solution": "Check network connectivity and firewall settings"
+    },
+    "session_not_found": {
+      "code": "SSH_SESSION_NOT_FOUND",
+      "description": "SSH session not found",
+      "solution": "Establish SSH connection first"
+    },
+    "file_not_found": {
+      "code": "SSH_FILE_NOT_FOUND",
+      "description": "File or directory not found",
+      "solution": "Check file path and permissions"
+    },
+    "permission_denied": {
+      "code": "SSH_PERMISSION_DENIED",
+      "description": "Permission denied",
+      "solution": "Check user privileges and file permissions"
+    },
+    "port_in_use": {
+      "code": "SSH_PORT_IN_USE",
+      "description": "Port already in use",
+      "solution": "Use different port or close existing service"
+    }
+  },
+  
+  "examples": {
+    "basic_connection": {
+      "description": "Basic SSH connection and command execution",
+      "json": {
+        "meta": {"mode": false},
+        "task": [
+          {
+            "ssh": {
+              "operator": "connect",
+              "host": "192.168.1.100",
+              "username": "admin",
+              "password": "adminpass",
+              "session_name": "server1",
+              "result": "connect_status"
+            }
+          },
+          {
+            "if": {
+              "condition": "${connect_status} == true",
+              "then": {
+                "task": [
+                  {
+                    "ssh": {
+                      "operator": "execute",
+                      "session": "server1",
+                      "command": "whoami",
+                      "result": "user_info"
+                    }
+                  },
+                  {
+                    "print": {
+                      "text": "Current user: {{user_info.stdout}}"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    
+    "file_backup": {
+      "description": "Automated file backup using SSH",
+      "json": {
+        "meta": {"mode": false},
+        "task": [
+          {
+            "ssh": {
+              "operator": "connect",
+              "host": "192.168.1.100",
+              "username": "admin",
+              "password": "adminpass",
+              "session_name": "backup",
+              "result": "connect_status"
+            }
+          },
+          {
+            "if": {
+              "condition": "${connect_status} == true",
+              "then": {
+                "task": [
+                  {
+                    "ssh": {
+                      "operator": "execute",
+                      "session": "backup",
+                      "command": "tar -czf /tmp/backup_$(date +%Y%m%d).tar.gz /var/www",
+                      "result": "backup_result"
+                    }
+                  },
+                  {
+                    "ssh": {
+                      "operator": "download",
+                      "session": "backup",
+                      "remote_path": "/tmp/backup_$(date +%Y%m%d).tar.gz",
+                      "local_path": "./backups/",
+                      "result": "download_status"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    
+    "system_monitoring": {
+      "description": "Multi-server system monitoring",
+      "json": {
+        "meta": {"mode": false},
+        "task": [
+          {
+            "let": {
+              "name": "servers",
+              "value": [
+                {"name": "web1", "host": "192.168.1.100", "username": "admin", "password": "adminpass"},
+                {"name": "web2", "host": "192.168.1.101", "username": "admin", "password": "adminpass"}
+              ]
+            }
+          },
+          {
+            "foreach": {
+              "from": "servers",
+              "to": "server",
+              "task": [
+                {
+                  "ssh": {
+                    "operator": "connect",
+                    "host": "{{server.host}}",
+                    "username": "{{server.username}}",
+                    "password": "{{server.password}}",
+                    "session_name": "{{server.name}}",
+                    "result": "connect_status"
+                  }
+                },
+                {
+                  "if": {
+                    "condition": "${connect_status} == true",
+                    "then": {
+                      "task": [
+                        {
+                          "ssh": {
+                            "operator": "system_info",
+                            "session": "{{server.name}}",
+                            "result": "server_info"
+                          }
+                        },
+                        {
+                          "print": {
+                            "pretty": "{{server.name}} System Info:",
+                            "value": "{{server_info}}"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

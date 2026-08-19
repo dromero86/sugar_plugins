@@ -1,0 +1,332 @@
+{
+  "task": [
+    {
+      "print": {
+        "text": "=== SMB PLUGIN - EJEMPLO BÁSICO DE USO ==="
+      }
+    },
+    {
+      "print": {
+        "text": "Este ejemplo demuestra las funcionalidades básicas del plugin SMB"
+      }
+    },
+    {
+      "print": {
+        "text": "=================================================="
+      }
+    },
+    {
+      "let": {
+        "name": "smb_host",
+        "value": "192.168.1.100"
+      }
+    },
+    {
+      "let": {
+        "name": "smb_share",
+        "value": "shared_folder"
+      }
+    },
+    {
+      "let": {
+        "name": "smb_user",
+        "value": "user"
+      }
+    },
+    {
+      "let": {
+        "name": "smb_pass",
+        "value": "password123"
+      }
+    },
+    {
+      "print": {
+        "text": "Configuración: {{smb_user}}@{{smb_host}}/{{smb_share}}"
+      }
+    },
+    {
+      "print": {
+        "text": ""
+      }
+    },
+    {
+      "print": {
+        "text": "=== 1. PRUEBA DE CONEXIÓN ==="
+      }
+    },
+    {
+      "smb": {
+        "operator": "test_connection",
+        "host": "{{smb_host}}",
+        "share": "{{smb_share}}",
+        "username": "{{smb_user}}",
+        "password": "{{smb_pass}}",
+        "result": "connection_test"
+      }
+    },
+    {
+      "print": {
+        "text": "Resultado de la prueba: {{connection_test.status}}"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{connection_test.status}} == 'success'",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Conexión exitosa. Procediendo con las operaciones..."
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 2. CONEXIÓN PERSISTENTE ==="
+              }
+            },
+            {
+              "smb": {
+                "operator": "connect",
+                "host": "{{smb_host}}",
+                "share": "{{smb_share}}",
+                "username": "{{smb_user}}",
+                "password": "{{smb_pass}}",
+                "session_name": "demo_session",
+                "result": "connection_status"
+              }
+            },
+            {
+              "print": {
+                "text": "Estado de conexión: {{connection_status.status}}"
+              }
+            },
+            {
+              "if": {
+                "condition": "{{connection_status.status}} == 'success'",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Sesión establecida. Ejecutando operaciones..."
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": ""
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "=== 3. LISTADO DE DIRECTORIO ==="
+                      }
+                    },
+                    {
+                      "smb": {
+                        "operator": "list_directory",
+                        "session": "demo_session",
+                        "path": "/",
+                        "result": "directory_listing"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Contenido del directorio raíz:"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Total de elementos: {{directory_listing.total_items}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Directorios: {{directory_listing.directories}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Archivos: {{directory_listing.files}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": ""
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "=== 4. CREACIÓN DE DIRECTORIO ==="
+                      }
+                    },
+                    {
+                      "smb": {
+                        "operator": "create_directory",
+                        "session": "demo_session",
+                        "path": "test_folder",
+                        "result": "create_dir_result"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Resultado creación directorio: {{create_dir_result.status}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": ""
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "=== 5. INFORMACIÓN DE SESIÓN ==="
+                      }
+                    },
+                    {
+                      "smb": {
+                        "operator": "get_session_info",
+                        "session": "demo_session",
+                        "result": "session_info"
+                      }
+                    },
+                    {
+              "print": {
+                "text": "ℹInformación de la sesión:"
+              }
+            },
+            {
+              "print": {
+                "text": "Host: {{session_info.session_info.host}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Share: {{session_info.session_info.share}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Usuario: {{session_info.session_info.username}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Tiempo conectado: {{session_info.session_info.connected_duration}} segundos"
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 6. ESTADÍSTICAS DE TRANSFERENCIA ==="
+              }
+            },
+            {
+              "smb": {
+                "operator": "get_transfer_stats",
+                "result": "transfer_stats"
+              }
+            },
+            {
+              "print": {
+                "text": "Estadísticas de transferencia:"
+              }
+            },
+            {
+              "print": {
+                "text": "Total de transferencias: {{transfer_stats.transfer_statistics.total_transfers}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Transferencias exitosas: {{transfer_stats.transfer_statistics.successful_transfers}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Transferencias fallidas: {{transfer_stats.transfer_statistics.failed_transfers}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Bytes totales: {{transfer_stats.transfer_statistics.total_bytes}}"
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 7. DESCONEXIÓN ==="
+              }
+            },
+            {
+              "smb": {
+                "operator": "disconnect",
+                "session": "demo_session",
+                "result": "disconnect_status"
+              }
+            },
+            {
+              "print": {
+                "text": "Estado de desconexión: {{disconnect_status.status}}"
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== EJEMPLO COMPLETADO ==="
+              }
+            },
+            {
+              "print": {
+                "text": "El plugin SMB ha demostrado todas sus funcionalidades básicas"
+              }
+            }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "condition": "{{connection_test.status}} != 'success'",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Error en la conexión: {{connection_test.error}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Detalles: {{connection_test.details}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Verifique la configuración del servidor SMB"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

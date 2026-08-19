@@ -1,0 +1,105 @@
+{
+  "task": [
+    {
+      "docker": {
+        "operator": "run_container",
+        "name": "test_web",
+        "image": "nginx:alpine",
+        "ports": ["8080:80"],
+        "environment": {
+          "NGINX_HOST": "localhost"
+        },
+        "volumes": ["./html:/usr/share/nginx/html"],
+        "restart": "unless-stopped",
+        "labels": {
+          "app": "test_web",
+          "environment": "testing"
+        },
+        "result": "container_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Contenedor web creado: {{container_result}}"
+      }
+    },
+    {
+      "docker": {
+        "operator": "inspect_container",
+        "container_id": "{{container_result.container_id}}",
+        "result": "inspect_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Información del contenedor: {{inspect_result}}"
+      }
+    },
+    {
+      "docker": {
+        "operator": "logs_container",
+        "container_id": "{{container_result.container_id}}",
+        "tail": "10",
+        "timestamps": true,
+        "result": "logs_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Logs del contenedor: {{logs_result.logs}}"
+      }
+    },
+    {
+      "docker": {
+        "operator": "exec_container",
+        "container_id": "{{container_result.container_id}}",
+        "command": "ls -la /usr/share/nginx/html",
+        "result": "exec_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Contenido del directorio web: {{exec_result.stdout}}"
+      }
+    },
+    {
+      "docker": {
+        "operator": "stats_container",
+        "container_id": "{{container_result.container_id}}",
+        "result": "stats_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Estadísticas del contenedor: {{stats_result.stats}}"
+      }
+    },
+    {
+      "docker": {
+        "operator": "stop_container",
+        "container_id": "{{container_result.container_id}}",
+        "timeout": 10,
+        "result": "stop_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Contenedor detenido: {{stop_result}}"
+      }
+    },
+    {
+      "docker": {
+        "operator": "remove_container",
+        "container_id": "{{container_result.container_id}}",
+        "force": true,
+        "volumes": true,
+        "result": "remove_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Contenedor eliminado: {{remove_result}}"
+      }
+    }
+  ]
+}

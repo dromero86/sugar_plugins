@@ -1,0 +1,432 @@
+{
+  "task": [
+    {
+      "print": {
+        "text": "=== SMB PLUGIN - CONFIGURACIÓN CON META PLUGIN ==="
+      }
+    },
+    {
+      "print": {
+        "text": "Este ejemplo demuestra la configuración centralizada con Meta Plugin"
+      }
+    },
+    {
+      "print": {
+        "text": "=================================================="
+      }
+    },
+    {
+      "print": {
+        "text": ""
+      }
+    },
+    {
+      "print": {
+        "text": "=== 1. CONFIGURACIÓN META ==="
+      }
+    },
+    {
+      "meta": {
+        "smb": {
+          "connections": {
+            "main_server": {
+              "host": "192.168.1.100",
+              "share": "shared_folder",
+              "username": "user",
+              "password": "password123",
+              "domain": "WORKGROUP",
+              "port": 445,
+              "timeout": 30,
+              "auto_connect": true
+            },
+            "backup_server": {
+              "host": "192.168.1.101",
+              "share": "backup_share",
+              "username": "backup_user",
+              "password": "backup_pass",
+              "domain": "WORKGROUP",
+              "port": 445,
+              "timeout": 30,
+              "auto_connect": false
+            },
+            "test_server": {
+              "host": "192.168.1.102",
+              "share": "test_share",
+              "username": "test_user",
+              "password": "test_pass",
+              "domain": "TESTDOMAIN",
+              "port": 445,
+              "timeout": 15,
+              "auto_connect": false
+            }
+          },
+          "options": {
+            "default_timeout": 30,
+            "max_retries": 3,
+            "parallel_transfers": 5,
+            "compression_enabled": true,
+            "encryption_enabled": true,
+            "max_workers": 3
+          }
+        }
+      }
+    },
+    {
+      "print": {
+        "text": "Configuración Meta aplicada"
+      }
+    },
+    {
+      "print": {
+        "text": ""
+      }
+    },
+    {
+      "print": {
+        "text": "=== 2. VERIFICACIÓN DE CONEXIONES ==="
+      }
+    },
+    {
+      "print": {
+        "text": "Probando conexión al servidor principal..."
+      }
+    },
+    {
+      "smb": {
+        "operator": "test_connection",
+        "host": "192.168.1.100",
+        "share": "shared_folder",
+        "username": "user",
+        "password": "password123",
+        "result": "main_server_test"
+      }
+    },
+    {
+      "print": {
+        "text": "Servidor principal: {{main_server_test.status}}"
+      }
+    },
+    {
+      "print": {
+        "text": ""
+      }
+    },
+    {
+      "print": {
+        "text": "Probando conexión al servidor de backup..."
+      }
+    },
+    {
+      "smb": {
+        "operator": "test_connection",
+        "host": "192.168.1.101",
+        "share": "backup_share",
+        "username": "backup_user",
+        "password": "backup_pass",
+        "result": "backup_server_test"
+      }
+    },
+    {
+      "print": {
+        "text": "Servidor de backup: {{backup_server_test.status}}"
+      }
+    },
+    {
+      "print": {
+        "text": ""
+      }
+    },
+    {
+      "print": {
+        "text": "=== 3. CONEXIÓN AL SERVIDOR PRINCIPAL ==="
+      }
+    },
+    {
+      "smb": {
+        "operator": "connect",
+        "host": "192.168.1.100",
+        "share": "shared_folder",
+        "username": "user",
+        "password": "password123",
+        "session_name": "main_session",
+        "result": "main_connection"
+      }
+    },
+    {
+      "print": {
+        "text": "Conexión principal: {{main_connection.status}}"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{main_connection.status}} == 'success'",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Sesión principal establecida"
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 4. OPERACIONES CON CONFIGURACIÓN META ==="
+              }
+            },
+            {
+              "smb": {
+                "operator": "list_directory",
+                "session": "main_session",
+                "path": "/",
+                "result": "main_directory"
+              }
+            },
+            {
+              "print": {
+                "text": "Contenido del servidor principal:"
+              }
+            },
+            {
+              "print": {
+                "text": "Total: {{main_directory.total_items}} elementos"
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 5. CONEXIÓN AL SERVIDOR DE BACKUP ==="
+              }
+            },
+            {
+              "smb": {
+                "operator": "connect",
+                "host": "192.168.1.101",
+                "share": "backup_share",
+                "username": "backup_user",
+                "password": "backup_pass",
+                "session_name": "backup_session",
+                "result": "backup_connection"
+              }
+            },
+            {
+              "print": {
+                "text": "Conexión de backup: {{backup_connection.status}}"
+              }
+            },
+            {
+              "if": {
+                "condition": "{{backup_connection.status}} == 'success'",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Sesión de backup establecida"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": ""
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "=== 6. SINCRONIZACIÓN ENTRE SERVIDORES ==="
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Listando contenido del servidor principal..."
+                      }
+                    },
+                    {
+                      "smb": {
+                        "operator": "list_directory",
+                        "session": "main_session",
+                        "path": "/",
+                        "result": "main_files"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Listando contenido del servidor de backup..."
+                      }
+                    },
+                    {
+                      "smb": {
+                        "operator": "list_directory",
+                        "session": "backup_session",
+                        "path": "/",
+                        "result": "backup_files"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Comparación de servidores:"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Servidor principal: {{main_files.total_items}} elementos"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Servidor de backup: {{backup_files.total_items}} elementos"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": ""
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "=== 7. ESTADÍSTICAS DE SESIONES ==="
+                      }
+                    },
+                    {
+                      "smb": {
+                        "operator": "get_session_info",
+                        "session": "main_session",
+                        "result": "main_session_info"
+                      }
+                    },
+                    {
+                      "smb": {
+                        "operator": "get_session_info",
+                        "session": "backup_session",
+                        "result": "backup_session_info"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "ℹInformación de sesiones:"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Sesión principal: {{main_session_info.session_info.host}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Sesión backup: {{backup_session_info.session_info.host}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": ""
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "=== 8. DESCONEXIÓN DE SESIONES ==="
+                      }
+                    },
+                    {
+                      "smb": {
+                        "operator": "disconnect",
+                        "session": "main_session",
+                        "result": "main_disconnect"
+                      }
+                    },
+                    {
+                      "smb": {
+                        "operator": "disconnect",
+                        "session": "backup_session",
+                        "result": "backup_disconnect"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Desconexión principal: {{main_disconnect.status}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Desconexión backup: {{backup_disconnect.status}}"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "if": {
+                "condition": "{{backup_connection.status}} != 'success'",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "No se pudo conectar al servidor de backup"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Continuando solo con el servidor principal..."
+                      }
+                    },
+                    {
+                      "smb": {
+                        "operator": "disconnect",
+                        "session": "main_session",
+                        "result": "main_disconnect"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Desconexión principal: {{main_disconnect.status}}"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "condition": "{{main_connection.status}} != 'success'",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Error en la conexión principal"
+              }
+            },
+            {
+              "print": {
+                "text": "Verifique la configuración del servidor"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "print": {
+        "text": ""
+      }
+    },
+    {
+      "print": {
+        "text": "=== CONFIGURACIÓN META COMPLETADA ==="
+      }
+    },
+    {
+      "print": {
+        "text": "El plugin SMB ha demostrado la configuración centralizada con Meta Plugin"
+      }
+    }
+  ]
+}

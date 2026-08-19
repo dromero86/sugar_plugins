@@ -1,0 +1,39 @@
+{
+  "description": "Template de configuración para el plugin AI Native",
+  "ai_native_config": {
+    "enabled": true,
+    "models": {
+      "code_generation": "auto",
+      "optimization": "auto",
+      "nl_processing": "auto"
+    },
+    "api_keys": {
+      "openai": "sk-your-openai-api-key-here",
+      "anthropic": "sk-ant-your-anthropic-api-key-here",
+      "huggingface": "hf-your-huggingface-token-here"
+    },
+    "local_models": {
+      "enabled": false,
+      "model_path": "./models",
+      "default_model": "codellama-7b-instruct"
+    },
+    "limits": {
+      "max_tokens": 8000,
+      "max_execution_time": 60,
+      "max_memory_usage": "2GB",
+      "max_concurrent_requests": 5
+    },
+    "security": {
+      "code_validation": true,
+      "sandbox_execution": true,
+      "audit_logging": true,
+      "rate_limiting": true,
+      "content_filtering": true
+    },
+    "cache": {
+      "enabled": true,
+      "max_size": "1GB",
+      "ttl_hours": 24
+    }
+  }
+}

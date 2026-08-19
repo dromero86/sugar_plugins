@@ -1,0 +1,326 @@
+{
+    "name": "MCP Server Avanzado",
+    "description": "Ejemplo avanzado de servidor MCP con herramientas y recursos personalizados",
+    "tasks": [
+        {
+            "print": {
+                "text": "Iniciando servidor MCP Server avanzado..."
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "start_server",
+                "host": "0.0.0.0",
+                "port": 3000,
+                "protocol": "tcp",
+                "result": "server_status"
+            }
+        },
+        {
+            "if": {
+                "condition": "${server_status.status} == 'success'",
+                "then": {
+                    "task": [
+                        {
+                            "print": {
+                                "text": "Servidor MCP iniciado exitosamente"
+                            }
+                        },
+                        {
+                            "print": {
+                                "text": "Endpoint: {{server_status.endpoint}}"
+                            }
+                        }
+                    ]
+                },
+                "else": {
+                    "task": [
+                        {
+                            "print": {
+                                "text": "Error al iniciar servidor: {{server_status.message}}"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "print": {
+                "text": "Registrando herramientas personalizadas..."
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "register_tool",
+                "name": "calcular_suma",
+                "description": "Calcular la suma de dos números",
+                "input_schema": {
+                    "type": "object",
+                    "properties": {
+                        "a": {
+                            "type": "number",
+                            "description": "Primer número"
+                        },
+                        "b": {
+                            "type": "number",
+                            "description": "Segundo número"
+                        }
+                    },
+                    "required": ["a", "b"]
+                },
+                "handler": "suma_handler",
+                "result": "tool1_status"
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "register_tool",
+                "name": "validar_email",
+                "description": "Validar formato de dirección de email",
+                "input_schema": {
+                    "type": "object",
+                    "properties": {
+                        "email": {
+                            "type": "string",
+                            "description": "Dirección de email a validar"
+                        }
+                    },
+                    "required": ["email"]
+                },
+                "handler": "email_handler",
+                "result": "tool2_status"
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "register_tool",
+                "name": "generar_uuid",
+                "description": "Generar un UUID único",
+                "input_schema": {
+                    "type": "object",
+                    "properties": {
+                        "version": {
+                            "type": "string",
+                            "enum": ["v4", "v1"],
+                            "default": "v4",
+                            "description": "Versión del UUID"
+                        }
+                    }
+                },
+                "handler": "uuid_handler",
+                "result": "tool3_status"
+            }
+        },
+        {
+            "print": {
+                "text": "Registrando recursos personalizados..."
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "register_resource",
+                "uri": "sugar://config/system.json",
+                "name": "Configuración del Sistema",
+                "description": "Archivo de configuración del sistema Sugar",
+                "mime_type": "application/json",
+                "handler": "config_handler",
+                "result": "resource1_status"
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "register_resource",
+                "uri": "sugar://logs/application.log",
+                "name": "Logs de Aplicación",
+                "description": "Archivo de logs de la aplicación",
+                "mime_type": "text/plain",
+                "handler": "logs_handler",
+                "result": "resource2_status"
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "register_resource",
+                "uri": "sugar://api/endpoints.md",
+                "name": "Documentación de API",
+                "description": "Documentación de endpoints de la API",
+                "mime_type": "text/markdown",
+                "handler": "api_docs_handler",
+                "result": "resource3_status"
+            }
+        },
+        {
+            "print": {
+                "text": "Verificando estado del servidor..."
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "get_server_status",
+                "result": "status_info"
+            }
+        },
+        {
+            "print": {
+                "text": "Estadísticas del servidor:"
+            }
+        },
+        {
+            "print": {
+                "text": "   - Servidor ejecutándose: {{status_info.server_running}}"
+            }
+        },
+        {
+            "print": {
+                "text": "   - Herramientas registradas: {{status_info.tools_count}}"
+            }
+        },
+        {
+            "print": {
+                "text": "   - Recursos registrados: {{status_info.resources_count}}"
+            }
+        },
+        {
+            "print": {
+                "text": "   - Clientes conectados: {{status_info.clients_count}}"
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "list_tools",
+                "result": "tools_list"
+            }
+        },
+        {
+            "print": {
+                "text": "Herramientas disponibles:"
+            }
+        },
+        {
+            "foreach": {
+                "from": "tools_list.tools",
+                "to": "tool",
+                "task": [
+                    {
+                        "print": {
+                            "text": "   - {{tool.name}}: {{tool.description}}"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "list_resources",
+                "result": "resources_list"
+            }
+        },
+        {
+            "print": {
+                "text": "Recursos disponibles:"
+            }
+        },
+        {
+            "foreach": {
+                "from": "resources_list.resources",
+                "to": "resource",
+                "task": [
+                    {
+                        "print": {
+                            "text": "   - {{resource.uri}}: {{resource.name}}"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "print": {
+                "text": "Probando conexión del servidor..."
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "test_connection",
+                "result": "connection_test"
+            }
+        },
+        {
+            "if": {
+                "condition": "${connection_test.status} == 'success'",
+                "then": {
+                    "task": [
+                        {
+                            "print": {
+                                "text": "Prueba de conexión exitosa"
+                            }
+                        }
+                    ]
+                },
+                "else": {
+                    "task": [
+                        {
+                            "print": {
+                                "text": "Error en prueba de conexión: {{connection_test.message}}"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "print": {
+                "text": "Servidor MCP avanzado listo para conexiones"
+            }
+        },
+        {
+            "print": {
+                "text": "Características disponibles:"
+            }
+        },
+        {
+            "print": {
+                "text": "   - Protocolo TCP con mensajes JSON"
+            }
+        },
+        {
+            "print": {
+                "text": "   - Herramientas nativas de Sugar"
+            }
+        },
+        {
+            "print": {
+                "text": "   - Herramientas personalizadas registradas"
+            }
+        },
+        {
+            "print": {
+                "text": "   - Recursos de documentación y configuración"
+            }
+        },
+        {
+            "print": {
+                "text": "   - Gestión de múltiples clientes"
+            }
+        },
+        {
+            "print": {
+                "text": "Para conectar desde un cliente MCP:"
+            }
+        },
+        {
+            "print": {
+                "text": "   TCP: tcp://localhost:3000"
+            }
+        },
+        {
+            "print": {
+                "text": "Ejemplo de mensaje de inicialización:"
+            }
+        },
+        {
+            "print": {
+                "text": "   {\"id\": \"1\", \"type\": \"initialize\", \"params\": {\"protocolVersion\": \"2024-11-05\"}}"
+            }
+        }
+    ]
+}

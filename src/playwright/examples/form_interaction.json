@@ -1,0 +1,193 @@
+{
+  "meta": {
+    "playwright": {
+      "browser_type": "chromium",
+      "headless": false,
+      "slow_mo": 500
+    }
+  },
+  "task": [
+    {
+      "playwright": {
+        "operator": "launch_browser",
+        "result": "browser"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "new_context",
+        "viewport": {
+          "width": 1024,
+          "height": 768
+        }
+      }
+    },
+    {
+      "playwright": {
+        "operator": "new_page"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "goto",
+        "url": "https://httpbin.org/forms/post",
+        "wait_until": "load"
+      }
+    },
+    {
+      "print": {
+        "text": "Navegando a formulario de ejemplo..."
+      }
+    },
+    {
+      "playwright": {
+        "operator": "get_title",
+        "result": "page_title"
+      }
+    },
+    {
+      "print": {
+        "text": "Página cargada: {{page_title.title}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "fill",
+        "selector": "input[name='custname']",
+        "value": "Juan Pérez"
+      }
+    },
+    {
+      "print": {
+        "text": "Nombre completado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "fill",
+        "selector": "input[name='custtel']",
+        "value": "+34 123 456 789"
+      }
+    },
+    {
+      "print": {
+        "text": "Teléfono completado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "fill",
+        "selector": "input[name='custemail']",
+        "value": "juan.perez@ejemplo.com"
+      }
+    },
+    {
+      "print": {
+        "text": "Email completado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "select_option",
+        "selector": "select[name='size']",
+        "value": "large"
+      }
+    },
+    {
+      "print": {
+        "text": "Tamaño seleccionado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "check",
+        "selector": "input[name='topping'][value='bacon']"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "check",
+        "selector": "input[name='topping'][value='cheese']"
+      }
+    },
+    {
+      "print": {
+        "text": "Toppings seleccionados"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "fill",
+        "selector": "textarea[name='delivery']",
+        "value": "Entregar en la puerta principal"
+      }
+    },
+    {
+      "print": {
+        "text": "Instrucciones de entrega completadas"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "screenshot",
+        "path": "./screenshots/form_filled.png",
+        "result": "form_screenshot"
+      }
+    },
+    {
+      "print": {
+        "text": "Formulario completado - Screenshot guardado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "click",
+        "selector": "input[type='submit']"
+      }
+    },
+    {
+      "print": {
+        "text": "Formulario enviado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "wait_for_load_state",
+        "state": "networkidle"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "get_url",
+        "result": "final_url"
+      }
+    },
+    {
+      "print": {
+        "text": "URL después del envío: {{final_url.url}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "screenshot",
+        "path": "./screenshots/form_submitted.png",
+        "result": "submitted_screenshot"
+      }
+    },
+    {
+      "print": {
+        "text": "Resultado del envío capturado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "close_browser"
+      }
+    },
+    {
+      "print": {
+        "text": "Interacción con formulario completada exitosamente"
+      }
+    }
+  ]
+}

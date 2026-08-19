@@ -1,0 +1,113 @@
+{
+  "task": [
+    {
+      "ncurses": {
+        "operator": "init",
+        "enable_colors": true,
+        "enable_mouse": false
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "init_colors",
+        "theme": "default"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "create_window",
+        "name": "main_window",
+        "x": 0,
+        "y": 0,
+        "width": "100%",
+        "height": "100%",
+        "title": "Aplicación Básica Sugar",
+        "border": true
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "set_active_window",
+        "window": "main_window"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "print",
+        "text": "¡Bienvenido a Sugar Language!",
+        "x": 2,
+        "y": 2,
+        "color": "accent",
+        "attributes": ["bold"]
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "print",
+        "text": "Esta es una aplicación de terminal básica creada con Sugar.",
+        "x": 2,
+        "y": 4,
+        "color": "foreground"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "print",
+        "text": "Presiona cualquier tecla para continuar...",
+        "x": 2,
+        "y": 6,
+        "color": "warning"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "refresh"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "get_key",
+        "result": "user_key"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "clear"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "print",
+        "text": "Gracias por usar Sugar Language!",
+        "x": 2,
+        "y": 2,
+        "color": "success"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "print",
+        "text": "Tecla presionada: {{user_key.key_name}}",
+        "x": 2,
+        "y": 4,
+        "color": "foreground"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "refresh"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "wait_for_event",
+        "timeout": 3
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "end"
+      }
+    }
+  ]
+}

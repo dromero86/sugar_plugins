@@ -1,0 +1,105 @@
+{
+  "meta": {
+    "serial": {
+      "options": {
+        "sensor_node": {
+          "port": "/dev/ttyUSB0",
+          "baudrate": 9600,
+          "timeout": 1.0,
+          "auto_connect": true
+        }
+      }
+    }
+  },
+  "task": [
+    {
+      "print": {
+        "text": "=== Ejemplo de Monitoreo en Tiempo Real ==="
+      }
+    },
+    {
+      "serial": {
+        "operator": "write",
+        "session": "sensor_node",
+        "data": "START_LOGGING\\r\\n",
+        "result": "start_cmd"
+      }
+    },
+    {
+      "print": {
+        "text": "Comando de inicio enviado: {{start_cmd}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "monitor",
+        "session": "sensor_node",
+        "duration": 30.0,
+        "log_file": "sensor_monitor.log",
+        "filter": "sensor_data",
+        "result": "monitor_status"
+      }
+    },
+    {
+      "print": {
+        "text": "Monitor iniciado: {{monitor_status}}"
+      }
+    },
+    {
+      "loop": {
+        "count": 10,
+        "task": [
+          {
+            "serial": {
+              "operator": "read_line",
+              "session": "sensor_node",
+              "timeout": 5.0,
+              "result": "logged_data"
+            }
+          },
+          {
+            "print": {
+              "text": "Datos recibidos: {{logged_data}}"
+            }
+          },
+          {
+            "sleep": {
+              "seconds": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "serial": {
+        "operator": "log_activity",
+        "session": "sensor_node",
+        "result": "activity_log"
+      }
+    },
+    {
+      "print": {
+        "text": "Log de actividad: {{activity_log}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "write",
+        "session": "sensor_node",
+        "data": "STOP_LOGGING\\r\\n",
+        "result": "stop_cmd"
+      }
+    },
+    {
+      "print": {
+        "text": "Comando de parada enviado: {{stop_cmd}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "disconnect",
+        "session": "sensor_node"
+      }
+    }
+  ]
+}

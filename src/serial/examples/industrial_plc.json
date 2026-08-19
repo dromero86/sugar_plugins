@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "serial": {
+      "options": {
+        "plc_controller": {
+          "port": "/dev/ttyS0",
+          "baudrate": 19200,
+          "parity": "EVEN",
+          "stopbits": 1,
+          "bytesize": 8,
+          "timeout": 5.0,
+          "auto_connect": true
+        }
+      }
+    }
+  },
+  "task": [
+    {
+      "print": {
+        "text": "=== Comunicación Industrial con PLC ==="
+      }
+    },
+    {
+      "serial": {
+        "operator": "write",
+        "session": "plc_controller",
+        "data": "01 03 00 00 00 01 84 0A",
+        "encoding": "hex",
+        "result": "write_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Comando Modbus RTU enviado: {{write_result}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "read_bytes",
+        "session": "plc_controller",
+        "size": 7,
+        "timeout": 3.0,
+        "encoding": "hex",
+        "result": "plc_response"
+      }
+    },
+    {
+      "print": {
+        "text": "Respuesta PLC: {{plc_response}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "set_dtr",
+        "session": "plc_controller",
+        "state": true,
+        "result": "dtr_result"
+      }
+    },
+    {
+      "print": {
+        "text": "DTR activado: {{dtr_result}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "get_cts",
+        "session": "plc_controller",
+        "result": "cts_status"
+      }
+    },
+    {
+      "print": {
+        "text": "Estado CTS: {{cts_status}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "disconnect",
+        "session": "plc_controller"
+      }
+    }
+  ]
+}

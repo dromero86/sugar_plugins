@@ -1,0 +1,90 @@
+{
+  "task": [
+    {
+      "print": {
+        "text": "=== Comunicación con Impresora Térmica ==="
+      }
+    },
+    {
+      "serial": {
+        "operator": "connect",
+        "port": "COM7",
+        "baudrate": 9600,
+        "session": "thermal_printer",
+        "timeout": 2.0,
+        "result": "printer_connection"
+      }
+    },
+    {
+      "print": {
+        "text": "Conexión a impresora: {{printer_connection}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "write",
+        "session": "thermal_printer",
+        "data": "\\x1B\\x40",
+        "encoding": "binary",
+        "result": "init_cmd"
+      }
+    },
+    {
+      "print": {
+        "text": "Comando de inicialización enviado"
+      }
+    },
+    {
+      "serial": {
+        "operator": "write",
+        "session": "thermal_printer",
+        "data": "\\x1B\\x61\\x01",
+        "encoding": "binary",
+        "result": "center_cmd"
+      }
+    },
+    {
+      "print": {
+        "text": "Comando de centrado enviado"
+      }
+    },
+    {
+      "serial": {
+        "operator": "write",
+        "session": "thermal_printer",
+        "data": "TICKET DE VENTA\\r\\n",
+        "result": "text_cmd"
+      }
+    },
+    {
+      "print": {
+        "text": "Texto enviado a impresora"
+      }
+    },
+    {
+      "serial": {
+        "operator": "write",
+        "session": "thermal_printer",
+        "data": "\\x1D\\x56\\x00",
+        "encoding": "binary",
+        "result": "cut_cmd"
+      }
+    },
+    {
+      "print": {
+        "text": "Comando de corte enviado"
+      }
+    },
+    {
+      "serial": {
+        "operator": "disconnect",
+        "session": "thermal_printer"
+      }
+    },
+    {
+      "print": {
+        "text": "Desconectado de impresora"
+      }
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+    "task": [
+        {
+            "plugin": {
+                "name": "extract_table_selenium",
+                "command": "navigate_to",
+                "config": {
+                    "url": "https://example.com/login",
+                    "wait": 3
+                }
+            }
+        },
+        {
+            "plugin": {
+                "name": "extract_table_selenium",
+                "command": "wait_for_element",
+                "config": {
+                    "selector": "#login-form",
+                    "timeout": 10
+                }
+            }
+        },
+        {
+            "plugin": {
+                "name": "extract_table_selenium",
+                "command": "click_element",
+                "config": {
+                    "selector": "#login-button",
+                    "wait_after": 2
+                }
+            }
+        },
+        {
+            "plugin": {
+                "name": "extract_table_selenium",
+                "command": "navigate_to",
+                "config": {
+                    "url": "https://example.com/dashboard",
+                    "wait": 5
+                }
+            }
+        },
+        {
+            "plugin": {
+                "name": "extract_table_selenium",
+                "command": "wait_for_element",
+                "config": {
+                    "selector": ".data-table",
+                    "timeout": 15
+                }
+            }
+        },
+        {
+            "plugin": {
+                "name": "extract_table_selenium",
+                "command": "scroll_to_element",
+                "config": {
+                    "selector": ".data-table"
+                }
+            }
+        },
+        {
+            "plugin": {
+                "name": "extract_table_selenium",
+                "command": "extract_table",
+                "config": {
+                    "selector": ".data-table",
+                    "config": {
+                        "headers": "first_row",
+                        "format": "objects",
+                        "scope": "tbody"
+                    },
+                    "filters": {
+                        "max_rows": 100
+                    },
+                    "transform": {
+                        "columns": {
+                            "Amount": "parse_currency(USD)",
+                            "Date": "parse_date(%Y-%m-%d)"
+                        }
+                    },
+                    "result": "dashboard_data"
+                }
+            }
+        },
+        {
+            "plugin": {
+                "name": "extract_table_selenium",
+                "command": "take_screenshot",
+                "config": {
+                    "filename": "dashboard_screenshot.png"
+                }
+            }
+        },
+        {
+            "print": {
+                "text": "Dashboard data extracted: {{dashboard_data.length}} records"
+            }
+        },
+        {
+            "save": {
+                "file": "dashboard_data.json",
+                "value": "dashboard_data"
+            }
+        },
+        {
+            "plugin": {
+                "name": "extract_table_selenium",
+                "command": "close_browser"
+            }
+        }
+    ]
+}

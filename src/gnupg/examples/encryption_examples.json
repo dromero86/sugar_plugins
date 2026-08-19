@@ -1,0 +1,206 @@
+{
+  "meta": {
+    "name": "GnuPG Encryption Examples",
+    "description": "Ejemplos de cifrado y descifrado con GnuPG",
+    "version": "1.0.0"
+  },
+  "task": [
+    {
+      "let": {
+        "name": "mensaje_secreto",
+        "value": "Este es un mensaje secreto que será cifrado con GnuPG desde Sugar Language!"
+      }
+    },
+    {
+      "let": {
+        "name": "recipient_email",
+        "value": "juan.perez@ejemplo.com"
+      }
+    },
+    {
+      "print": {
+        "text": "=== GnuPG Encryption Examples ==="
+      }
+    },
+    {
+      "print": {
+        "text": "1. Cifrando mensaje con cifrado asimétrico..."
+      }
+    },
+    {
+      "gnupg": {
+        "operator": "encrypt_text",
+        "text": "{{mensaje_secreto}}",
+        "recipient": "{{recipient_email}}",
+        "armor": true,
+        "result": "encrypted_message"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{encrypted_message.success}} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Mensaje cifrado exitosamente"
+              }
+            },
+            {
+              "print": {
+                "text": "2. Descifrando mensaje..."
+              }
+            },
+            {
+              "gnupg": {
+                "operator": "decrypt_text",
+                "encrypted_text": "{{encrypted_message.encrypted_text}}",
+                "passphrase": "MiPassphraseSegura123!",
+                "result": "decrypted_message"
+              }
+            },
+            {
+              "if": {
+                "condition": "{{decrypted_message.success}} == true",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Mensaje descifrado exitosamente"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Mensaje original: {{decrypted_message.decrypted_text}}"
+                      }
+                    }
+                  ]
+                },
+                "else": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Error descifrando mensaje: {{decrypted_message.error}}"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Error cifrando mensaje: {{encrypted_message.error}}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "print": {
+        "text": "3. Probando cifrado simétrico..."
+      }
+    },
+    {
+      "let": {
+        "name": "contenido_archivo",
+        "value": "Este es el contenido de un archivo que será cifrado simétricamente."
+      }
+    },
+    {
+      "file": {
+        "operator": "write",
+        "path": "archivo_test.txt",
+        "content": "{{contenido_archivo}}",
+        "result": "file_written"
+      }
+    },
+    {
+      "gnupg": {
+        "operator": "symmetric_encrypt",
+        "input_file": "archivo_test.txt",
+        "output_file": "archivo_test.txt.gpg",
+        "passphrase": "MiPassphraseSegura123!",
+        "cipher": "AES256",
+        "armor": false,
+        "result": "symmetric_encryption"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{symmetric_encryption.success}} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Archivo cifrado simétricamente"
+              }
+            },
+            {
+              "gnupg": {
+                "operator": "symmetric_decrypt",
+                "input_file": "archivo_test.txt.gpg",
+                "output_file": "archivo_descifrado.txt",
+                "passphrase": "MiPassphraseSegura123!",
+                "result": "symmetric_decryption"
+              }
+            },
+            {
+              "if": {
+                "condition": "{{symmetric_decryption.success}} == true",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Archivo descifrado exitosamente"
+                      }
+                    },
+                    {
+                      "file": {
+                        "operator": "read",
+                        "path": "archivo_descifrado.txt",
+                        "result": "decrypted_content"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Contenido descifrado: {{decrypted_content}}"
+                      }
+                    }
+                  ]
+                },
+                "else": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Error descifrando archivo: {{symmetric_decryption.error}}"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Error cifrando archivo: {{symmetric_encryption.error}}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "print": {
+        "text": "=== GnuPG Encryption Examples Completed ==="
+      }
+    }
+  ]
+}

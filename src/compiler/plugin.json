@@ -1,0 +1,11 @@
+{
+  "name": "compiler",
+  "version": "1.0.0",
+  "description": "Plugin compiler para Sugar",
+  "author": "Sugar Team",
+  "main": "src/compilerPlugin.py",
+  "dependencies": [
+    "llvmlite>=0.34.0"
+  ],
+  "commands": []
+}

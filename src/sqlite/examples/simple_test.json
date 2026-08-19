@@ -1,0 +1,63 @@
+{
+  "task": [
+    {
+      "print": { "text": "Test simple del plugin SQLite" }
+    },
+    {
+      "sqlite.connect": {
+        "database_path": "./data/test_simple.db"
+      }
+    },
+    {
+      "print": { "text": "Conectado a la base de datos" }
+    },
+    {
+      "sqlite.create_table": {
+        "table_name": "test_table",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT"
+          },
+          {
+            "name": "name",
+            "type": "TEXT",
+            "constraints": "NOT NULL"
+          }
+        ],
+        "result": "table_created"
+      }
+    },
+    {
+      "print": { "text": "Tabla creada: {{table_created}}" }
+    },
+    {
+      "sqlite.insert": {
+        "table": "test_table",
+        "data": {
+          "name": "Test User"
+        },
+        "result": "insert_result"
+      }
+    },
+    {
+      "print": { "text": "Usuario insertado: {{insert_result}}" }
+    },
+    {
+      "sqlite.select": {
+        "table": "test_table",
+        "result": "users_data"
+      }
+    },
+    {
+      "print": { "text": "Datos de la tabla: {{users_data}}" }
+    },
+    {
+      "sqlite.disconnect": {}
+    },
+    {
+      "print": { "text": "Test completado exitosamente" }
+    }
+  ]
+}

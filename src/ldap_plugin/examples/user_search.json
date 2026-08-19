@@ -1,0 +1,48 @@
+{
+  "task": [
+    {
+      "ldap": {
+        "operator": "connect",
+        "server": "ldap.example.com",
+        "port": 389,
+        "username": "cn=admin,dc=example,dc=com",
+        "password": "admin_password",
+        "connection_name": "search_server"
+      }
+    },
+    {
+      "ldap": {
+        "operator": "search_users",
+        "connection_name": "search_server",
+        "base_dn": "ou=users,dc=example,dc=com",
+        "search_filter": "(&(objectClass=person)(uid=john*))",
+        "attributes": ["cn", "uid", "mail", "sn", "givenName"],
+        "result": "user_results"
+      }
+    },
+    {
+      "print": {
+        "text": "Found {{user_results.count}} users matching 'john*'"
+      }
+    },
+    {
+      "for": {
+        "variable": "user",
+        "in": "{{user_results.results}}",
+        "task": [
+          {
+            "print": {
+              "text": "User: {{user.cn}} ({{user.uid}}) - {{user.mail}}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "ldap": {
+        "operator": "disconnect",
+        "connection_name": "search_server"
+      }
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "mode": "selenium",
+    "browser": "edge",
+    "options": [
+      "--disable-gpu",
+      "--no-sandbox",
+      "--disable-web-security",
+      "--window-size=1280,720",
+      "--disable-blink-features=AutomationControlled"
+    ],
+    "detach": true,
+    "headless": false,
+    "timeout": 10
+  },
+  
+  "task": [
+    {
+      "selenium": {
+        "operator": "open",
+        "url": "https://www.microsoft.com",
+        "result": "is_open"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "element",
+        "selector": "header",
+        "result": "header_ready"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "screenshot",
+        "file": "./edge_microsoft.png",
+        "result": "screenshot"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "find",
+        "selector": "a[href*='products']",
+        "multiple": true,
+        "result": "product_links"
+      }
+    },
+    {
+      "print": {
+        "text": "Enlaces de productos encontrados: {{product_links}}"
+      }
+    }
+  ]
+}

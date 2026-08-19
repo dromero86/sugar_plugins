@@ -1,0 +1,9 @@
+{
+  "name": "openssl_binary",
+  "version": "1.0.0",
+  "description": "Plugin openssl_binary para Sugar",
+  "author": "Sugar Team",
+  "main": "src/openssl_binaryPlugin.py",
+  "dependencies": [],
+  "commands": []
+}

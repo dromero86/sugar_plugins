@@ -1,0 +1,340 @@
+{
+  "task": [
+    {
+      "print": { "text": "Ejemplo de manejo de transacciones en SQLite" }
+    },
+    {
+      "sqlite": {
+        "operator": "connect",
+        "database_path": "./data/transacciones.db"
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "create_table",
+        "table_name": "cuentas",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT"
+          },
+          {
+            "name": "numero_cuenta",
+            "type": "TEXT",
+            "constraints": "UNIQUE NOT NULL"
+          },
+          {
+            "name": "titular",
+            "type": "TEXT",
+            "constraints": "NOT NULL"
+          },
+          {
+            "name": "saldo",
+            "type": "REAL",
+            "constraints": "DEFAULT 0.0"
+          }
+        ],
+        "result": "tabla_cuentas"
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "create_table",
+        "table_name": "transacciones",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT"
+          },
+          {
+            "name": "cuenta_origen",
+            "type": "TEXT"
+          },
+          {
+            "name": "cuenta_destino",
+            "type": "TEXT"
+          },
+          {
+            "name": "monto",
+            "type": "REAL",
+            "constraints": "NOT NULL"
+          },
+          {
+            "name": "tipo",
+            "type": "TEXT",
+            "constraints": "CHECK(tipo IN ('deposito', 'retiro', 'transferencia'))"
+          },
+          {
+            "name": "fecha",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP"
+          }
+        ],
+        "result": "tabla_transacciones"
+      }
+    },
+    {
+      "print": { "text": "Tablas de cuentas y transacciones creadas" }
+    },
+    {
+      "sqlite": {
+        "operator": "insert",
+        "table": "cuentas",
+        "data": [
+          {
+            "numero_cuenta": "001-123456",
+            "titular": "Juan Pérez",
+            "saldo": 1000.00
+          },
+          {
+            "numero_cuenta": "001-789012",
+            "titular": "María García",
+            "saldo": 500.00
+          },
+          {
+            "numero_cuenta": "001-345678",
+            "titular": "Carlos López",
+            "saldo": 2500.00
+          }
+        ],
+        "result": "cuentas_creadas"
+      }
+    },
+    {
+      "print": { "text": "Cuentas iniciales creadas" }
+    },
+    {
+      "sqlite": {
+        "operator": "select",
+        "table": "cuentas",
+        "result": "cuentas_iniciales"
+      }
+    },
+    {
+      "print": { "text": "Estado inicial de cuentas:" }
+    },
+    {
+      "for": {
+        "variable": "cuenta",
+        "in": "{{cuentas_iniciales.data}}",
+        "task": [
+          {
+            "print": { "text": "  - {{cuenta.titular}} ({{cuenta.numero_cuenta}}): ${{cuenta.saldo}}" }
+          }
+        ]
+      }
+    },
+    {
+      "print": { "text": "Iniciando transacción de transferencia..." }
+    },
+    {
+      "sqlite": {
+        "operator": "begin_transaction"
+      }
+    },
+    {
+      "print": { "text": "Transacción iniciada" }
+    },
+    {
+      "sqlite": {
+        "operator": "savepoint",
+        "name": "antes_transferencia"
+      }
+    },
+    {
+      "print": { "text": "Savepoint creado: antes_transferencia" }
+    },
+    {
+      "print": { "text": "Realizando transferencia de $200 de Juan a María..." }
+    },
+    {
+      "sqlite": {
+        "operator": "update",
+        "table": "cuentas",
+        "data": { "saldo": "saldo - 200" },
+        "where": "numero_cuenta = '001-123456'",
+        "result": "debito_juan"
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "update",
+        "table": "cuentas",
+        "data": { "saldo": "saldo + 200" },
+        "where": "numero_cuenta = '001-789012'",
+        "result": "credito_maria"
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "insert",
+        "table": "transacciones",
+        "data": {
+          "cuenta_origen": "001-123456",
+          "cuenta_destino": "001-789012",
+          "monto": 200.00,
+          "tipo": "transferencia"
+        },
+        "result": "registro_transaccion"
+      }
+    },
+    {
+      "print": { "text": "Transacción registrada" }
+    },
+    {
+      "sqlite": {
+        "operator": "select",
+        "table": "cuentas",
+        "result": "cuentas_despues_transferencia"
+      }
+    },
+    {
+      "print": { "text": "Estado después de la transferencia:" }
+    },
+    {
+      "for": {
+        "variable": "cuenta",
+        "in": "{{cuentas_despues_transferencia.data}}",
+        "task": [
+          {
+            "print": { "text": "  - {{cuenta.titular}} ({{cuenta.numero_cuenta}}): ${{cuenta.saldo}}" }
+          }
+        ]
+      }
+    },
+    {
+      "print": { "text": "Transacción completada exitosamente" }
+    },
+    {
+      "sqlite": {
+        "operator": "commit"
+      }
+    },
+    {
+      "print": { "text": "Transacción confirmada" }
+    },
+    {
+      "print": { "text": "Iniciando transacción con error para demostrar rollback..." }
+    },
+    {
+      "sqlite": {
+        "operator": "begin_transaction"
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "savepoint",
+        "name": "antes_operacion_riesgosa"
+      }
+    },
+    {
+      "print": { "text": "Savepoint creado: antes_operacion_riesgosa" }
+    },
+    {
+      "print": { "text": "Intentando retirar $5000 de la cuenta de Carlos (solo tiene $2500)..." }
+    },
+    {
+      "sqlite": {
+        "operator": "update",
+        "table": "cuentas",
+        "data": { "saldo": "saldo - 5000" },
+        "where": "numero_cuenta = '001-345678'",
+        "result": "retiro_carlos"
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "select",
+        "table": "cuentas",
+        "where": "numero_cuenta = '001-345678'",
+        "result": "cuenta_carlos_negativa"
+      }
+    },
+    {
+      "print": { "text": "Saldo negativo detectado: ${{cuenta_carlos_negativa.data[0].saldo}}" }
+    },
+    {
+      "print": { "text": "Revertiendo a savepoint..." }
+    },
+    {
+      "sqlite": {
+        "operator": "rollback_to_savepoint",
+        "name": "antes_operacion_riesgosa"
+      }
+    },
+    {
+      "print": { "text": "Revertido a savepoint" }
+    },
+    {
+      "sqlite": {
+        "operator": "select",
+        "table": "cuentas",
+        "where": "numero_cuenta = '001-345678'",
+        "result": "cuenta_carlos_revertida"
+      }
+    },
+    {
+      "print": { "text": "Saldo de Carlos restaurado: ${{cuenta_carlos_revertida.data[0].saldo}}" }
+    },
+    {
+      "sqlite": {
+        "operator": "rollback"
+      }
+    },
+    {
+      "print": { "text": "Transacción completa revertida" }
+    },
+    {
+      "sqlite": {
+        "operator": "select",
+        "table": "cuentas",
+        "result": "cuentas_finales"
+      }
+    },
+    {
+      "print": { "text": "Estado final de cuentas:" }
+    },
+    {
+      "for": {
+        "variable": "cuenta",
+        "in": "{{cuentas_finales.data}}",
+        "task": [
+          {
+            "print": { "text": "  - {{cuenta.titular}} ({{cuenta.numero_cuenta}}): ${{cuenta.saldo}}" }
+          }
+        ]
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "query",
+        "sql": "SELECT t.tipo, t.monto, t.fecha, c1.titular as origen, c2.titular as destino FROM transacciones t LEFT JOIN cuentas c1 ON t.cuenta_origen = c1.numero_cuenta LEFT JOIN cuentas c2 ON t.cuenta_destino = c2.numero_cuenta ORDER BY t.fecha DESC",
+        "result": "historial_transacciones"
+      }
+    },
+    {
+      "print": { "text": "Historial de transacciones:" }
+    },
+    {
+      "for": {
+        "variable": "transaccion",
+        "in": "{{historial_transacciones.data}}",
+        "task": [
+          {
+            "print": { "text": "  - {{transaccion.tipo}}: ${{transaccion.monto}} de {{transaccion.origen}} a {{transaccion.destino}} ({{transaccion.fecha}})" }
+          }
+        ]
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "disconnect"
+      }
+    },
+    {
+      "print": { "text": "Ejemplo de transacciones completado" }
+    }
+  ]
+}

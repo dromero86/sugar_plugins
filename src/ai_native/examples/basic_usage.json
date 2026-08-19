@@ -1,0 +1,41 @@
+{
+  "description": "Ejemplo básico de uso del plugin AI Native",
+  "task": [
+    {
+      "ai_native": {
+        "operator": "get_ai_info",
+        "result": "plugin_info"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Información del Plugin AI Native ==="
+      }
+    },
+    {
+      "print": {
+        "text": "Versión: {{plugin_info.version}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Descripción: {{plugin_info.description}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Comandos disponibles: {{plugin_info.available_commands}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Dominios soportados: {{plugin_info.domains}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Fin de Información ==="
+      }
+    }
+  ]
+}

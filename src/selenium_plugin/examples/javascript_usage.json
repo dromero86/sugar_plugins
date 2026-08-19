@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "mode": "selenium",
+    "driver": { "bin": "./driver/chromedriver" },
+    "options": [
+      "--disable-gpu",
+      "--no-sandbox",
+      "--window-size=1280,720"
+    ],
+    "detach": false,
+    "timeout": 10
+  },
+  
+  "task": [
+    {
+      "selenium": {
+        "operator": "open",
+        "url": "https://www.example.com",
+        "result": "is_open"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "javascript",
+        "from_string": "document.title = 'Modified by Sugar Selenium';",
+        "result": "title_modified"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "javascript",
+        "from_string": "window.scrollTo(0, document.body.scrollHeight);",
+        "result": "scrolled_to_bottom"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "javascript",
+        "from_string": "return document.querySelectorAll('a').length;",
+        "result": "link_count"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "javascript",
+        "from_string": "return Array.from(document.querySelectorAll('a')).map(a => a.href);",
+        "result": "all_links"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "javascript",
+        "from_string": "localStorage.setItem('sugar_test', 'Hello from Sugar!');",
+        "result": "local_storage_set"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "javascript",
+        "from_string": "return localStorage.getItem('sugar_test');",
+        "result": "local_storage_get"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "screenshot",
+        "file": "./javascript_test.png",
+        "result": "screenshot"
+      }
+    }
+  ]
+}

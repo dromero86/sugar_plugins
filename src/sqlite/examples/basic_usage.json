@@ -1,0 +1,159 @@
+{
+  "task": [
+    {
+      "print": { "text": "Iniciando ejemplo básico de SQLite" }
+    },
+    {
+      "sqlite": {
+        "operator": "connect",
+        "database_path": "./data/ejemplo_basico.db"
+      }
+    },
+    {
+      "print": { "text": "Conectado a la base de datos" }
+    },
+    {
+      "sqlite": {
+        "operator": "create_table",
+        "table_name": "usuarios",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT"
+          },
+          {
+            "name": "nombre",
+            "type": "TEXT",
+            "constraints": "NOT NULL"
+          },
+          {
+            "name": "email",
+            "type": "TEXT",
+            "constraints": "UNIQUE"
+          },
+          {
+            "name": "edad",
+            "type": "INTEGER"
+          },
+          {
+            "name": "fecha_registro",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP"
+          }
+        ],
+        "result": "tabla_creada"
+      }
+    },
+    {
+      "print": { "text": "Tabla usuarios creada: {{tabla_creada}}" }
+    },
+    {
+      "sqlite": {
+        "operator": "insert",
+        "table": "usuarios",
+        "data": [
+          {
+            "nombre": "Ana García",
+            "email": "ana@ejemplo.com",
+            "edad": 25
+          },
+          {
+            "nombre": "Carlos López",
+            "email": "carlos@ejemplo.com",
+            "edad": 30
+          },
+          {
+            "nombre": "María Rodríguez",
+            "email": "maria@ejemplo.com",
+            "edad": 28
+          },
+          {
+            "nombre": "Juan Pérez",
+            "email": "juan@ejemplo.com",
+            "edad": 35
+          }
+        ],
+        "result": "usuarios_insertados"
+      }
+    },
+    {
+      "print": { "text": "Usuarios insertados: {{usuarios_insertados}}" }
+    },
+    {
+      "sqlite": {
+        "operator": "select",
+        "table": "usuarios",
+        "columns": "id, nombre, email, edad",
+        "order_by": "nombre ASC",
+        "result": "todos_usuarios"
+      }
+    },
+    {
+      "print": { "text": "Todos los usuarios:" }
+    },
+    {
+      "for": {
+        "variable": "usuario",
+        "in": "{{todos_usuarios.data}}",
+        "task": [
+          {
+            "print": { "text": "  - {{usuario.nombre}} ({{usuario.email}}) - {{usuario.edad}} años" }
+          }
+        ]
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "select",
+        "table": "usuarios",
+        "where": "edad > 25",
+        "order_by": "edad DESC",
+        "result": "usuarios_mayores"
+      }
+    },
+    {
+      "print": { "text": "Usuarios mayores de 25 años:" }
+    },
+    {
+      "for": {
+        "variable": "usuario",
+        "in": "{{usuarios_mayores.data}}",
+        "task": [
+          {
+            "print": { "text": "  - {{usuario.nombre}} ({{usuario.edad}} años)" }
+          }
+        ]
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "update",
+        "table": "usuarios",
+        "data": { "edad": 26 },
+        "where": "nombre = 'Ana García'",
+        "result": "ana_actualizada"
+      }
+    },
+    {
+      "print": { "text": "Ana actualizada: {{ana_actualizada}}" }
+    },
+    {
+      "sqlite": {
+        "operator": "list_tables",
+        "result": "tablas_disponibles"
+      }
+    },
+    {
+      "print": { "text": "Tablas en la base de datos: {{tablas_disponibles}}" }
+    },
+    {
+      "sqlite": {
+        "operator": "disconnect"
+      }
+    },
+    {
+      "print": { "text": "Ejemplo básico completado" }
+    }
+  ]
+}

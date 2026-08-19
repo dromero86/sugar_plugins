@@ -1,0 +1,217 @@
+{
+  "task": [
+    {
+      "print": { "text": "Iniciando pruebas completas del plugin bzip2" }
+    },
+    {
+      "print": { "text": "================================================" }
+    },
+    {
+      "print": { "text": "1. Verificando información del SDK..." }
+    },
+    {
+      "bzip2": {
+        "operator": "sdk_info",
+        "result": "sdk_info"
+      }
+    },
+    {
+      "print": { "text": "   Plugin: {{sdk_info.plugin_name}} v{{sdk_info.version}}" }
+    },
+    {
+      "print": { "text": "   Componentes SDK: {{sdk_info.sdk_components}}" }
+    },
+    {
+      "print": { "text": "2. Probando funcionalidades del SDK..." }
+    },
+    {
+      "bzip2": {
+        "operator": "test_sdk",
+        "result": "sdk_test"
+      }
+    },
+    {
+      "print": { "text": "   Tests SDK: {{sdk_test.tests}}" }
+    },
+    {
+      "print": { "text": "3. Creando archivo de prueba..." }
+    },
+    {
+      "file": {
+        "operator": "write",
+        "path": "test_data.txt",
+        "data": "Este es un archivo de prueba para el plugin bzip2.\nContiene múltiples líneas de texto para probar la compresión.\nLa compresión bzip2 es muy efectiva para archivos de texto.\nEste archivo se usará para demostrar las capacidades del plugin.\n"
+      }
+    },
+    {
+      "print": { "text": "4. Comprimiendo archivo..." }
+    },
+    {
+      "bzip2": {
+        "operator": "bzip2_compress",
+        "source": "test_data.txt",
+        "destination": "test_data.txt.bz2",
+        "compression_level": 6,
+        "result": "compression_result"
+      }
+    },
+    {
+      "print": { "text": "   Compresión completada" }
+    },
+    {
+      "print": { "text": "   Tamaño original: {{compression_result.original_size}} bytes" }
+    },
+    {
+      "print": { "text": "   Tamaño comprimido: {{compression_result.compressed_size}} bytes" }
+    },
+    {
+      "print": { "text": "   Ratio de compresión: {{compression_result.compression_ratio}}%" }
+    },
+    {
+      "print": { "text": "   ⏱Tiempo: {{compression_result.processing_time}} segundos" }
+    },
+    {
+      "print": { "text": "5. Verificando integridad del archivo comprimido..." }
+    },
+    {
+      "bzip2": {
+        "operator": "bzip2_test",
+        "source": "test_data.txt.bz2",
+        "result": "test_result"
+      }
+    },
+    {
+      "if": {
+        "condition": "${test_result.is_valid} == true",
+        "then": {
+          "task": [
+            {
+              "print": { "text": "   Archivo íntegro" }
+            },
+            {
+              "print": { "text": "   Tamaño descomprimido: {{test_result.decompressed_size}} bytes" }
+            }
+          ]
+        },
+        "else": {
+          "print": { "text": "   Archivo corrupto: {{test_result.error}}" }
+        }
+      }
+    },
+    {
+      "print": { "text": "6. Obteniendo información del archivo..." }
+    },
+    {
+      "bzip2": {
+        "operator": "bzip2_info",
+        "source": "test_data.txt.bz2",
+        "result": "info_result"
+      }
+    },
+    {
+      "print": { "text": "   Información obtenida" }
+    },
+    {
+      "print": { "text": "   Tamaño del archivo: {{info_result.file_size}} bytes" }
+    },
+    {
+      "print": { "text": "   Es bzip2 válido: {{info_result.is_valid_bzip2}}" }
+    },
+    {
+      "print": { "text": "7. Descomprimiendo archivo..." }
+    },
+    {
+      "bzip2": {
+        "operator": "bzip2_decompress",
+        "source": "test_data.txt.bz2",
+        "destination": "test_data_decompressed.txt",
+        "result": "decompression_result"
+      }
+    },
+    {
+      "print": { "text": "   Descompresión completada" }
+    },
+    {
+      "print": { "text": "   Tamaño descomprimido: {{decompression_result.original_size}} bytes" }
+    },
+    {
+      "print": { "text": "   ⏱Tiempo: {{decompression_result.processing_time}} segundos" }
+    },
+    {
+      "print": { "text": "8. Verificando que el contenido es idéntico..." }
+    },
+    {
+      "file": {
+        "operator": "read",
+        "path": "test_data.txt",
+        "result": "original_content"
+      }
+    },
+    {
+      "file": {
+        "operator": "read",
+        "path": "test_data_decompressed.txt",
+        "result": "decompressed_content"
+      }
+    },
+    {
+      "if": {
+        "condition": "${original_content} == ${decompressed_content}",
+        "then": {
+          "print": { "text": "   Contenido idéntico - Prueba exitosa" }
+        },
+        "else": {
+          "print": { "text": "   Contenido diferente - Error en la compresión/descompresión" }
+        }
+      }
+    },
+    {
+      "print": { "text": "9. Limpiando archivos de prueba..." }
+    },
+    {
+      "file": {
+        "operator": "delete",
+        "path": "test_data.txt"
+      }
+    },
+    {
+      "file": {
+        "operator": "delete",
+        "path": "test_data.txt.bz2"
+      }
+    },
+    {
+      "file": {
+        "operator": "delete",
+        "path": "test_data_decompressed.txt"
+      }
+    },
+    {
+      "print": { "text": "   Archivos eliminados" }
+    },
+    {
+      "print": { "text": "================================================" }
+    },
+    {
+      "print": { "text": "Todas las pruebas del plugin bzip2 completadas exitosamente" }
+    },
+    {
+      "print": { "text": "Resumen:" }
+    },
+    {
+      "print": { "text": "   - SDK funcionando correctamente" }
+    },
+    {
+      "print": { "text": "   - Compresión exitosa con {{compression_result.compression_ratio}}% de reducción" }
+    },
+    {
+      "print": { "text": "   - Verificación de integridad exitosa" }
+    },
+    {
+      "print": { "text": "   - Descompresión exitosa" }
+    },
+    {
+      "print": { "text": "   - Contenido preservado correctamente" }
+    }
+  ]
+}

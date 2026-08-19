@@ -1,0 +1,225 @@
+{
+  "description": "Ejemplo de verificación de dependencias del plugin RAR",
+  "task": [
+    {
+      "print": {
+        "text": "Verificando dependencias del plugin RAR..."
+      }
+    },
+    {
+      "rar": {
+        "operator": "check_dependencies",
+        "result": "deps_status"
+      }
+    },
+    {
+      "print": {
+        "text": "Estado general: {{deps_status.all_satisfied}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Dependencias de Python:"
+      }
+    },
+    {
+      "for": {
+        "variable": "dep",
+        "in": "${deps_status.python_dependencies}",
+        "task": [
+          {
+            "print": {
+              "text": "  {{dep.name}}: {{dep.status}} ({{dep.version}})"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "print": {
+        "text": "Dependencias del sistema:"
+      }
+    },
+    {
+      "for": {
+        "variable": "sys_dep",
+        "in": "${deps_status.system_dependencies}",
+        "task": [
+          {
+            "print": {
+              "text": "  {{sys_dep.name}}: {{sys_dep.status}}"
+            }
+          },
+          {
+            "if": {
+              "condition": "${sys_dep.path} != null",
+              "then": {
+                "task": [
+                  {
+                    "print": {
+                      "text": "    Ruta: {{sys_dep.path}}"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "print": {
+        "text": "Información del sistema:"
+      }
+    },
+    {
+      "rar": {
+        "operator": "system_info",
+        "result": "sys_info"
+      }
+    },
+    {
+      "print": {
+        "text": "Plataforma: {{sys_info.system.platform}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Python: {{sys_info.system.python_version}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Arquitectura: {{sys_info.system.architecture}}"
+      }
+    },
+    {
+      "print": {
+        "text": "CPU: {{sys_info.hardware.cpu_count}} núcleos"
+      }
+    },
+    {
+      "print": {
+        "text": "Memoria total: {{sys_info.hardware.memory_total}} bytes"
+      }
+    },
+    {
+      "print": {
+        "text": "Memoria disponible: {{sys_info.hardware.memory_available}} bytes"
+      }
+    },
+    {
+      "print": {
+        "text": "Herramienta RAR: {{sys_info.rar_tool}}"
+      }
+    },
+    {
+      "if": {
+        "condition": "${deps_status.all_satisfied} == false",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Dependencias faltantes detectadas:"
+              }
+            },
+            {
+              "for": {
+                "variable": "missing",
+                "in": "${deps_status.missing_dependencies}",
+                "task": [
+                  {
+                    "print": {
+                      "text": "  {{missing}}"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "print": {
+                "text": "Instrucciones de instalación:"
+              }
+            },
+            {
+              "print": {
+                "text": "  Ubuntu/Debian: sudo apt-get install unrar"
+              }
+            },
+            {
+              "print": {
+                "text": "  CentOS/RHEL: sudo yum install unrar"
+              }
+            },
+            {
+              "print": {
+                "text": "  macOS: brew install unrar"
+              }
+            },
+            {
+              "print": {
+                "text": "  Python: pip install rarfile>=4.0 psutil>=5.8.0"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Todas las dependencias están satisfechas"
+              }
+            },
+            {
+              "print": {
+                "text": "Probando funcionalidad del plugin..."
+              }
+            },
+            {
+              "rar": {
+                "operator": "test_functionality",
+                "result": "func_test"
+              }
+            },
+            {
+              "if": {
+                "condition": "${func_test.all_tests_passed} == true",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Plugin RAR funcionando correctamente"
+                      }
+                    }
+                  ]
+                },
+                "else": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Algunas pruebas fallaron:"
+                      }
+                    },
+                    {
+                      "for": {
+                        "variable": "test",
+                        "in": "${func_test.tests}",
+                        "task": [
+                          {
+                            "print": {
+                              "text": "  {{test}}: {{func_test.tests[test]}}"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

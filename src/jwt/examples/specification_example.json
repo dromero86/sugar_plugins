@@ -1,0 +1,45 @@
+[
+  {
+    "jwt": {
+      "operator": "encode",
+      "payload": {
+        "sub": "1234567890",
+        "name": "{{ nombre|default('Usuario Anónimo') }}",
+        "iat": "{{ timestamp }}",
+        "exp": "{{ timestamp + 3600 }}"
+      },
+      "key": "{{ secret_key }}",
+      "algorithm": "HS256",
+      "result": "encoded_jwt"
+    }
+  },
+  {
+    "jwt": {
+      "operator": "decode",
+      "token": "{{ encoded_jwt }}",
+      "key": "{{ secret_key }}",
+      "algorithms": ["HS256"],
+      "verify": true,
+      "result": "decoded_payload"
+    }
+  },
+  {
+    "jwt": {
+      "operator": "verify",
+      "token": "{{ token_input }}",
+      "key": "{{ public_key }}",
+      "algorithms": ["RS256"],
+      "result": "is_valid"
+    }
+  },
+  {
+    "jwt": {
+      "operator": "decode",
+      "token": "{{ token_input }}",
+      "options": {
+        "verify_signature": false
+      },
+      "result": "payload_unverified"
+    }
+  }
+]

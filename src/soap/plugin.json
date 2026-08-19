@@ -1,0 +1,15 @@
+{
+  "name": "soap",
+  "version": "1.0.0",
+  "description": "Plugin SOAP para Sugar - Cliente y servidor SOAP nativo sin dependencias externas",
+  "author": "Sugar Team",
+  "main": "src/soap_plugin.py",
+  "dependencies": [],
+  "commands": [
+    "soap_client",
+    "soap_server", 
+    "soap_wsdl",
+    "soap_schema",
+    "soap_middleware"
+  ]
+}

@@ -1,0 +1,342 @@
+{
+  "meta": {
+    "playwright": {
+      "browser_type": "chromium",
+      "headless": false,
+      "slow_mo": 1000
+    }
+  },
+  "task": [
+    {
+      "print": {
+        "text": "Iniciando automatización web con Playwright..."
+      }
+    },
+    {
+      "playwright": {
+        "operator": "launch_browser",
+        "browser_type": "chromium",
+        "headless": false,
+        "result": "browser_status"
+      }
+    },
+    {
+      "print": {
+        "text": "Navegador lanzado: {{browser_status.browser_type}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "new_context",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "result": "context_status"
+      }
+    },
+    {
+      "print": {
+        "text": "Contexto de navegador creado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "new_page",
+        "result": "page_status"
+      }
+    },
+    {
+      "print": {
+        "text": "Nueva página creada"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "goto",
+        "url": "https://httpbin.org/forms/post",
+        "wait_until": "load",
+        "timeout": 30000,
+        "result": "navigation_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Navegando a formulario de ejemplo..."
+      }
+    },
+    {
+      "playwright": {
+        "operator": "get_title",
+        "result": "page_title"
+      }
+    },
+    {
+      "print": {
+        "text": "Título de la página: {{page_title.title}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "screenshot",
+        "path": "./screenshots/initial_page.png",
+        "full_page": true,
+        "result": "initial_screenshot"
+      }
+    },
+    {
+      "print": {
+        "text": "Screenshot inicial guardado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "fill",
+        "selector": "input[name='custname']",
+        "value": "María García López"
+      }
+    },
+    {
+      "print": {
+        "text": "Nombre completado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "fill",
+        "selector": "input[name='custtel']",
+        "value": "+34 987 654 321"
+      }
+    },
+    {
+      "print": {
+        "text": "Teléfono completado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "fill",
+        "selector": "input[name='custemail']",
+        "value": "maria.garcia@ejemplo.com"
+      }
+    },
+    {
+      "print": {
+        "text": "Email completado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "select_option",
+        "selector": "select[name='size']",
+        "value": "large"
+      }
+    },
+    {
+      "print": {
+        "text": "Tamaño seleccionado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "check",
+        "selector": "input[name='topping'][value='bacon']"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "check",
+        "selector": "input[name='topping'][value='cheese']"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "check",
+        "selector": "input[name='topping'][value='mushroom']"
+      }
+    },
+    {
+      "print": {
+        "text": "Toppings seleccionados"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "fill",
+        "selector": "textarea[name='delivery']",
+        "value": "Entregar en la puerta principal. Tocar el timbre dos veces."
+      }
+    },
+    {
+      "print": {
+        "text": "Instrucciones de entrega completadas"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "screenshot",
+        "path": "./screenshots/form_completed.png",
+        "result": "form_screenshot"
+      }
+    },
+    {
+      "print": {
+        "text": "Formulario completado - Screenshot guardado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "evaluate",
+        "script": "return document.querySelector('input[type=\"submit\"]').value;",
+        "result": "submit_button_text"
+      }
+    },
+    {
+      "print": {
+        "text": "Texto del botón de envío: {{submit_button_text.result}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "click",
+        "selector": "input[type='submit']",
+        "button": "left",
+        "click_count": 1
+      }
+    },
+    {
+      "print": {
+        "text": "Formulario enviado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "wait_for_load_state",
+        "state": "networkidle"
+      }
+    },
+    {
+      "print": {
+        "text": "⏳ Esperando carga completa..."
+      }
+    },
+    {
+      "playwright": {
+        "operator": "get_url",
+        "result": "final_url"
+      }
+    },
+    {
+      "print": {
+        "text": "URL después del envío: {{final_url.url}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "get_title",
+        "result": "final_title"
+      }
+    },
+    {
+      "print": {
+        "text": "Título final: {{final_title.title}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "evaluate",
+        "script": "return document.body.innerText;",
+        "result": "page_content"
+      }
+    },
+    {
+      "print": {
+        "text": "Contenido de la página obtenido"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{page_content.result}} contains 'custname'",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Formulario enviado correctamente - Datos recibidos"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Error en el envío del formulario"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "playwright": {
+        "operator": "screenshot",
+        "path": "./screenshots/submission_result.png",
+        "full_page": true,
+        "result": "final_screenshot"
+      }
+    },
+    {
+      "print": {
+        "text": "Resultado final capturado"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "evaluate",
+        "script": "return { url: window.location.href, title: document.title, timestamp: new Date().toISOString() };",
+        "result": "page_info"
+      }
+    },
+    {
+      "print": {
+        "text": "Información de la página:"
+      }
+    },
+    {
+      "print": {
+        "text": "   URL: {{page_info.result.url}}"
+      }
+    },
+    {
+      "print": {
+        "text": "   Título: {{page_info.result.title}}"
+      }
+    },
+    {
+      "print": {
+        "text": "   Timestamp: {{page_info.result.timestamp}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "close_browser"
+      }
+    },
+    {
+      "print": {
+        "text": "Navegador cerrado"
+      }
+    },
+    {
+      "print": {
+        "text": "¡Automatización completada exitosamente!"
+      }
+    },
+    {
+      "print": {
+        "text": "Screenshots guardados en: ./screenshots/"
+      }
+    }
+  ]
+}

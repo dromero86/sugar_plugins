@@ -1,0 +1,116 @@
+{
+  "description": "Ejemplo básico de uso del PDF Plugin",
+  "task": [
+    {
+      "print": {
+        "text": "Verificando dependencias del PDF Plugin..."
+      }
+    },
+    {
+      "pdf": {
+        "operator": "check_dependencies",
+        "result": "dependency_status"
+      }
+    },
+    {
+      "if": {
+        "condition": "${dependency_status.dependency_status.all_satisfied} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Dependencias satisfechas - PDF Plugin listo para usar"
+              }
+            },
+            {
+              "print": {
+                "text": "Creando un PDF de ejemplo..."
+              }
+            },
+            {
+              "pdf": {
+                "operator": "create_pdf",
+                "output_path": "ejemplo_basico.pdf",
+                "title": "Documento de Ejemplo",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Este es un documento PDF creado con Sugar PDF Plugin",
+                    "font_size": 14
+                  },
+                  {
+                    "type": "text",
+                    "text": "Fecha de creación: 2024-01-15",
+                    "font_size": 12
+                  },
+                  {
+                    "type": "table",
+                    "data": [
+                      ["Característica", "Estado"],
+                      ["Lectura PDF", ""],
+                      ["Escritura PDF", ""],
+                      ["Extracción texto", ""],
+                      ["Extracción imágenes", ""]
+                    ]
+                  }
+                ],
+                "result": "pdf_creado"
+              }
+            },
+            {
+              "print": {
+                "text": "Analizando el PDF creado..."
+              }
+            },
+            {
+              "pdf": {
+                "operator": "analyze_pdf",
+                "file_path": "ejemplo_basico.pdf",
+                "result": "analisis"
+              }
+            },
+            {
+              "print": {
+                "text": "Información del PDF:"
+              }
+            },
+            {
+              "print": {
+                "text": "   - Páginas: {{analisis.page_count}}"
+              }
+            },
+            {
+              "print": {
+                "text": "   - Tamaño: {{analisis.file_size_formatted}}"
+              }
+            },
+            {
+              "print": {
+                "text": "   - Texto: {{analisis.total_text_length}} caracteres"
+              }
+            },
+            {
+              "print": {
+                "text": "Ejemplo básico completado exitosamente"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Dependencias faltantes. Instala las dependencias requeridas:"
+              }
+            },
+            {
+              "print": {
+                "text": "   pip install PyPDF2>=3.0.0 pdfplumber>=0.9.0 reportlab>=4.0.0 Pillow>=10.0.0"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

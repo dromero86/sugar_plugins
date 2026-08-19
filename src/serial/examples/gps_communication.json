@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "serial": {
+      "options": {
+        "gps_receiver": {
+          "port": "COM6",
+          "baudrate": 4800,
+          "parity": "NONE",
+          "stopbits": 1,
+          "bytesize": 8,
+          "timeout": 1.0,
+          "auto_connect": true
+        }
+      }
+    }
+  },
+  "task": [
+    {
+      "print": {
+        "text": "=== Comunicación con Receptor GPS ==="
+      }
+    },
+    {
+      "serial": {
+        "operator": "write",
+        "session": "gps_receiver",
+        "data": "$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*28\\r\\n",
+        "result": "gps_config"
+      }
+    },
+    {
+      "print": {
+        "text": "Configuración GPS enviada: {{gps_config}}"
+      }
+    },
+    {
+      "loop": {
+        "count": 5,
+        "task": [
+          {
+            "serial": {
+              "operator": "read_until",
+              "session": "gps_receiver",
+              "terminator": "\\r\\n",
+              "timeout": 2.0,
+              "result": "nmea_sentence"
+            }
+          },
+          {
+            "if": {
+              "condition": "${nmea_sentence} contains 'GPGGA'",
+              "then": {
+                "task": [
+                  {
+                    "print": {
+                      "text": "Datos GPS: {{nmea_sentence}}"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "sleep": {
+              "seconds": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "serial": {
+        "operator": "disconnect",
+        "session": "gps_receiver"
+      }
+    }
+  ]
+}

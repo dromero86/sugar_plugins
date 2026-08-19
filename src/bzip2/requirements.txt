@@ -1,0 +1,5 @@
+# Dependencias del plugin bzip2
+# bz2 es parte de la biblioteca estándar de Python, no necesita instalación externa
+
+# Dependencias opcionales para funcionalidades avanzadas
+# No se requieren dependencias externas para funcionalidad básica

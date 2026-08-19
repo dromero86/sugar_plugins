@@ -1,0 +1,12 @@
+{
+  "name": "extract_table_selenium",
+  "version": "1.0.0",
+  "description": "Plugin extract_table_selenium para Sugar",
+  "author": "Sugar Team",
+  "main": "src/extract_table_seleniumPlugin.py",
+  "dependencies": [
+    "selenium>=4.0.0",
+    "webdriver-manager>=3.8.0"
+  ],
+  "commands": []
+}

@@ -1,0 +1,9 @@
+{
+  "name": "openssl_native",
+  "version": "1.0.0",
+  "description": "Plugin openssl_native para Sugar",
+  "author": "Sugar Team",
+  "main": "src/openssl_nativePlugin.py",
+  "dependencies": [],
+  "commands": []
+}

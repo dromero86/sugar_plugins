@@ -1,0 +1,257 @@
+{
+  "task": [
+    {
+      "print": { "text": "Demo completo del plugin SQLite para Sugar" }
+    },
+    {
+      "print": { "text": "=============================================" }
+    },
+    {
+      "sqlite.connect": {
+        "database_path": "./data/demo_complete.db"
+      }
+    },
+    {
+      "print": { "text": "Conectado a la base de datos demo_complete.db" }
+    },
+    {
+      "sqlite.create_table": {
+        "table_name": "usuarios",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT"
+          },
+          {
+            "name": "nombre",
+            "type": "TEXT",
+            "constraints": "NOT NULL"
+          },
+          {
+            "name": "email",
+            "type": "TEXT",
+            "constraints": "UNIQUE NOT NULL"
+          },
+          {
+            "name": "edad",
+            "type": "INTEGER"
+          },
+          {
+            "name": "fecha_registro",
+            "type": "TEXT",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP"
+          }
+        ],
+        "result": "tabla_usuarios_creada"
+      }
+    },
+    {
+      "print": { "text": "Tabla usuarios creada: {{tabla_usuarios_creada}}" }
+    },
+    {
+      "sqlite.create_table": {
+        "table_name": "productos",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT"
+          },
+          {
+            "name": "nombre",
+            "type": "TEXT",
+            "constraints": "NOT NULL"
+          },
+          {
+            "name": "precio",
+            "type": "REAL",
+            "constraints": "NOT NULL"
+          },
+          {
+            "name": "categoria",
+            "type": "TEXT"
+          }
+        ],
+        "result": "tabla_productos_creada"
+      }
+    },
+    {
+      "print": { "text": "Tabla productos creada: {{tabla_productos_creada}}" }
+    },
+    {
+      "sqlite.insert": {
+        "table": "usuarios",
+        "data": [
+          {
+            "nombre": "Ana García",
+            "email": "ana@ejemplo.com",
+            "edad": 28
+          },
+          {
+            "nombre": "Carlos López",
+            "email": "carlos@ejemplo.com",
+            "edad": 35
+          },
+          {
+            "nombre": "María Rodríguez",
+            "email": "maria@ejemplo.com",
+            "edad": 42
+          }
+        ],
+        "result": "usuarios_insertados"
+      }
+    },
+    {
+      "print": { "text": "Usuarios insertados: {{usuarios_insertados}}" }
+    },
+    {
+      "sqlite.insert": {
+        "table": "productos",
+        "data": [
+          {
+            "nombre": "Laptop Gaming",
+            "precio": 1299.99,
+            "categoria": "Electrónicos"
+          },
+          {
+            "nombre": "Mouse Inalámbrico",
+            "precio": 29.99,
+            "categoria": "Accesorios"
+          },
+          {
+            "nombre": "Teclado Mecánico",
+            "precio": 89.99,
+            "categoria": "Accesorios"
+          }
+        ],
+        "result": "productos_insertados"
+      }
+    },
+    {
+      "print": { "text": "Productos insertados: {{productos_insertados}}" }
+    },
+    {
+      "print": { "text": "Consultando todos los usuarios:" }
+    },
+    {
+      "sqlite.select": {
+        "table": "usuarios",
+        "result": "todos_usuarios"
+      }
+    },
+    {
+      "print": { "text": "Usuarios en la base de datos: {{todos_usuarios}}" }
+    },
+    {
+      "print": { "text": "Consultando productos por categoría:" }
+    },
+    {
+      "sqlite.query": {
+        "sql": "SELECT nombre, precio, categoria FROM productos WHERE categoria = 'Accesorios' ORDER BY precio DESC",
+        "result": "accesorios_caros"
+      }
+    },
+    {
+      "print": { "text": "Accesorios ordenados por precio: {{accesorios_caros}}" }
+    },
+    {
+      "print": { "text": "Actualizando precio del mouse:" }
+    },
+    {
+      "sqlite.update": {
+        "table": "productos",
+        "data": {
+          "precio": 24.99
+        },
+        "where": {
+          "nombre": "Mouse Inalámbrico"
+        },
+        "result": "mouse_actualizado"
+      }
+    },
+    {
+      "print": { "text": "Mouse actualizado: {{mouse_actualizado}}" }
+    },
+    {
+      "print": { "text": "Listando todas las tablas:" }
+    },
+    {
+      "sqlite.list_tables": {
+        "result": "tablas_disponibles"
+      }
+    },
+    {
+      "print": { "text": "Tablas en la base de datos: {{tablas_disponibles}}" }
+    },
+    {
+      "print": { "text": "Describiendo tabla usuarios:" }
+    },
+    {
+      "sqlite.describe_table": {
+        "table_name": "usuarios",
+        "result": "estructura_usuarios"
+      }
+    },
+    {
+      "print": { "text": "Estructura de la tabla usuarios: {{estructura_usuarios}}" }
+    },
+    {
+      "print": { "text": "Creando backup de la base de datos:" }
+    },
+    {
+      "sqlite.backup": {
+        "backup_path": "./backups/demo_backup.db",
+        "result": "backup_creado"
+      }
+    },
+    {
+      "print": { "text": "Backup creado: {{backup_creado}}" }
+    },
+    {
+      "print": { "text": "Exportando datos a CSV:" }
+    },
+    {
+      "sqlite.export_data": {
+        "table": "usuarios",
+        "file_path": "./exports/usuarios.csv",
+        "format": "csv",
+        "result": "usuarios_exportados"
+      }
+    },
+    {
+      "print": { "text": "Usuarios exportados: {{usuarios_exportados}}" }
+    },
+    {
+      "print": { "text": "Verificando integridad de la base de datos:" }
+    },
+    {
+      "sqlite.check_integrity": {
+        "result": "integridad_ok"
+      }
+    },
+    {
+      "print": { "text": "Integridad de la base de datos: {{integridad_ok}}" }
+    },
+    {
+      "print": { "text": "Analizando la base de datos:" }
+    },
+    {
+      "sqlite.analyze": {
+        "result": "analisis_completado"
+      }
+    },
+    {
+      "print": { "text": "Análisis completado: {{analisis_completado}}" }
+    },
+    {
+      "sqlite.disconnect": {}
+    },
+    {
+      "print": { "text": "Demo completado exitosamente" }
+    },
+    {
+      "print": { "text": "¡Plugin SQLite funcionando perfectamente!" }
+    }
+  ]
+}

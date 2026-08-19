@@ -1,0 +1,2 @@
+# Meta plugin has no external dependencies
+# It only depends on the core Sugar system

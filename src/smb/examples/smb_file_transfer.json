@@ -1,0 +1,615 @@
+{
+  "task": [
+    {
+      "print": {
+        "text": "=== SMB PLUGIN - TRANSFERENCIA DE ARCHIVOS ==="
+      }
+    },
+    {
+      "print": {
+        "text": "Este ejemplo demuestra las funcionalidades de transferencia de archivos"
+      }
+    },
+    {
+      "print": {
+        "text": "=================================================="
+      }
+    },
+    {
+      "let": {
+        "name": "smb_host",
+        "value": "192.168.1.100"
+      }
+    },
+    {
+      "let": {
+        "name": "smb_share",
+        "value": "shared_folder"
+      }
+    },
+    {
+      "let": {
+        "name": "smb_user",
+        "value": "user"
+      }
+    },
+    {
+      "let": {
+        "name": "smb_pass",
+        "value": "password123"
+      }
+    },
+    {
+      "print": {
+        "text": "Configuración: {{smb_user}}@{{smb_host}}/{{smb_share}}"
+      }
+    },
+    {
+      "print": {
+        "text": ""
+      }
+    },
+    {
+      "print": {
+        "text": "=== 1. CONEXIÓN AL SERVIDOR SMB ==="
+      }
+    },
+    {
+      "smb": {
+        "operator": "connect",
+        "host": "{{smb_host}}",
+        "share": "{{smb_share}}",
+        "username": "{{smb_user}}",
+        "password": "{{smb_pass}}",
+        "session_name": "transfer_session",
+        "result": "connection_status"
+      }
+    },
+    {
+      "print": {
+        "text": "Estado de conexión: {{connection_status.status}}"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{connection_status.status}} == 'success'",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Conexión establecida. Iniciando transferencias..."
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 2. CREACIÓN DE ARCHIVOS DE PRUEBA ==="
+              }
+            },
+            {
+              "let": {
+                "name": "test_file1",
+                "value": "/tmp/test_file1.txt"
+              }
+            },
+            {
+              "let": {
+                "name": "test_file2",
+                "value": "/tmp/test_file2.txt"
+              }
+            },
+            {
+              "let": {
+                "name": "test_file3",
+                "value": "/tmp/test_file3.txt"
+              }
+            },
+            {
+              "print": {
+                "text": "Creando archivos de prueba..."
+              }
+            },
+            {
+              "shell": {
+                "command": "echo 'Contenido del archivo 1' > {{test_file1}}"
+              }
+            },
+            {
+              "shell": {
+                "command": "echo 'Contenido del archivo 2' > {{test_file2}}"
+              }
+            },
+            {
+              "shell": {
+                "command": "echo 'Contenido del archivo 3' > {{test_file3}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Archivos de prueba creados"
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 3. UPLOAD DE ARCHIVO ÚNICO ==="
+              }
+            },
+            {
+              "smb": {
+                "operator": "upload",
+                "session": "transfer_session",
+                "local_path": "{{test_file1}}",
+                "remote_path": "uploaded_file1.txt",
+                "overwrite": true,
+                "result": "upload_result"
+              }
+            },
+            {
+              "print": {
+                "text": "Resultado upload: {{upload_result.status}}"
+              }
+            },
+            {
+              "if": {
+                "condition": "{{upload_result.status}} == 'success'",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Detalles de la transferencia:"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Archivo: {{upload_result.file}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Tamaño: {{upload_result.size}} bytes"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Tiempo: {{upload_result.transfer_time}} segundos"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Velocidad: {{upload_result.speed_mbps}} MB/s"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 4. UPLOAD MÚLTIPLE DE ARCHIVOS ==="
+              }
+            },
+            {
+              "smb": {
+                "operator": "upload_multiple",
+                "session": "transfer_session",
+                "files": [
+                  {
+                    "local": "{{test_file2}}",
+                    "remote": "uploaded_file2.txt"
+                  },
+                  {
+                    "local": "{{test_file3}}",
+                    "remote": "uploaded_file3.txt"
+                  }
+                ],
+                "parallel": true,
+                "max_workers": 2,
+                "result": "upload_multiple_result"
+              }
+            },
+            {
+              "print": {
+                "text": "Resultado upload múltiple: {{upload_multiple_result.status}}"
+              }
+            },
+            {
+              "if": {
+                "condition": "{{upload_multiple_result.status}} == 'success'",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Estadísticas del upload múltiple:"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Archivos procesados: {{upload_multiple_result.files_processed}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Exitosos: {{upload_multiple_result.successful}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Fallidos: {{upload_multiple_result.failed}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Tiempo total: {{upload_multiple_result.total_time}} segundos"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 5. LISTADO DE ARCHIVOS SUBIDOS ==="
+              }
+            },
+            {
+              "smb": {
+                "operator": "list_directory",
+                "session": "transfer_session",
+                "path": "/",
+                "result": "directory_listing"
+              }
+            },
+            {
+              "print": {
+                "text": "Archivos en el servidor:"
+              }
+            },
+            {
+              "print": {
+                "text": "Total: {{directory_listing.total_items}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Directorios: {{directory_listing.directories}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Archivos: {{directory_listing.files}}"
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 6. DOWNLOAD DE ARCHIVO ==="
+              }
+            },
+            {
+              "smb": {
+                "operator": "download",
+                "session": "transfer_session",
+                "remote_path": "uploaded_file1.txt",
+                "local_path": "/tmp/downloaded_file1.txt",
+                "overwrite": true,
+                "result": "download_result"
+              }
+            },
+            {
+              "print": {
+                "text": "Resultado download: {{download_result.status}}"
+              }
+            },
+            {
+              "if": {
+                "condition": "{{download_result.status}} == 'success'",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Detalles de la descarga:"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Archivo: {{download_result.file}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Tamaño: {{download_result.size}} bytes"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Tiempo: {{download_result.transfer_time}} segundos"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Velocidad: {{download_result.speed_mbps}} MB/s"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 7. DOWNLOAD MÚLTIPLE ==="
+              }
+            },
+            {
+              "smb": {
+                "operator": "download_multiple",
+                "session": "transfer_session",
+                "files": [
+                  {
+                    "remote": "uploaded_file2.txt",
+                    "local": "/tmp/downloaded_file2.txt"
+                  },
+                  {
+                    "remote": "uploaded_file3.txt",
+                    "local": "/tmp/downloaded_file3.txt"
+                  }
+                ],
+                "parallel": true,
+                "max_workers": 2,
+                "result": "download_multiple_result"
+              }
+            },
+            {
+              "print": {
+                "text": "Resultado download múltiple: {{download_multiple_result.status}}"
+              }
+            },
+            {
+              "if": {
+                "condition": "{{download_multiple_result.status}} == 'success'",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Estadísticas del download múltiple:"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Archivos procesados: {{download_multiple_result.files_processed}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Exitosos: {{download_multiple_result.successful}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Fallidos: {{download_multiple_result.failed}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Tiempo total: {{download_multiple_result.total_time}} segundos"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 8. VERIFICACIÓN DE ARCHIVOS DESCARGADOS ==="
+              }
+            },
+            {
+              "shell": {
+                "command": "ls -la /tmp/downloaded_file*.txt",
+                "result": "downloaded_files_list"
+              }
+            },
+            {
+              "print": {
+                "text": "Archivos descargados:"
+              }
+            },
+            {
+              "print": {
+                "text": "{{downloaded_files_list.stdout}}"
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 9. ESTADÍSTICAS FINALES ==="
+              }
+            },
+            {
+              "smb": {
+                "operator": "get_transfer_stats",
+                "result": "final_stats"
+              }
+            },
+            {
+              "print": {
+                "text": "Estadísticas finales de transferencia:"
+              }
+            },
+            {
+              "print": {
+                "text": "Total de transferencias: {{final_stats.transfer_statistics.total_transfers}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Transferencias exitosas: {{final_stats.transfer_statistics.successful_transfers}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Transferencias fallidas: {{final_stats.transfer_statistics.failed_transfers}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Bytes totales: {{final_stats.transfer_statistics.total_bytes}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Tasa de éxito: {{final_stats.transfer_statistics.success_rate}}%"
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 10. LIMPIEZA ==="
+              }
+            },
+            {
+              "smb": {
+                "operator": "delete_file",
+                "session": "transfer_session",
+                "path": "uploaded_file1.txt",
+                "result": "delete_file1_result"
+              }
+            },
+            {
+              "smb": {
+                "operator": "delete_file",
+                "session": "transfer_session",
+                "path": "uploaded_file2.txt",
+                "result": "delete_file2_result"
+              }
+            },
+            {
+              "smb": {
+                "operator": "delete_file",
+                "session": "transfer_session",
+                "path": "uploaded_file3.txt",
+                "result": "delete_file3_result"
+              }
+            },
+            {
+              "print": {
+                "text": "Archivos eliminados del servidor"
+              }
+            },
+            {
+              "shell": {
+                "command": "rm -f /tmp/test_file*.txt /tmp/downloaded_file*.txt"
+              }
+            },
+            {
+              "print": {
+                "text": "Archivos temporales eliminados"
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== 11. DESCONEXIÓN ==="
+              }
+            },
+            {
+              "smb": {
+                "operator": "disconnect",
+                "session": "transfer_session",
+                "result": "disconnect_status"
+              }
+            },
+            {
+              "print": {
+                "text": "Estado de desconexión: {{disconnect_status.status}}"
+              }
+            },
+            {
+              "print": {
+                "text": ""
+              }
+            },
+            {
+              "print": {
+                "text": "=== TRANSFERENCIA DE ARCHIVOS COMPLETADA ==="
+              }
+            },
+            {
+              "print": {
+                "text": "El plugin SMB ha demostrado todas sus funcionalidades de transferencia"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "condition": "{{connection_status.status}} != 'success'",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Error en la conexión: {{connection_status.error}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Detalles: {{connection_status.details}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Verifique la configuración del servidor SMB"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

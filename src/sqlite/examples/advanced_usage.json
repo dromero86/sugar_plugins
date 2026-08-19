@@ -1,0 +1,305 @@
+{
+  "task": [
+    {
+      "print": { "text": "Iniciando ejemplo avanzado de SQLite" }
+    },
+    {
+      "sqlite": {
+        "operator": "connect",
+        "database_path": "./data/tienda_avanzada.db"
+      }
+    },
+    {
+      "print": { "text": "Conectado a la base de datos de tienda" }
+    },
+    {
+      "sqlite": {
+        "operator": "create_table",
+        "table_name": "categorias",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT"
+          },
+          {
+            "name": "nombre",
+            "type": "TEXT",
+            "constraints": "NOT NULL UNIQUE"
+          },
+          {
+            "name": "descripcion",
+            "type": "TEXT"
+          }
+        ],
+        "result": "categorias_creada"
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "create_table",
+        "table_name": "productos",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT"
+          },
+          {
+            "name": "nombre",
+            "type": "TEXT",
+            "constraints": "NOT NULL"
+          },
+          {
+            "name": "descripcion",
+            "type": "TEXT"
+          },
+          {
+            "name": "precio",
+            "type": "REAL",
+            "constraints": "NOT NULL CHECK(precio > 0)"
+          },
+          {
+            "name": "stock",
+            "type": "INTEGER",
+            "constraints": "DEFAULT 0 CHECK(stock >= 0)"
+          },
+          {
+            "name": "categoria_id",
+            "type": "INTEGER",
+            "constraints": "REFERENCES categorias(id)"
+          },
+          {
+            "name": "fecha_creacion",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP"
+          }
+        ],
+        "result": "productos_creada"
+      }
+    },
+    {
+      "print": { "text": "Tablas creadas: categorias y productos" }
+    },
+    {
+      "sqlite": {
+        "operator": "begin_transaction"
+      }
+    },
+    {
+      "print": { "text": "Iniciando transacción" }
+    },
+    {
+      "sqlite": {
+        "operator": "insert",
+        "table": "categorias",
+        "data": [
+          {
+            "nombre": "Electrónicos",
+            "descripcion": "Productos electrónicos y tecnología"
+          },
+          {
+            "nombre": "Ropa",
+            "descripcion": "Vestimenta y accesorios"
+          },
+          {
+            "nombre": "Hogar",
+            "descripcion": "Artículos para el hogar"
+          }
+        ],
+        "result": "categorias_insertadas"
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "select",
+        "table": "categorias",
+        "result": "categorias_data"
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "insert",
+        "table": "productos",
+        "data": [
+          {
+            "nombre": "Laptop Gaming",
+            "descripcion": "Laptop para juegos de alto rendimiento",
+            "precio": 1299.99,
+            "stock": 5,
+            "categoria_id": 1
+          },
+          {
+            "nombre": "Smartphone",
+            "descripcion": "Teléfono inteligente último modelo",
+            "precio": 599.99,
+            "stock": 15,
+            "categoria_id": 1
+          },
+          {
+            "nombre": "Camiseta Básica",
+            "descripcion": "Camiseta de algodón 100%",
+            "precio": 19.99,
+            "stock": 50,
+            "categoria_id": 2
+          },
+          {
+            "nombre": "Sofá Moderno",
+            "descripcion": "Sofá de 3 plazas moderno",
+            "precio": 899.99,
+            "stock": 3,
+            "categoria_id": 3
+          },
+          {
+            "nombre": "Auriculares Bluetooth",
+            "descripcion": "Auriculares inalámbricos con cancelación de ruido",
+            "precio": 89.99,
+            "stock": 25,
+            "categoria_id": 1
+          }
+        ],
+        "result": "productos_insertados"
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "savepoint",
+        "name": "datos_iniciales"
+      }
+    },
+    {
+      "print": { "text": "Savepoint creado: datos_iniciales" }
+    },
+    {
+      "sqlite": {
+        "operator": "query",
+        "sql": "SELECT p.nombre, p.precio, p.stock, c.nombre as categoria FROM productos p JOIN categorias c ON p.categoria_id = c.id ORDER BY p.precio DESC",
+        "result": "productos_con_categorias"
+      }
+    },
+    {
+      "print": { "text": "Productos con categorías:" }
+    },
+    {
+      "for": {
+        "variable": "producto",
+        "in": "{{productos_con_categorias.data}}",
+        "task": [
+          {
+            "print": { "text": "  - {{producto.nombre}} ({{producto.categoria}}) - ${{producto.precio}} - Stock: {{producto.stock}}" }
+          }
+        ]
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "update",
+        "table": "productos",
+        "data": { "precio": "precio * 0.9" },
+        "where": "stock > 10",
+        "result": "descuento_aplicado"
+      }
+    },
+    {
+      "print": { "text": "Descuento aplicado a productos con stock alto: {{descuento_aplicado}}" }
+    },
+    {
+      "sqlite": {
+        "operator": "query",
+        "sql": "SELECT c.nombre as categoria, COUNT(p.id) as total_productos, AVG(p.precio) as precio_promedio FROM categorias c LEFT JOIN productos p ON c.id = p.categoria_id GROUP BY c.id, c.nombre",
+        "result": "resumen_categorias"
+      }
+    },
+    {
+      "print": { "text": "Resumen por categorías:" }
+    },
+    {
+      "for": {
+        "variable": "categoria",
+        "in": "{{resumen_categorias.data}}",
+        "task": [
+          {
+            "print": { "text": "  - {{categoria.categoria}}: {{categoria.total_productos}} productos, precio promedio: ${{categoria.precio_promedio}}" }
+          }
+        ]
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "commit"
+      }
+    },
+    {
+      "print": { "text": "Transacción confirmada" }
+    },
+    {
+      "sqlite": {
+        "operator": "backup",
+        "backup_path": "./backups/tienda_avanzada_backup.db",
+        "result": "backup_result"
+      }
+    },
+    {
+      "print": { "text": "Backup creado: {{backup_result}}" }
+    },
+    {
+      "sqlite": {
+        "operator": "export_data",
+        "table": "productos",
+        "file_path": "./exports/productos.csv",
+        "format": "csv",
+        "result": "export_result"
+      }
+    },
+    {
+      "print": { "text": "Productos exportados a CSV: {{export_result}}" }
+    },
+    {
+      "sqlite": {
+        "operator": "check_integrity",
+        "result": "integrity_check"
+      }
+    },
+    {
+      "print": { "text": "Verificación de integridad: {{integrity_check}}" }
+    },
+    {
+      "sqlite": {
+        "operator": "analyze",
+        "result": "analyze_result"
+      }
+    },
+    {
+      "print": { "text": "Análisis de base de datos completado" }
+    },
+    {
+      "sqlite": {
+        "operator": "get_table_info",
+        "table": "productos",
+        "result": "info_productos"
+      }
+    },
+    {
+      "print": { "text": "Información de tabla productos:" }
+    },
+    {
+      "for": {
+        "variable": "columna",
+        "in": "{{info_productos.data}}",
+        "task": [
+          {
+            "print": { "text": "  - {{columna.name}}: {{columna.type}} {{columna.notnull}}" }
+          }
+        ]
+      }
+    },
+    {
+      "sqlite": {
+        "operator": "disconnect"
+      }
+    },
+    {
+      "print": { "text": "Ejemplo avanzado completado" }
+    }
+  ]
+}

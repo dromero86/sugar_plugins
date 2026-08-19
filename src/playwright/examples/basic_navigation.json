@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "playwright": {
+      "browser_type": "chromium",
+      "headless": false,
+      "slow_mo": 1000
+    }
+  },
+  "task": [
+    {
+      "playwright": {
+        "operator": "launch_browser",
+        "browser_type": "chromium",
+        "headless": false,
+        "result": "browser_status"
+      }
+    },
+    {
+      "print": {
+        "text": "Navegador lanzado: {{browser_status.browser_type}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "new_context",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "result": "context_status"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "new_page",
+        "result": "page_status"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "goto",
+        "url": "https://example.com",
+        "wait_until": "load",
+        "timeout": 30000,
+        "result": "navigation_result"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "get_title",
+        "result": "page_title"
+      }
+    },
+    {
+      "print": {
+        "text": "Título de la página: {{page_title.title}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "get_url",
+        "result": "current_url"
+      }
+    },
+    {
+      "print": {
+        "text": "URL actual: {{current_url.url}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "screenshot",
+        "path": "./screenshots/example_page.png",
+        "full_page": true,
+        "result": "screenshot_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Screenshot guardado: {{screenshot_result.path}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "close_browser"
+      }
+    },
+    {
+      "print": {
+        "text": "Navegación básica completada exitosamente"
+      }
+    }
+  ]
+}

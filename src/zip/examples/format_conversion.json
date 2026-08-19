@@ -1,0 +1,80 @@
+{
+  "name": "Conversión de Formatos",
+  "description": "Ejemplo de conversión entre diferentes formatos de compresión",
+  "version": "1.0.0",
+  "task": [
+    {
+      "let": {
+        "name": "fecha",
+        "value": "${Date.now()}"
+      }
+    },
+    {
+      "print": {
+        "text": "Iniciando conversión de formatos..."
+      }
+    },
+    {
+      "zip": {
+        "operator": "compress",
+        "source": "./datos",
+        "destination": "./original_{{fecha}}.zip",
+        "format": "zip",
+        "compression_level": 9,
+        "result": "zip_original"
+      }
+    },
+    {
+      "zip": {
+        "operator": "convert",
+        "source": "{{zip_original.destination}}",
+        "destination": "./convertido_{{fecha}}.tar.gz",
+        "target_format": "tar.gz",
+        "result": "conversion_targz"
+      }
+    },
+    {
+      "zip": {
+        "operator": "convert",
+        "source": "{{zip_original.destination}}",
+        "destination": "./convertido_{{fecha}}.tar.bz2",
+        "target_format": "tar.bz2",
+        "result": "conversion_tarbz2"
+      }
+    },
+    {
+      "zip": {
+        "operator": "convert",
+        "source": "{{zip_original.destination}}",
+        "destination": "./convertido_{{fecha}}.tar.xz",
+        "target_format": "tar.xz",
+        "result": "conversion_tarxz"
+      }
+    },
+    {
+      "print": {
+        "text": "Resultados de conversión:"
+      }
+    },
+    {
+      "print": {
+        "text": "   ZIP: {{zip_original.compressed_size}} bytes"
+      }
+    },
+    {
+      "print": {
+        "text": "   TAR.GZ: {{conversion_targz.compressed_size}} bytes"
+      }
+    },
+    {
+      "print": {
+        "text": "   TAR.BZ2: {{conversion_tarbz2.compressed_size}} bytes"
+      }
+    },
+    {
+      "print": {
+        "text": "   TAR.XZ: {{conversion_tarxz.compressed_size}} bytes"
+      }
+    }
+  ]
+}

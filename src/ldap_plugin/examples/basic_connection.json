@@ -1,0 +1,53 @@
+{
+  "task": [
+    {
+      "ldap": {
+        "operator": "connect",
+        "server": "ldap.example.com",
+        "port": 389,
+        "username": "cn=admin,dc=example,dc=com",
+        "password": "admin_password",
+        "connection_name": "main_server",
+        "result": "connection_result"
+      }
+    },
+    {
+      "ldap": {
+        "operator": "test_connection",
+        "connection_name": "main_server",
+        "result": "test_result"
+      }
+    },
+    {
+      "ldap": {
+        "operator": "search",
+        "connection_name": "main_server",
+        "base_dn": "dc=example,dc=com",
+        "search_filter": "(objectClass=person)",
+        "attributes": ["cn", "uid", "mail"],
+        "result": "search_results"
+      }
+    },
+    {
+      "print": {
+        "text": "Connection result: {{connection_result}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Test result: {{test_result}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Found {{search_results.count}} users"
+      }
+    },
+    {
+      "ldap": {
+        "operator": "disconnect",
+        "connection_name": "main_server"
+      }
+    }
+  ]
+}

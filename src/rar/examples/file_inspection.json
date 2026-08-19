@@ -1,0 +1,152 @@
+{
+  "description": "Ejemplo de inspección de archivos RAR",
+  "task": [
+    {
+      "print": {
+        "text": "Inspeccionando archivo RAR..."
+      }
+    },
+    {
+      "rar": {
+        "operator": "rar_info",
+        "source": "./archivo.rar",
+        "result": "file_info"
+      }
+    },
+    {
+      "print": {
+        "text": "Información del archivo:"
+      }
+    },
+    {
+      "print": {
+        "text": "Archivo: {{file_info.file}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Tamaño: {{file_info.size_human}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Formato: {{file_info.format}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Archivos contenidos: {{file_info.files_count}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Protegido con contraseña: {{file_info.is_encrypted}}"
+      }
+    },
+    {
+      "if": {
+        "condition": "${file_info.comment} != null",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Comentario: {{file_info.comment}}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "print": {
+        "text": "Primeros archivos:"
+      }
+    },
+    {
+      "for": {
+        "variable": "file",
+        "in": "${file_info.files}",
+        "task": [
+          {
+            "print": {
+              "text": "  - {{file}}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "print": {
+        "text": "Detalles de archivos:"
+      }
+    },
+    {
+      "for": {
+        "variable": "detail",
+        "in": "${file_info.file_details}",
+        "task": [
+          {
+            "print": {
+              "text": "  {{detail.name}}"
+            }
+          },
+          {
+            "print": {
+              "text": "    Tamaño: {{detail.size}} bytes"
+            }
+          },
+          {
+            "print": {
+              "text": "    Comprimido: {{detail.compressed_size}} bytes"
+            }
+          },
+          {
+            "print": {
+              "text": "    Encriptado: {{detail.is_encrypted}}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "print": {
+        "text": "Probando integridad del archivo..."
+      }
+    },
+    {
+      "rar": {
+        "operator": "rar_test",
+        "source": "./archivo.rar",
+        "result": "test_result"
+      }
+    },
+    {
+      "if": {
+        "condition": "${test_result.is_valid} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Archivo RAR válido - {{test_result.files_tested}} archivos verificados"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Archivo RAR corrupto o dañado"
+              }
+            },
+            {
+              "print": {
+                "text": "Error: {{test_result.error}}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

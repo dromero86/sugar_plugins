@@ -1,0 +1,25 @@
+# PDF Plugin Dependencies
+# Core PDF manipulation libraries
+
+# FPDF2 - Modern PDF creation and manipulation (replaces reportlab)
+fpdf2>=2.7.0
+
+# PyPDF2 - For basic PDF reading and manipulation
+PyPDF2>=3.0.0
+
+# pdfplumber - For advanced text and image extraction
+pdfplumber>=0.9.0
+
+# Pillow - For image processing
+Pillow>=10.0.0
+
+# Optional dependencies for enhanced functionality
+# psutil - For system information (used in system_info command)
+psutil>=5.9.0
+
+# Additional PDF libraries for extended functionality
+# pdf2image - For PDF to image conversion (optional)
+# pdf2image>=1.16.0
+
+# pikepdf - For advanced PDF manipulation (optional)
+# pikepdf>=8.0.0

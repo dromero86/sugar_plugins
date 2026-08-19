@@ -1,0 +1,238 @@
+{
+  "task": [
+    {
+      "docker": {
+        "operator": "create_composition",
+        "name": "microservices_app",
+        "version": "3.8",
+        "services": {
+          "api_gateway": {
+            "image": "nginx:alpine",
+            "ports": ["8080:80"],
+            "environment": {
+              "UPSTREAM_API": "http://api_service:3000",
+              "UPSTREAM_AUTH": "http://auth_service:3001"
+            },
+            "volumes": ["./nginx.conf:/etc/nginx/nginx.conf"],
+            "networks": ["app_network"],
+            "restart": "unless-stopped",
+            "depends_on": ["api_service", "auth_service"],
+            "healthcheck": {
+              "test": ["CMD", "curl", "-f", "http://localhost/health"],
+              "interval": "30s",
+              "timeout": "10s",
+              "retries": 3,
+              "start_period": "40s"
+            },
+            "labels": {
+              "app": "api_gateway",
+              "tier": "frontend"
+            }
+          },
+          "api_service": {
+            "image": "node:16-alpine",
+            "ports": ["3000:3000"],
+            "environment": {
+              "NODE_ENV": "production",
+              "DB_HOST": "database",
+              "DB_PORT": "5432",
+              "REDIS_HOST": "redis",
+              "REDIS_PORT": "6379"
+            },
+            "volumes": ["./api:/app", "/app/node_modules"],
+            "networks": ["app_network"],
+            "restart": "unless-stopped",
+            "depends_on": ["database", "redis"],
+            "working_dir": "/app",
+            "command": ["npm", "start"],
+            "healthcheck": {
+              "test": ["CMD", "curl", "-f", "http://localhost:3000/health"],
+              "interval": "30s",
+              "timeout": "10s",
+              "retries": 3
+            },
+            "labels": {
+              "app": "api_service",
+              "tier": "backend"
+            }
+          },
+          "auth_service": {
+            "image": "node:16-alpine",
+            "ports": ["3001:3001"],
+            "environment": {
+              "NODE_ENV": "production",
+              "JWT_SECRET": "your-secret-key",
+              "DB_HOST": "database",
+              "DB_PORT": "5432"
+            },
+            "volumes": ["./auth:/app", "/app/node_modules"],
+            "networks": ["app_network"],
+            "restart": "unless-stopped",
+            "depends_on": ["database"],
+            "working_dir": "/app",
+            "command": ["npm", "start"],
+            "healthcheck": {
+              "test": ["CMD", "curl", "-f", "http://localhost:3001/health"],
+              "interval": "30s",
+              "timeout": "10s",
+              "retries": 3
+            },
+            "labels": {
+              "app": "auth_service",
+              "tier": "backend"
+            }
+          },
+          "database": {
+            "image": "postgres:13-alpine",
+            "ports": ["5432:5432"],
+            "environment": {
+              "POSTGRES_DB": "microservices",
+              "POSTGRES_USER": "app_user",
+              "POSTGRES_PASSWORD": "secure_password",
+              "POSTGRES_INITDB_ARGS": "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+            },
+            "volumes": ["postgres_data:/var/lib/postgresql/data", "./init.sql:/docker-entrypoint-initdb.d/init.sql"],
+            "networks": ["app_network"],
+            "restart": "unless-stopped",
+            "healthcheck": {
+              "test": ["CMD-SHELL", "pg_isready -U app_user -d microservices"],
+              "interval": "30s",
+              "timeout": "10s",
+              "retries": 5,
+              "start_period": "30s"
+            },
+            "labels": {
+              "app": "database",
+              "tier": "data"
+            }
+          },
+          "redis": {
+            "image": "redis:6-alpine",
+            "ports": ["6379:6379"],
+            "volumes": ["redis_data:/data", "./redis.conf:/usr/local/etc/redis/redis.conf"],
+            "networks": ["app_network"],
+            "restart": "unless-stopped",
+            "command": ["redis-server", "/usr/local/etc/redis/redis.conf"],
+            "healthcheck": {
+              "test": ["CMD", "redis-cli", "ping"],
+              "interval": "30s",
+              "timeout": "10s",
+              "retries": 3
+            },
+            "labels": {
+              "app": "redis",
+              "tier": "cache"
+            }
+          },
+          "monitoring": {
+            "image": "prom/prometheus:latest",
+            "ports": ["9090:9090"],
+            "volumes": ["./prometheus.yml:/etc/prometheus/prometheus.yml", "prometheus_data:/prometheus"],
+            "networks": ["app_network"],
+            "restart": "unless-stopped",
+            "command": [
+              "--config.file=/etc/prometheus/prometheus.yml",
+              "--storage.tsdb.path=/prometheus",
+              "--web.console.libraries=/etc/prometheus/console_libraries",
+              "--web.console.templates=/etc/prometheus/consoles",
+              "--storage.tsdb.retention.time=200h",
+              "--web.enable-lifecycle"
+            ],
+            "labels": {
+              "app": "monitoring",
+              "tier": "observability"
+            }
+          }
+        },
+        "networks": {
+          "app_network": {
+            "driver": "bridge",
+            "labels": {
+              "app": "microservices_app"
+            }
+          }
+        },
+        "volumes": {
+          "postgres_data": {
+            "driver": "local",
+            "labels": {
+              "app": "database"
+            }
+          },
+          "redis_data": {
+            "driver": "local",
+            "labels": {
+              "app": "redis"
+            }
+          },
+          "prometheus_data": {
+            "driver": "local",
+            "labels": {
+              "app": "monitoring"
+            }
+          }
+        },
+        "result": "composition_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Composición de microservicios creada: {{composition_result}}"
+      }
+    },
+    {
+      "docker": {
+        "operator": "validate_composition",
+        "name": "microservices_app",
+        "result": "validation_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Validación de la composición: {{validation_result}}"
+      }
+    },
+    {
+      "if": {
+        "condition": "${validation_result.valid} == true",
+        "then": {
+          "task": [
+            {
+              "docker": {
+                "operator": "start_composition",
+                "name": "microservices_app",
+                "result": "start_result"
+              }
+            },
+            {
+              "print": {
+                "text": "Microservicios iniciados: {{start_result}}"
+              }
+            },
+            {
+              "docker": {
+                "operator": "health_check",
+                "composition_name": "microservices_app",
+                "result": "health_result"
+              }
+            },
+            {
+              "print": {
+                "text": "Estado de salud: {{health_result}}"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "La composición tiene errores de validación: {{validation_result.errors}}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

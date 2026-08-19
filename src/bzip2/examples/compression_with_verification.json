@@ -1,0 +1,54 @@
+{
+  "task": [
+    {
+      "print": { "text": "Iniciando compresión con verificación de integridad" }
+    },
+    {
+      "bzip2": {
+        "operator": "bzip2_compress",
+        "source": "archivo_importante.txt",
+        "destination": "archivo_importante.txt.bz2",
+        "compression_level": 8,
+        "result": "compression_result"
+      }
+    },
+    {
+      "print": { "text": "Archivo comprimido, verificando integridad..." }
+    },
+    {
+      "bzip2": {
+        "operator": "bzip2_test",
+        "source": "archivo_importante.txt.bz2",
+        "result": "test_result"
+      }
+    },
+    {
+      "if": {
+        "condition": "${test_result.is_valid} == true",
+        "then": {
+          "task": [
+            {
+              "print": { "text": "Verificación exitosa - Archivo íntegro" }
+            },
+            {
+              "print": { "text": "Tamaño descomprimido: {{test_result.decompressed_size}} bytes" }
+            },
+            {
+              "print": { "text": "⏱Tiempo de verificación: {{test_result.processing_time}} segundos" }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": { "text": "Error en la verificación" }
+            },
+            {
+              "print": { "text": "Error: {{test_result.error}}" }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

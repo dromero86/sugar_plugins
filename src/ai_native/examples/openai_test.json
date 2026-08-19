@@ -1,0 +1,201 @@
+{
+  "description": "Prueba funcional del plugin AI Native con OpenAI",
+  "variables": {
+    "openai_api_key": {
+      "type": "String",
+      "value": "sk-your-openai-api-key-here"
+    }
+  },
+  "task": [
+    {
+      "print": {
+        "text": "Iniciando prueba funcional con OpenAI..."
+      }
+    },
+    {
+      "print": {
+        "text": "=== Configurando Plugin con OpenAI ==="
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "get_ai_info",
+        "result": "initial_info"
+      }
+    },
+    {
+      "print": {
+        "text": "Estado inicial del plugin: {{initial_info.model_status.model_type}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Modelo actual: {{initial_info.model_status.current_model}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Probando Generación de Código con OpenAI ==="
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "generate_code",
+        "description": "Crear una función en Python que calcule el factorial de un número usando recursión y manejo de errores",
+        "context": {
+          "domain": "data_processing"
+        },
+        "options": {
+          "language": "python",
+          "style": "functional",
+          "complexity": "medium"
+        },
+        "result": "factorial_function"
+      }
+    },
+    {
+      "print": {
+        "text": "Código generado exitosamente"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Código Generado por OpenAI ==="
+      }
+    },
+    {
+      "print": {
+        "text": "{{factorial_function}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Validando Código Generado ==="
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "validate_code",
+        "code": "{{factorial_function}}",
+        "result": "validation_result"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{validation_result.valid}} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Código validado correctamente"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Problemas de validación: {{validation_result.issues}}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "print": {
+        "text": "=== Probando Optimización con OpenAI ==="
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "optimize_code",
+        "code": "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr",
+        "target": "performance",
+        "constraints": {
+          "maintain_api": true,
+          "preserve_behavior": true
+        },
+        "result": "optimized_sort"
+      }
+    },
+    {
+      "print": {
+        "text": "Código optimizado exitosamente"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Código Optimizado por OpenAI ==="
+      }
+    },
+    {
+      "print": {
+        "text": "{{optimized_sort}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Probando Lenguaje Natural con OpenAI ==="
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "nl_to_code",
+        "query": "Crear un script que lea un archivo CSV, procese los datos, calcule estadísticas básicas y guarde los resultados en un archivo JSON",
+        "context": {
+          "domain": "data_processing",
+          "requirements": ["file_io", "data_analysis", "error_handling"]
+        },
+        "result": "csv_processor"
+      }
+    },
+    {
+      "print": {
+        "text": "Script generado desde lenguaje natural"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Script Generado por OpenAI ==="
+      }
+    },
+    {
+      "print": {
+        "text": "{{csv_processor}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Información Final del Plugin ==="
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "get_model_info",
+        "result": "final_model_info"
+      }
+    },
+    {
+      "print": {
+        "text": "Modelo final: {{final_model_info.current_model}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Tipo: {{final_model_info.model_type}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Capacidades: {{final_model_info.capabilities}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Prueba funcional con OpenAI completada exitosamente!"
+      }
+    }
+  ]
+}

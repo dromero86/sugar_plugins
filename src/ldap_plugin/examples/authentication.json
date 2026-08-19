@@ -1,0 +1,50 @@
+{
+  "task": [
+    {
+      "ldap": {
+        "operator": "connect",
+        "server": "ldap.example.com",
+        "port": 389,
+        "connection_name": "auth_server"
+      }
+    },
+    {
+      "ldap": {
+        "operator": "authenticate",
+        "connection_name": "auth_server",
+        "username": "cn=john.doe,ou=users,dc=example,dc=com",
+        "password": "user_password",
+        "result": "auth_result"
+      }
+    },
+    {
+      "if": {
+        "condition": "${auth_result.status} == 'success'",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Authentication successful"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Authentication failed: {{auth_result.message}}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ldap": {
+        "operator": "disconnect",
+        "connection_name": "auth_server"
+      }
+    }
+  ]
+}

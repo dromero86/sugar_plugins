@@ -1,0 +1,152 @@
+{
+  "description": "Ejemplo de optimización de código usando AI Native Plugin",
+  "variables": {
+    "bubble_sort_function": {
+      "type": "String",
+      "value": "function sort(arr) { for (let i = 0; i < arr.length; i++) { for (let j = 0; j < arr.length - 1; j++) { if (arr[j] > arr[j + 1]) { let temp = arr[j]; arr[j] = arr[j + 1]; arr[j + 1] = temp; } } } return arr; }"
+    }
+  },
+  "task": [
+    {
+      "print": {
+        "text": "Iniciando optimización de código con AI Native Plugin..."
+      }
+    },
+    {
+      "print": {
+        "text": "=== Código Original ==="
+      }
+    },
+    {
+      "print": {
+        "text": "{{bubble_sort_function}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Fin del Código Original ==="
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "analyze_code",
+        "code": "{{bubble_sort_function}}",
+        "result": "original_analysis"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Análisis del Código Original ==="
+      }
+    },
+    {
+      "print": {
+        "text": "Problemas de rendimiento: {{original_analysis.performance_issues}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Sugerencias: {{original_analysis.suggestions}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Fin del Análisis Original ==="
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "optimize_code",
+        "code": "{{bubble_sort_function}}",
+        "target": "performance",
+        "constraints": {
+          "maintain_api": true,
+          "preserve_behavior": true
+        },
+        "result": "optimized_function"
+      }
+    },
+    {
+      "print": {
+        "text": "Código optimizado exitosamente"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Código Optimizado ==="
+      }
+    },
+    {
+      "print": {
+        "text": "{{optimized_function}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Fin del Código Optimizado ==="
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "analyze_code",
+        "code": "{{optimized_function}}",
+        "result": "optimized_analysis"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Análisis del Código Optimizado ==="
+      }
+    },
+    {
+      "print": {
+        "text": "Problemas de rendimiento: {{optimized_analysis.performance_issues}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Sugerencias: {{optimized_analysis.suggestions}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Fin del Análisis Optimizado ==="
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "validate_code",
+        "code": "{{optimized_function}}",
+        "result": "optimization_validation"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{optimization_validation.valid}} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Código optimizado validado correctamente"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Problemas de validación en optimización: {{optimization_validation.issues}}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "print": {
+        "text": "Optimización completada exitosamente"
+      }
+    }
+  ]
+}

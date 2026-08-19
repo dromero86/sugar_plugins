@@ -1,0 +1,74 @@
+{
+    "task": [
+        {
+            "plugin": {
+                "name": "extract_table_selenium",
+                "command": "extract_table",
+                "config": {
+                    "url": "https://example.com/products",
+                    "selector": ".product-table",
+                    "config": {
+                        "headers": [
+                            "Product",
+                            "Price",
+                            "Stock",
+                            "Category",
+                            "Rating"
+                        ],
+                        "format": "objects",
+                        "scope": "tbody"
+                    },
+                    "filters": {
+                        "skip_rows": 1,
+                        "max_rows": 50,
+                        "skip_columns": [
+                            0
+                        ],
+                        "row_condition": "{{row.Stock}} > 0",
+                        "min_columns": 4
+                    },
+                    "transform": {
+                        "columns": {
+                            "Price": "parse_currency(USD)",
+                            "Stock": "parse_int",
+                            "Rating": "parse_float"
+                        },
+                        "custom": {
+                            "ID": "generate_uuid()",
+                            "Discount": "{{row.Price}} * 0.1",
+                            "Availability": "{{row.Stock}} > 0 ? 'In Stock' : 'Out of Stock'"
+                        },
+                        "rename": {
+                            "Product": "ProductName",
+                            "Category": "ProductCategory"
+                        }
+                    },
+                    "validation": {
+                        "required": [
+                            "Product",
+                            "Price",
+                            "Stock"
+                        ],
+                        "types": {
+                            "Price": "number",
+                            "Stock": "integer",
+                            "Rating": "number"
+                        },
+                        "on_error": "skip_row"
+                    },
+                    "result": "products_data"
+                }
+            }
+        },
+        {
+            "print": {
+                "text": "Extracted {{products_data.length}} products"
+            }
+        },
+        {
+            "print": {
+                "text": "Products data: {{products_data}}"
+            }
+        }
+    ]
+}

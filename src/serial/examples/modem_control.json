@@ -1,0 +1,102 @@
+{
+  "task": [
+    {
+      "print": {
+        "text": "=== Control de Módem Serie ==="
+      }
+    },
+    {
+      "serial": {
+        "operator": "connect",
+        "port": "COM4",
+        "baudrate": 57600,
+        "session": "modem",
+        "rtscts": true,
+        "result": "connection"
+      }
+    },
+    {
+      "print": {
+        "text": "Conexión a módem: {{connection}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "set_dtr",
+        "session": "modem",
+        "state": true,
+        "result": "dtr_set"
+      }
+    },
+    {
+      "print": {
+        "text": "DTR activado: {{dtr_set}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "write",
+        "session": "modem",
+        "data": "ATZ\\r",
+        "result": "reset_cmd"
+      }
+    },
+    {
+      "print": {
+        "text": "Comando ATZ enviado: {{reset_cmd}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "read_until",
+        "session": "modem",
+        "terminator": "OK",
+        "timeout": 10.0,
+        "result": "modem_response"
+      }
+    },
+    {
+      "print": {
+        "text": "Respuesta del módem: {{modem_response}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "write",
+        "session": "modem",
+        "data": "ATI\\r",
+        "result": "info_cmd"
+      }
+    },
+    {
+      "print": {
+        "text": "Comando ATI enviado: {{info_cmd}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "read_until",
+        "session": "modem",
+        "terminator": "OK",
+        "timeout": 5.0,
+        "result": "modem_info"
+      }
+    },
+    {
+      "print": {
+        "text": "Información del módem: {{modem_info}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "disconnect",
+        "session": "modem"
+      }
+    },
+    {
+      "print": {
+        "text": "Desconectado del módem"
+      }
+    }
+  ]
+}

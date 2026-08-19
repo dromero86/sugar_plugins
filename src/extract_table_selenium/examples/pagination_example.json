@@ -1,0 +1,73 @@
+{
+    "task": [
+        {
+            "plugin": {
+                "name": "extract_table_selenium",
+                "command": "extract_table",
+                "config": {
+                    "url": "https://example.com/financial-data",
+                    "selector": ".financial-table",
+                    "config": {
+                        "headers": [
+                            "Symbol",
+                            "Company",
+                            "Price",
+                            "Change",
+                            "Volume",
+                            "Market Cap"
+                        ],
+                        "format": "objects",
+                        "scope": "tbody"
+                    },
+                    "filters": {
+                        "skip_rows": 1,
+                        "row_condition": "{{row.Volume}} > 1000000"
+                    },
+                    "transform": {
+                        "columns": {
+                            "Price": "parse_currency(USD)",
+                            "Change": "parse_float",
+                            "Volume": "parse_int",
+                            "Market Cap": "parse_currency(USD)"
+                        },
+                        "custom": {
+                            "ID": "generate_uuid()",
+                            "Change_Percent": "{{row.Change}} / {{row.Price}} * 100"
+                        }
+                    },
+                    "pagination": {
+                        "next_page": ".next-page-btn",
+                        "max_pages": 5,
+                        "page_load_wait": 3,
+                        "stop_condition": "row_count_less_than_10"
+                    },
+                    "validation": {
+                        "required": [
+                            "Symbol",
+                            "Company",
+                            "Price"
+                        ],
+                        "types": {
+                            "Price": "number",
+                            "Volume": "integer",
+                            "Change": "number"
+                        },
+                        "on_error": "skip_row"
+                    },
+                    "result": "financial_data"
+                }
+            }
+        },
+        {
+            "print": {
+                "text": "Extracted financial data from multiple pages: {{financial_data.length}} records"
+            }
+        },
+        {
+            "save": {
+                "file": "financial_data.json",
+                "value": "financial_data"
+            }
+        }
+    ]
+}

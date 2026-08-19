@@ -1,0 +1,57 @@
+{
+  "name": "selenium",
+  "version": "2.0.0",
+  "description": "Plugin de automatización web para Sugar con sintaxis @selenium/",
+  "author": "Sugar Team",
+  "license": "MIT",
+  "main": "src/SeleniumPlugin.py",
+  "class": "SeleniumPlugin",
+  "dependencies": [
+    "selenium>=4.0.0",
+    "webdriver-manager>=3.8.0"
+  ],
+  "keywords": [
+    "selenium",
+    "webdriver",
+    "automation",
+    "browser",
+    "testing",
+    "web"
+  ],
+  "supported_browsers": [
+    "chrome",
+    "firefox", 
+    "edge"
+  ],
+  "operators": [
+    "click",
+    "open",
+    "javascript",
+    "type",
+    "wait",
+    "screenshot",
+    "navigate",
+    "find",
+    "submit",
+    "clear",
+    "select",
+    "hover",
+    "scroll",
+    "upload",
+    "download",
+    "cookies",
+    "window",
+    "frame",
+    "alert"
+  ],
+  "features": [
+    "Sintaxis unificada @selenium/",
+    "Soporte completo de navegadores",
+    "Sistema avanzado de cookies",
+    "Descarga automática de drivers",
+    "Gestión robusta de errores",
+    "Timeouts configurables",
+    "Modo headless",
+    "Modo detach"
+  ]
+}

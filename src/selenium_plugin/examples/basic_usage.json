@@ -1,0 +1,56 @@
+{
+  "meta": {
+    "mode": "selenium",
+    "browser": "chrome",
+    "headless": true,
+    "timeout": 10,
+    "implicit_wait": 5
+  },
+  "task": [
+    {
+      "selenium": {
+        "operator": "open",
+        "url": "https://www.google.com",
+        "result": "is_open"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "time",
+        "seconds": 2,
+        "result": "is_waited"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "type",
+        "selector": "input[name='q']",
+        "value": "Sugar automation",
+        "result": "is_typed"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "click",
+        "selector": "input[name='btnK']",
+        "result": "is_clicked"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "element",
+        "selector": "#search",
+        "result": "search_loaded"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "screenshot",
+        "file": "./google_result.png",
+        "result": "screenshot"
+      }
+    }
+  ]
+}

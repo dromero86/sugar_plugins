@@ -1,0 +1,3 @@
+# Dependencias opcionales para funciones de hash avanzadas
+# Solo necesario si se quiere usar password_hash con algoritmo bcrypt
+bcrypt>=4.0.0

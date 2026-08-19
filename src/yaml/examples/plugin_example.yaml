@@ -1,0 +1,41 @@
+# Ejemplo de uso de plugins con YAML
+# Demuestra cómo usar plugins existentes con sintaxis YAML
+
+task:
+  - simple:
+      operator: "hello"
+      name: "YAML"
+      result: "saludo"
+  
+  - print:
+      text: "{{saludo}}"
+  
+  - simple:
+      operator: "add"
+      left: 10
+      right: 20
+      result: "suma"
+  
+  - print:
+      text: "10 + 20 = {{suma}}"
+  
+  - simple:
+      operator: "multiply"
+      left: 5
+      right: 6
+      result: "multiplicacion"
+  
+  - print:
+      text: "5 * 6 = {{multiplicacion}}"
+  
+  # Ejemplo con condicionales
+  - if:
+      condition: "${suma} > 25"
+      then:
+        task:
+          - print:
+              text: "✅ La suma es mayor que 25"
+      else:
+        task:
+          - print:
+              text: "❌ La suma no es mayor que 25"

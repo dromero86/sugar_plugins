@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "mode": "selenium",
+    "driver": { "bin": "./driver/chromedriver" },
+    "options": [
+      "--disable-gpu",
+      "--no-sandbox",
+      "--window-size=1280,720"
+    ],
+    "detach": false,
+    "timeout": 10
+  },
+  
+  "task": [
+    {
+      "selenium": {
+        "operator": "open",
+        "url": "https://httpbin.org/forms/post",
+        "result": "is_open"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "element",
+        "selector": "form",
+        "result": "form_ready"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "type",
+        "selector": "input[name='custname']",
+        "value": "Juan Pérez",
+        "result": "name_typed"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "type",
+        "selector": "input[name='custtel']",
+        "value": "123-456-7890",
+        "result": "phone_typed"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "type",
+        "selector": "input[name='custemail']",
+        "value": "juan@example.com",
+        "result": "email_typed"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "select",
+        "selector": "select[name='size']",
+        "value": "large",
+        "result": "size_selected"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "click",
+        "selector": "input[name='topping'][value='bacon']",
+        "result": "topping_selected"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "type",
+        "selector": "textarea[name='comments']",
+        "value": "Sin cebolla, por favor",
+        "result": "comments_typed"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "screenshot",
+        "file": "./form_filled.png",
+        "result": "form_screenshot"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "submit",
+        "selector": "form",
+        "result": "form_submitted"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "time",
+        "seconds": 3,
+        "result": "submission_wait"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "screenshot",
+        "file": "./form_result.png",
+        "result": "result_screenshot"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "find",
+        "selector": "body",
+        "result": "response_content"
+      }
+    }
+  ]
+}

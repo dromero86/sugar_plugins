@@ -1,0 +1,9 @@
+{
+  "name": "webserver",
+  "version": "1.0.0",
+  "description": "Plugin webserver para Sugar",
+  "author": "Sugar Team",
+  "main": "src/webserverPlugin.py",
+  "dependencies": [],
+  "commands": []
+}

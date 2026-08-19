@@ -1,0 +1,66 @@
+{
+  "meta": {
+    "serial": {
+      "options": {
+        "device_1": {
+          "port": "COM3",
+          "baudrate": 115200,
+          "timeout": 2.0,
+          "parity": "NONE",
+          "stopbits": 1,
+          "bytesize": 8,
+          "auto_connect": true
+        }
+      }
+    }
+  },
+  "task": [
+    {
+      "print": {
+        "text": "=== Ejemplo de Comunicación Serie Básica ==="
+      }
+    },
+    {
+      "serial": {
+        "operator": "write",
+        "session": "device_1",
+        "data": "STATUS\\r\\n",
+        "encoding": "ascii",
+        "add_newline": false,
+        "result": "write_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Resultado del envío: {{write_result}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "read_line",
+        "session": "device_1",
+        "eol": "\\n",
+        "timeout": 3.0,
+        "encoding": "utf-8",
+        "result": "device_response"
+      }
+    },
+    {
+      "print": {
+        "text": "Respuesta del dispositivo: {{device_response}}"
+      }
+    },
+    {
+      "serial": {
+        "operator": "disconnect",
+        "session": "device_1",
+        "result": "disconnect_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Desconexión: {{disconnect_result}}"
+      }
+    }
+  ]
+}

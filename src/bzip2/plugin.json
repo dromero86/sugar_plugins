@@ -1,0 +1,19 @@
+{
+  "name": "bzip2",
+  "version": "1.0.0",
+  "description": "Plugin bzip2 para Sugar - Compresión y descompresión con bzip2",
+  "author": "Sugar Team",
+  "main": "src/bzip2_plugin.py",
+  "dependencies": ["bz2"],
+  "commands": [
+    "bzip2_compress",
+    "bzip2_decompress", 
+    "bzip2_info",
+    "bzip2_test",
+    "bzip2_convert",
+    "bzip2_merge",
+    "bzip2_split",
+    "sdk_info",
+    "test_sdk"
+  ]
+}

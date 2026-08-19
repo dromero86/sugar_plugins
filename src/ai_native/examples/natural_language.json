@@ -1,0 +1,122 @@
+{
+  "description": "Ejemplo de interfaz de lenguaje natural usando AI Native Plugin",
+  "task": [
+    {
+      "print": {
+        "text": "Iniciando procesamiento de lenguaje natural con AI Native Plugin..."
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "nl_to_code",
+        "query": "Crear un sistema de monitoreo que verifique el estado de múltiples servidores web cada 5 minutos, procese los datos de respuesta, guarde los resultados en una base de datos PostgreSQL y envíe alertas por email si algún servidor está caído o responde lentamente",
+        "context": {
+          "domain": "automation",
+          "requirements": [
+            "http_requests",
+            "scheduling",
+            "database_operations",
+            "email_notifications",
+            "error_handling",
+            "logging",
+            "data_processing",
+            "performance_monitoring"
+          ]
+        },
+        "result": "server_monitoring_system"
+      }
+    },
+    {
+      "print": {
+        "text": "Script generado exitosamente desde lenguaje natural"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Script Generado ==="
+      }
+    },
+    {
+      "print": {
+        "text": "{{server_monitoring_system}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Fin del Script ==="
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "validate_code",
+        "code": "{{server_monitoring_system}}",
+        "result": "nl_validation"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{nl_validation.valid}} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Script generado validado correctamente"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Problemas de validación: {{nl_validation.issues}}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "analyze_code",
+        "code": "{{server_monitoring_system}}",
+        "result": "nl_analysis"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Análisis del Script Generado ==="
+      }
+    },
+    {
+      "print": {
+        "text": "Complejidad: {{nl_analysis.complexity}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Problemas de rendimiento: {{nl_analysis.performance_issues}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Problemas de seguridad: {{nl_analysis.security_issues}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Sugerencias: {{nl_analysis.suggestions}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Fin del Análisis ==="
+      }
+    },
+    {
+      "print": {
+        "text": "Procesamiento de lenguaje natural completado exitosamente"
+      }
+    }
+  ]
+}

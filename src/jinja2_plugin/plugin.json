@@ -1,0 +1,12 @@
+{
+  "name": "jinja2",
+  "version": "1.0.0",
+  "description": "Plugin jinja2 para Sugar",
+  "author": "Sugar Team",
+  "main": "src/jinja2Plugin.py",
+  "dependencies": [
+    "Jinja2>=3.1.0",
+    "MarkupSafe>=2.1.0"
+  ],
+  "commands": []
+}

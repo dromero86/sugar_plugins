@@ -1,0 +1,3 @@
+# Jinja2 Plugin Requirements
+Jinja2>=3.1.0
+MarkupSafe>=2.1.0 

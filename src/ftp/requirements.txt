@@ -1,0 +1,8 @@
+# FTP plugin uses only built-in Python modules
+# No external dependencies required
+# 
+# Built-in modules used:
+# - ftplib (FTP client)
+# - ssl (TLS support)
+# - os (file operations)
+# - logging (logging functionality)

@@ -1,0 +1,112 @@
+{
+  "description": "Ejemplo de generación de código usando AI Native Plugin",
+  "task": [
+    {
+      "print": {
+        "text": "Iniciando generación de código con AI Native Plugin..."
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "generate_code",
+        "description": "Crear un web scraper que extraiga títulos y precios de productos de una página de e-commerce con manejo de errores y rate limiting",
+        "context": {
+          "domain": "web_scraping"
+        },
+        "options": {
+          "language": "sugar",
+          "style": "functional",
+          "complexity": "medium"
+        },
+        "result": "ecommerce_scraper"
+      }
+    },
+    {
+      "print": {
+        "text": "Código generado exitosamente"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Código Generado ==="
+      }
+    },
+    {
+      "print": {
+        "text": "{{ecommerce_scraper}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Fin del Código ==="
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "validate_code",
+        "code": "{{ecommerce_scraper}}",
+        "result": "validation_result"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{validation_result.valid}} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Código validado correctamente"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Problemas de validación: {{validation_result.issues}}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "analyze_code",
+        "code": "{{ecommerce_scraper}}",
+        "result": "code_analysis"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Análisis del Código ==="
+      }
+    },
+    {
+      "print": {
+        "text": "Complejidad: {{code_analysis.complexity}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Problemas de rendimiento: {{code_analysis.performance_issues}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Problemas de seguridad: {{code_analysis.security_issues}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Sugerencias: {{code_analysis.suggestions}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Fin del Análisis ==="
+      }
+    }
+  ]
+}

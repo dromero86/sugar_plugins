@@ -1,0 +1,266 @@
+{
+  "task": [
+    {
+      "print": {
+        "text": "=== SOAP Plugin - Uso Avanzado ==="
+      }
+    },
+    {
+      "print": {
+        "text": "1. Creando servidor SOAP..."
+      }
+    },
+    {
+      "soap_server": {
+        "operator": "create",
+        "port": 8080,
+        "host": "localhost",
+        "service_name": "UserService",
+        "auto_generate_wsdl": true,
+        "config": {
+          "log_requests": true,
+          "validate_schema": true
+        },
+        "result": "servidor_soap"
+      }
+    },
+    {
+      "print": {
+        "text": "Servidor SOAP creado"
+      }
+    },
+    {
+      "print": {
+        "text": "2. Registrando métodos en el servidor..."
+      }
+    },
+    {
+      "soap_server": {
+        "operator": "register_method",
+        "server": "{{servidor_soap}}",
+        "method_name": "GetUserById",
+        "handler": {
+          "operator": "function",
+          "parameters": ["userId"],
+          "task": [
+            {
+              "if": {
+                "condition": "${userId > 0}",
+                "then": {
+                  "task": [
+                    {
+                      "let": {
+                        "name": "usuario",
+                        "value": {
+                          "id": "{{userId}}",
+                          "nombre": "Usuario {{userId}}",
+                          "email": "usuario{{userId}}@example.com",
+                          "rol": "usuario"
+                        }
+                      }
+                    },
+                    {
+                      "return": {
+                        "value": "{{usuario}}"
+                      }
+                    }
+                  ]
+                },
+                "else": {
+                  "task": [
+                    {
+                      "throw": {
+                        "type": "soap_fault",
+                        "fault_code": "INVALID_USER_ID",
+                        "fault_string": "ID de usuario inválido"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "result": "metodo_get"
+      }
+    },
+    {
+      "soap_server": {
+        "operator": "register_method",
+        "server": "{{servidor_soap}}",
+        "method_name": "CreateUser",
+        "handler": {
+          "operator": "function",
+          "parameters": ["user"],
+          "task": [
+            {
+              "let": {
+                "name": "nuevo_id",
+                "value": "${Math.random() * 1000}"
+              }
+            },
+            {
+              "let": {
+                "name": "usuario_creado",
+                "value": {
+                  "id": "{{nuevo_id}}",
+                  "nombre": "{{user.nombre}}",
+                  "email": "{{user.email}}",
+                  "rol": "{{user.rol}}"
+                }
+              }
+            },
+            {
+              "return": {
+                "value": "{{usuario_creado}}"
+              }
+            }
+          ]
+        },
+        "result": "metodo_create"
+      }
+    },
+    {
+      "print": {
+        "text": "Métodos registrados exitosamente"
+      }
+    },
+    {
+      "print": {
+        "text": "3. Iniciando servidor SOAP..."
+      }
+    },
+    {
+      "soap_server": {
+        "operator": "start",
+        "server": "{{servidor_soap}}",
+        "result": "servidor_iniciado"
+      }
+    },
+    {
+      "print": {
+        "text": "Servidor SOAP iniciado en http://localhost:8080"
+      }
+    },
+    {
+      "print": {
+        "text": "4. Creando cliente para conectar al servidor..."
+      }
+    },
+    {
+      "soap_client": {
+        "operator": "create",
+        "wsdl_url": "http://localhost:8080/wsdl",
+        "config": {
+          "timeout": 10,
+          "verify_ssl": false
+        },
+        "result": "cliente_local"
+      }
+    },
+    {
+      "print": {
+        "text": "Cliente SOAP creado para servidor local"
+      }
+    },
+    {
+      "print": {
+        "text": "5. Probando método GetUserById..."
+      }
+    },
+    {
+      "soap_client": {
+        "operator": "call",
+        "client": "{{cliente_local}}",
+        "method": "GetUserById",
+        "parameters": {
+          "userId": 123
+        },
+        "result": "usuario_obtenido"
+      }
+    },
+    {
+      "print": {
+        "text": "Usuario obtenido: {{usuario_obtenido}}"
+      }
+    },
+    {
+      "print": {
+        "text": "6. Probando método CreateUser..."
+      }
+    },
+    {
+      "soap_client": {
+        "operator": "call",
+        "client": "{{cliente_local}}",
+        "method": "CreateUser",
+        "parameters": {
+          "user": {
+            "nombre": "Nuevo Usuario",
+            "email": "nuevo@example.com",
+            "rol": "usuario"
+          }
+        },
+        "result": "usuario_creado"
+      }
+    },
+    {
+      "print": {
+        "text": "Usuario creado: {{usuario_creado}}"
+      }
+    },
+    {
+      "print": {
+        "text": "7. Probando manejo de errores..."
+      }
+    },
+    {
+      "try": {
+        "task": [
+          {
+            "soap_client": {
+              "operator": "call",
+              "client": "{{cliente_local}}",
+              "method": "GetUserById",
+              "parameters": {
+                "userId": -1
+              },
+              "result": "usuario_invalido"
+            }
+          }
+        ],
+        "catch": {
+          "task": [
+            {
+              "print": {
+                "text": "Error capturado correctamente: {{error}}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "print": {
+        "text": "8. Deteniendo servidor..."
+      }
+    },
+    {
+      "soap_server": {
+        "operator": "stop",
+        "server": "{{servidor_soap}}",
+        "result": "servidor_detenido"
+      }
+    },
+    {
+      "print": {
+        "text": "Servidor SOAP detenido"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Prueba completada exitosamente ==="
+      }
+    }
+  ]
+}

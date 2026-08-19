@@ -1,0 +1,11 @@
+{
+  "name": "playwright",
+  "version": "1.0.0",
+  "description": "Plugin Playwright para Sugar - Automatización web moderna",
+  "author": "Sugar Team",
+  "main": "src/PlaywrightPlugin.py",
+  "dependencies": [
+    "playwright>=1.40.0"
+  ],
+  "commands": []
+}

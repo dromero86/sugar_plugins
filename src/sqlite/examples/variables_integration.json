@@ -1,0 +1,308 @@
+{
+  "String::database_path": "./data/variables_demo.db",
+  "String::table_name": "empleados",
+  "Number::edad_minima": 25,
+  "Number::salario_minimo": 30000,
+  "Array::departamentos": ["IT", "Marketing", "Ventas", "Recursos Humanos"],
+  "Object::configuracion": {
+    "timeout": 60.0,
+    "check_same_thread": false
+  },
+  "task": [
+    {
+      "print": { "text": "Ejemplo de integración con variables de Sugar" }
+    },
+    {
+      "sqlite": {
+        "operator": "connect",
+        "database_path": "{{database_path}}"
+      }
+    },
+    {
+      "print": { "text": "Conectado usando variable: {{database_path}}" }
+    },
+    {
+      "sqlite": {
+        "operator": "create_table",
+        "table_name": "{{table_name}}",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "constraints": "PRIMARY KEY AUTOINCREMENT"
+          },
+          {
+            "name": "nombre",
+            "type": "TEXT",
+            "constraints": "NOT NULL"
+          },
+          {
+            "name": "apellido",
+            "type": "TEXT",
+            "constraints": "NOT NULL"
+          },
+          {
+            "name": "edad",
+            "type": "INTEGER",
+            "constraints": "CHECK(edad >= 18)"
+          },
+          {
+            "name": "departamento",
+            "type": "TEXT",
+            "constraints": "NOT NULL"
+          },
+          {
+            "name": "salario",
+            "type": "REAL",
+            "constraints": "CHECK(salario > 0)"
+          },
+          {
+            "name": "fecha_contratacion",
+            "type": "DATETIME",
+            "constraints": "DEFAULT CURRENT_TIMESTAMP"
+          }
+        ],
+        "result": "tabla_creada"
+      }
+    },
+    {
+      "print": { "text": "Tabla {{table_name}} creada usando variable" }
+    },
+    {
+      "for": {
+        "variable": "depto",
+        "in": "{{departamentos}}",
+        "task": [
+          {
+            "print": { "text": "  - Procesando departamento: {{depto}}" }
+          },
+          {
+            "if": {
+              "condition": "${depto} == 'IT'",
+              "then": {
+                "task": [
+                  {
+                    "sqlite": {
+                      "operator": "insert",
+                      "table": "{{table_name}}",
+                      "data": [
+                        {
+                          "nombre": "Ana",
+                          "apellido": "García",
+                          "edad": 28,
+                          "departamento": "{{depto}}",
+                          "salario": 45000
+                        },
+                        {
+                          "nombre": "Carlos",
+                          "apellido": "López",
+                          "edad": 32,
+                          "departamento": "{{depto}}",
+                          "salario": 52000
+                        }
+                      ],
+                      "result": "empleados_it"
+                    }
+                  },
+                  {
+                    "print": { "text": "    Empleados IT insertados: {{empleados_it.rows_affected}}" }
+                  }
+                ]
+              },
+              "else": {
+                "task": [
+                  {
+                    "if": {
+                      "condition": "${depto} == 'Marketing'",
+                      "then": {
+                        "task": [
+                          {
+                            "sqlite": {
+                              "operator": "insert",
+                              "table": "{{table_name}}",
+                              "data": [
+                                {
+                                  "nombre": "María",
+                                  "apellido": "Rodríguez",
+                                  "edad": 26,
+                                  "departamento": "{{depto}}",
+                                  "salario": 38000
+                                }
+                              ],
+                              "result": "empleados_marketing"
+                            }
+                          },
+                          {
+                            "print": { "text": "    Empleados Marketing insertados: {{empleados_marketing.rows_affected}}" }
+                          }
+                        ]
+                      },
+                      "else": {
+                        "task": [
+                          {
+                            "sqlite": {
+                              "operator": "insert",
+                              "table": "{{table_name}}",
+                              "data": [
+                                {
+                                  "nombre": "Juan",
+                                  "apellido": "Pérez",
+                                  "edad": 30,
+                                  "departamento": "{{depto}}",
+                                  "salario": 35000
+                                }
+                              ],
+                              "result": "empleados_otros"
+                            }
+                          },
+                          {
+                            "print": { "text": "    Empleados {{depto}} insertados: {{empleados_otros.rows_affected}}" }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "print": { "text": "Consultando empleados mayores de {{edad_minima}} años..." }
+    },
+    {
+      "sqlite": {
+        "operator": "query",
+        "sql": "SELECT nombre, apellido, edad, departamento, salario FROM {{table_name}} WHERE edad > ${edad_minima} ORDER BY salario DESC",
+        "result": "empleados_mayores"
+      }
+    },
+    {
+      "print": { "text": "Empleados mayores de {{edad_minima}} años:" }
+    },
+    {
+      "for": {
+        "variable": "empleado",
+        "in": "{{empleados_mayores.data}}",
+        "task": [
+          {
+            "print": { "text": "  - {{empleado.nombre}} {{empleado.apellido}} ({{empleado.edad}} años) - {{empleado.departamento}} - ${{empleado.salario}}" }
+          }
+        ]
+      }
+    },
+    {
+      "print": { "text": "Consultando empleados con salario mayor a ${{salario_minimo}}..." }
+    },
+    {
+      "sqlite": {
+        "operator": "query",
+        "sql": "SELECT departamento, COUNT(*) as total, AVG(salario) as salario_promedio FROM {{table_name}} WHERE salario > ${salario_minimo} GROUP BY departamento",
+        "result": "resumen_salarios"
+      }
+    },
+    {
+      "print": { "text": "Resumen por departamento (salario > ${{salario_minimo}}):" }
+    },
+    {
+      "for": {
+        "variable": "resumen",
+        "in": "{{resumen_salarios.data}}",
+        "task": [
+          {
+            "print": { "text": "  - {{resumen.departamento}}: {{resumen.total}} empleados, salario promedio: ${{resumen.salario_promedio}}" }
+          }
+        ]
+      }
+    },
+    {
+      "print": { "text": "Actualizando salarios usando variables..." }
+    },
+    {
+      "sqlite": {
+        "operator": "update",
+        "table": "{{table_name}}",
+        "data": { "salario": "salario * 1.1" },
+        "where": "departamento = 'IT'",
+        "result": "aumento_it"
+      }
+    },
+    {
+      "print": { "text": "Aumento del 10% aplicado a IT: {{aumento_it.rows_affected}} empleados" }
+    },
+    {
+      "sqlite": {
+        "operator": "query",
+        "sql": "SELECT nombre, apellido, salario FROM {{table_name}} WHERE departamento = 'IT' ORDER BY salario DESC",
+        "result": "salarios_it_actualizados"
+      }
+    },
+    {
+      "print": { "text": "Salarios actualizados en IT:" }
+    },
+    {
+      "for": {
+        "variable": "empleado",
+        "in": "{{salarios_it_actualizados.data}}",
+        "task": [
+          {
+            "print": { "text": "  - {{empleado.nombre}} {{empleado.apellido}}: ${{empleado.salario}}" }
+          }
+        ]
+      }
+    },
+    {
+      "print": { "text": "Exportando datos usando variables..." }
+    },
+    {
+      "sqlite": {
+        "operator": "export_data",
+        "table": "{{table_name}}",
+        "file_path": "./exports/{{table_name}}_export.csv",
+        "format": "csv",
+        "result": "export_result"
+      }
+    },
+    {
+      "print": { "text": "Datos exportados: {{export_result.rows_exported}} registros" }
+    },
+    {
+      "sqlite": {
+        "operator": "backup",
+        "backup_path": "./backups/{{table_name}}_backup.db",
+        "result": "backup_result"
+      }
+    },
+    {
+      "print": { "text": "Backup creado: {{backup_result.backup_path}}" }
+    },
+    {
+      "sqlite": {
+        "operator": "disconnect"
+      }
+    },
+    {
+      "print": { "text": "Ejemplo de integración con variables completado" }
+    },
+    {
+      "print": { "text": "Variables utilizadas:" }
+    },
+    {
+      "print": { "text": "  - database_path: {{database_path}}" }
+    },
+    {
+      "print": { "text": "  - table_name: {{table_name}}" }
+    },
+    {
+      "print": { "text": "  - edad_minima: {{edad_minima}}" }
+    },
+    {
+      "print": { "text": "  - salario_minimo: {{salario_minimo}}" }
+    },
+    {
+      "print": { "text": "  - departamentos: {{departamentos}}" }
+    }
+  ]
+}

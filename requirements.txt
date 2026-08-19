@@ -1,0 +1,68 @@
+# Sugar Core Dependencies
+# ======================
+
+# LDAP Plugin
+python-ldap>=3.4.0
+
+# SSH Plugin
+paramiko>=3.0.0
+cryptography>=3.4.0
+
+# RAR Plugin
+rarfile>=4.0
+psutil>=5.8.0
+
+# Docker Plugin
+docker>=6.0.0
+pyyaml>=6.0
+
+# CURL Plugin
+pycurl>=7.45.0
+
+# Jinja2 Plugin
+Jinja2>=3.1.0
+MarkupSafe>=2.1.0
+
+# Database Plugin
+sqlalchemy>=1.4.0
+mysql-connector-python>=8.0.0
+
+# Selenium Plugin
+selenium>=4.0.0
+webdriver-manager>=3.8.0
+requests>=2.25.0
+
+# Additional dependencies that might be needed
+# ===========================================
+
+# For better SSL/TLS support
+pyOpenSSL>=23.0.0
+
+# For JSON processing
+jsonschema>=4.0.0
+
+# For XML processing
+lxml>=4.9.0
+
+# For image processing
+Pillow>=9.0.0
+
+# For network operations
+urllib3>=1.26.0
+
+# For date/time handling
+python-dateutil>=2.8.0
+
+# For configuration management
+configparser>=5.0.0
+
+# For logging
+colorlog>=6.0.0
+
+# For testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# For development
+black>=23.0.0
+flake8>=6.0.0

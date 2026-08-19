@@ -1,0 +1,11 @@
+# MCP Server Plugin Requirements
+# No external dependencies required - uses Sugar's native capabilities
+
+# Optional: For enhanced WebSocket support (if not using Sugar's built-in WebServer plugin)
+# websockets>=10.0
+
+# Optional: For enhanced JSON schema validation
+# jsonschema>=3.2.0
+
+# Optional: For enhanced logging
+# structlog>=21.1.0

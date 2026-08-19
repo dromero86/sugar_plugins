@@ -1,0 +1,153 @@
+{
+  "meta": {
+    "mode": "selenium",
+    "browser": "chrome",
+    "options": [
+      "--disable-gpu",
+      "--no-sandbox",
+      "--disable-dev-shm-usage",
+      "--window-size=1920,1080"
+    ],
+    "headless": true,
+    "timeout": 15,
+    "implicit_wait": 5
+  },
+  "task": [
+    {
+      "selenium": {
+        "operator": "open",
+        "url": "https://airtable.com/login",
+        "result": "login_page_open"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "element",
+        "selector": "form",
+        "result": "form_loaded"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "type",
+        "selector": "input[name='email']",
+        "value": "user@example.com",
+        "result": "email_typed"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "type",
+        "selector": "input[name='password']",
+        "value": "password123",
+        "result": "password_typed"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "submit",
+        "selector": "form",
+        "result": "form_submitted"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "element",
+        "selector": ".dashboard",
+        "result": "dashboard_loaded"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "cookies",
+        "action": "get",
+        "result": "session_cookies"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "open",
+        "url": "https://airtable.com/app/abc123/tbl/def456",
+        "result": "table_page_open"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "element",
+        "selector": ".record-row",
+        "result": "records_loaded"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "find",
+        "selector": ".record-row",
+        "multiple": true,
+        "result": "all_records"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "screenshot",
+        "file": "./airtable_records.png",
+        "result": "screenshot_taken"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "click",
+        "selector": ".add-record-button",
+        "result": "add_button_clicked"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "element",
+        "selector": ".record-form",
+        "result": "form_ready"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "type",
+        "selector": "input[name='Name']",
+        "value": "Nuevo Registro",
+        "result": "name_typed"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "type",
+        "selector": "input[name='Description']",
+        "value": "Descripción del nuevo registro",
+        "result": "description_typed"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "click",
+        "selector": ".save-record-button",
+        "result": "record_saved"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "time",
+        "seconds": 3,
+        "result": "save_wait"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "screenshot",
+        "file": "./airtable_new_record.png",
+        "result": "final_screenshot"
+      }
+    }
+  ]
+}

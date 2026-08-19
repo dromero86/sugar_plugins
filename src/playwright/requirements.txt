@@ -1,0 +1,2 @@
+# Dependencias del plugin Playwright
+playwright>=1.40.0

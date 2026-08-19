@@ -1,0 +1,14 @@
+# SOAP Plugin Requirements
+# This plugin uses only Python standard library components
+# No external dependencies required
+
+# Standard library components used:
+# - xml.etree.ElementTree
+# - urllib.request
+# - ssl
+# - base64
+# - hashlib
+# - threading
+# - socket
+# - http.server
+# - socketserver

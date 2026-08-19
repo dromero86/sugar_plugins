@@ -1,0 +1,9 @@
+{
+  "name": "openssl",
+  "version": "1.0.0",
+  "description": "Plugin openssl para Sugar",
+  "author": "Sugar Team",
+  "main": "src/opensslPlugin.py",
+  "dependencies": [],
+  "commands": []
+}

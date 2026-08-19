@@ -1,0 +1,11 @@
+{
+  "name": "curl",
+  "version": "1.0.0",
+  "description": "Plugin curl para Sugar",
+  "author": "Sugar Team",
+  "main": "src/curlPlugin.py",
+  "dependencies": [
+    "pycurl>=7.45.0"
+  ],
+  "commands": []
+}

@@ -1,0 +1,194 @@
+{
+  "meta": {
+    "playwright": {
+      "browser_type": "chromium",
+      "headless": false,
+      "slow_mo": 1000
+    }
+  },
+  "task": [
+    {
+      "playwright": {
+        "operator": "launch_browser",
+        "result": "browser"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "new_context"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "new_page"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "goto",
+        "url": "https://example.com",
+        "wait_until": "load"
+      }
+    },
+    {
+      "print": {
+        "text": "Página cargada, ejecutando JavaScript..."
+      }
+    },
+    {
+      "playwright": {
+        "operator": "evaluate",
+        "script": "document.title = 'Título Modificado por Playwright'; return document.title;",
+        "result": "title_change"
+      }
+    },
+    {
+      "print": {
+        "text": "Título modificado: {{title_change.result}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "evaluate",
+        "script": "return window.innerWidth + 'x' + window.innerHeight;",
+        "result": "viewport_size"
+      }
+    },
+    {
+      "print": {
+        "text": "Tamaño del viewport: {{viewport_size.result}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "evaluate",
+        "script": "return navigator.userAgent;",
+        "result": "user_agent"
+      }
+    },
+    {
+      "print": {
+        "text": "User Agent: {{user_agent.result}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "evaluate",
+        "script": "return document.cookie;",
+        "result": "cookies"
+      }
+    },
+    {
+      "print": {
+        "text": "Cookies actuales: {{cookies.result}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "evaluate",
+        "script": "return Array.from(document.querySelectorAll('*')).length;",
+        "result": "element_count"
+      }
+    },
+    {
+      "print": {
+        "text": "Número total de elementos en la página: {{element_count.result}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "evaluate",
+        "script": "return document.querySelectorAll('a').length;",
+        "result": "link_count"
+      }
+    },
+    {
+      "print": {
+        "text": "Número de enlaces en la página: {{link_count.result}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "evaluate",
+        "script": "return Array.from(document.querySelectorAll('a')).map(a => a.href);",
+        "result": "all_links"
+      }
+    },
+    {
+      "print": {
+        "text": "Enlaces encontrados:"
+      }
+    },
+    {
+      "for": {
+        "variable": "link",
+        "in": "{{all_links.result}}",
+        "task": [
+          {
+            "print": {
+              "text": "  - {{link}}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "playwright": {
+        "operator": "evaluate",
+        "script": "window.scrollTo(0, document.body.scrollHeight); return document.body.scrollHeight;",
+        "result": "scroll_height"
+      }
+    },
+    {
+      "print": {
+        "text": "Scroll realizado hasta el final. Altura total: {{scroll_height.result}}px"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "evaluate",
+        "script": "return new Date().toLocaleString();",
+        "result": "current_time"
+      }
+    },
+    {
+      "print": {
+        "text": "Hora actual en el navegador: {{current_time.result}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "evaluate",
+        "script": "localStorage.setItem('playwright_test', 'valor_de_prueba'); return localStorage.getItem('playwright_test');",
+        "result": "local_storage_test"
+      }
+    },
+    {
+      "print": {
+        "text": "LocalStorage test: {{local_storage_test.result}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "screenshot",
+        "path": "./screenshots/js_execution_result.png",
+        "result": "final_screenshot"
+      }
+    },
+    {
+      "print": {
+        "text": "Screenshot final guardado: {{final_screenshot.path}}"
+      }
+    },
+    {
+      "playwright": {
+        "operator": "close_browser"
+      }
+    },
+    {
+      "print": {
+        "text": "Ejecución de JavaScript completada exitosamente"
+      }
+    }
+  ]
+}

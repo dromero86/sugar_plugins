@@ -1,0 +1,60 @@
+# API Keys y Configuración Sensible
+.env
+*.key
+*.pem
+config.json
+secrets.json
+api_keys.json
+
+# Archivos de Test con API Keys Reales
+test_*.py
+*_with_api_key.json
+*_test.py
+*_demo.py
+
+# Logs y Archivos Temporales
+*.log
+*.tmp
+*.cache
+logs/
+temp/
+cache/
+
+# Modelos Descargados
+models/
+*.bin
+*.safetensors
+*.gguf
+
+# Archivos de Configuración Local
+local_config.json
+user_config.json
+
+# Archivos de Sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Entornos Virtuales
+venv/
+env/
+.venv/
+.env/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos de Backup
+*.bak
+*.backup
+*~

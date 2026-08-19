@@ -1,0 +1,41 @@
+{
+  "name": "serial",
+  "version": "1.0.0",
+  "description": "Plugin de comunicación serie universal para Sugar",
+  "author": "Sugar Team",
+  "license": "MIT",
+  "dependencies": [
+    "pyserial>=3.5"
+  ],
+  "commands": [
+    "connect",
+    "disconnect", 
+    "list_ports",
+    "test_connection",
+    "write",
+    "read",
+    "read_line",
+    "read_until",
+    "read_bytes",
+    "flush",
+    "configure",
+    "get_config",
+    "set_timeout",
+    "set_baudrate",
+    "set_parity",
+    "set_stopbits",
+    "set_bytesize",
+    "set_dtr",
+    "set_rts",
+    "get_cts",
+    "get_dsr",
+    "get_ri",
+    "get_cd",
+    "get_status",
+    "get_info",
+    "monitor",
+    "log_activity"
+  ],
+  "meta_support": true,
+  "platforms": ["windows", "linux", "macos"]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "database",
+  "version": "1.0.0",
+  "description": "Plugin database para Sugar",
+  "author": "Sugar Team",
+  "main": "src/databasePlugin.py",
+  "dependencies": [
+    "sqlalchemy>=1.4.0",
+    "mysql-connector-python>=8.0.0"
+  ],
+  "commands": []
+}

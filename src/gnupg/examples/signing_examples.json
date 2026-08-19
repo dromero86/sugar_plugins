@@ -1,0 +1,294 @@
+{
+  "meta": {
+    "name": "GnuPG Digital Signature Examples",
+    "description": "Ejemplos de firmas digitales con GnuPG",
+    "version": "1.0.0"
+  },
+  "task": [
+    {
+      "let": {
+        "name": "documento_contenido",
+        "value": "Este es un documento importante que necesita firma digital para verificar su autenticidad e integridad."
+      }
+    },
+    {
+      "print": {
+        "text": "=== GnuPG Digital Signature Examples ==="
+      }
+    },
+    {
+      "print": {
+        "text": "1. Creando documento de prueba..."
+      }
+    },
+    {
+      "file": {
+        "operator": "write",
+        "path": "documento.txt",
+        "content": "{{documento_contenido}}",
+        "result": "file_written"
+      }
+    },
+    {
+      "print": {
+        "text": "2. Firmando documento con firma adjunta..."
+      }
+    },
+    {
+      "gnupg": {
+        "operator": "detached_sign",
+        "input_file": "documento.txt",
+        "signature_file": "documento.txt.sig",
+        "key_id": "juan.perez@ejemplo.com",
+        "passphrase": "MiPassphraseSegura123!",
+        "armor": true,
+        "hash_algorithm": "SHA256",
+        "result": "signature_result"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{signature_result.success}} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Documento firmado exitosamente"
+              }
+            },
+            {
+              "print": {
+                "text": "Archivo de firma: {{signature_result.signature_file}}"
+              }
+            },
+            {
+              "print": {
+                "text": "3. Verificando firma..."
+              }
+            },
+            {
+              "gnupg": {
+                "operator": "verify_signature",
+                "input_file": "documento.txt",
+                "signature_file": "documento.txt.sig",
+                "result": "verification_result"
+              }
+            },
+            {
+              "if": {
+                "condition": "{{verification_result.verified}} == true",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Firma verificada correctamente"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Firmante: {{verification_result.signer}}"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Fecha de firma: {{verification_result.signature_date}}"
+                      }
+                    }
+                  ]
+                },
+                "else": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Error en la verificación de la firma"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Error: {{verification_result.error}}"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Error firmando documento: {{signature_result.error}}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "print": {
+        "text": "4. Creando firma clearsign..."
+      }
+    },
+    {
+      "gnupg": {
+        "operator": "clearsign",
+        "input_file": "documento.txt",
+        "output_file": "documento.txt.asc",
+        "key_id": "juan.perez@ejemplo.com",
+        "passphrase": "MiPassphraseSegura123!",
+        "hash_algorithm": "SHA256",
+        "result": "clearsign_result"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{clearsign_result.success}} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Documento clearsign creado exitosamente"
+              }
+            },
+            {
+              "print": {
+                "text": "Archivo clearsign: {{clearsign_result.output_file}}"
+              }
+            },
+            {
+              "print": {
+                "text": "5. Verificando firma clearsign..."
+              }
+            },
+            {
+              "gnupg": {
+                "operator": "verify_signature",
+                "input_file": "documento.txt.asc",
+                "result": "clearsign_verification"
+              }
+            },
+            {
+              "if": {
+                "condition": "{{clearsign_verification.verified}} == true",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Firma clearsign verificada correctamente"
+                      }
+                    }
+                  ]
+                },
+                "else": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Error verificando firma clearsign"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Error creando firma clearsign: {{clearsign_result.error}}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "print": {
+        "text": "6. Probando firma de texto..."
+      }
+    },
+    {
+      "let": {
+        "name": "texto_para_firmar",
+        "value": "Este es un texto que será firmado digitalmente."
+      }
+    },
+    {
+      "gnupg": {
+        "operator": "sign_text",
+        "text": "{{texto_para_firmar}}",
+        "key_id": "juan.perez@ejemplo.com",
+        "passphrase": "MiPassphraseSegura123!",
+        "armor": true,
+        "hash_algorithm": "SHA256",
+        "result": "text_signature"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{text_signature.success}} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Texto firmado exitosamente"
+              }
+            },
+            {
+              "print": {
+                "text": "7. Verificando firma de texto..."
+              }
+            },
+            {
+              "gnupg": {
+                "operator": "verify_text",
+                "text": "{{texto_para_firmar}}",
+                "signature_text": "{{text_signature.signature_text}}",
+                "result": "text_verification"
+              }
+            },
+            {
+              "if": {
+                "condition": "{{text_verification.verified}} == true",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Firma de texto verificada correctamente"
+                      }
+                    }
+                  ]
+                },
+                "else": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Error verificando firma de texto"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Error firmando texto: {{text_signature.error}}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "print": {
+        "text": "=== GnuPG Digital Signature Examples Completed ==="
+      }
+    }
+  ]
+}

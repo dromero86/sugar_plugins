@@ -1,0 +1,34 @@
+{
+  "task": [
+    {
+      "print": { "text": "Iniciando compresión básica con bzip2" }
+    },
+    {
+      "bzip2": {
+        "operator": "bzip2_compress",
+        "source": "datos.txt",
+        "destination": "datos.txt.bz2",
+        "compression_level": 6,
+        "result": "compression_result"
+      }
+    },
+    {
+      "print": { "text": "Compresión completada" }
+    },
+    {
+      "print": { "text": "Estadísticas:" }
+    },
+    {
+      "print": { "text": "   - Tamaño original: {{compression_result.original_size}} bytes" }
+    },
+    {
+      "print": { "text": "   - Tamaño comprimido: {{compression_result.compressed_size}} bytes" }
+    },
+    {
+      "print": { "text": "   - Ratio de compresión: {{compression_result.compression_ratio}}%" }
+    },
+    {
+      "print": { "text": "   - Tiempo de procesamiento: {{compression_result.processing_time}} segundos" }
+    }
+  ]
+}

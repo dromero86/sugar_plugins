@@ -1,0 +1,131 @@
+{
+  "task": [
+    {
+      "docker": {
+        "operator": "create_composition",
+        "name": "export_test",
+        "version": "3.8",
+        "services": {
+          "web": {
+            "image": "nginx:alpine",
+            "ports": ["8080:80"],
+            "environment": {
+              "NGINX_HOST": "localhost"
+            },
+            "volumes": ["./web:/usr/share/nginx/html"],
+            "networks": ["web_network"],
+            "restart": "unless-stopped",
+            "labels": {
+              "app": "web",
+              "environment": "development"
+            }
+          },
+          "api": {
+            "image": "node:16-alpine",
+            "ports": ["3000:3000"],
+            "environment": {
+              "NODE_ENV": "development",
+              "PORT": "3000"
+            },
+            "volumes": ["./api:/app", "/app/node_modules"],
+            "networks": ["web_network"],
+            "restart": "unless-stopped",
+            "working_dir": "/app",
+            "command": ["npm", "start"],
+            "labels": {
+              "app": "api",
+              "environment": "development"
+            }
+          }
+        },
+        "networks": {
+          "web_network": {
+            "driver": "bridge",
+            "labels": {
+              "app": "export_test"
+            }
+          }
+        },
+        "result": "composition_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Composición creada para exportación: {{composition_result}}"
+      }
+    },
+    {
+      "docker": {
+        "operator": "export_compose",
+        "name": "export_test",
+        "output_file": "./docker-compose-export.yml",
+        "result": "export_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Composición exportada: {{export_result}}"
+      }
+    },
+    {
+      "docker": {
+        "operator": "import_compose",
+        "input_file": "./docker-compose-export.yml",
+        "name": "imported_composition",
+        "result": "import_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Composición importada: {{import_result}}"
+      }
+    },
+    {
+      "docker": {
+        "operator": "validate_composition",
+        "name": "imported_composition",
+        "result": "validation_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Validación de la composición importada: {{validation_result}}"
+      }
+    },
+    {
+      "docker": {
+        "operator": "list_compositions",
+        "result": "list_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Composiciones disponibles: {{list_result}}"
+      }
+    },
+    {
+      "docker": {
+        "operator": "destroy_composition",
+        "name": "export_test",
+        "result": "destroy_export_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Composición original destruida: {{destroy_export_result}}"
+      }
+    },
+    {
+      "docker": {
+        "operator": "destroy_composition",
+        "name": "imported_composition",
+        "result": "destroy_import_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Composición importada destruida: {{destroy_import_result}}"
+      }
+    }
+  ]
+}

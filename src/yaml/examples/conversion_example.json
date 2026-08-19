@@ -1,0 +1,44 @@
+{
+  "task": [
+    {
+      "print": {
+        "text": "¡Hola desde JSON!"
+      }
+    },
+    {
+      "let": {
+        "name": "mensaje",
+        "value": "Este es un mensaje desde JSON"
+      }
+    },
+    {
+      "print": {
+        "text": "{{mensaje}}"
+      }
+    },
+    {
+      "let": {
+        "name": "numero",
+        "value": 42
+      }
+    },
+    {
+      "print": {
+        "text": "El número mágico es: {{numero}}"
+      }
+    },
+    {
+      "simple": {
+        "operator": "add",
+        "left": 10,
+        "right": 20,
+        "result": "suma"
+      }
+    },
+    {
+      "print": {
+        "text": "10 + 20 = {{suma}}"
+      }
+    }
+  ]
+}

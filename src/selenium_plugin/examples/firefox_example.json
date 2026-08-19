@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "mode": "selenium",
+    "browser": "firefox",
+    "options": [
+      "--width=1920",
+      "--height=1080",
+      "--no-sandbox"
+    ],
+    "headless": true,
+    "timeout": 15,
+    "implicit_wait": 5
+  },
+  "task": [
+    {
+      "selenium": {
+        "operator": "open",
+        "url": "https://example.com",
+        "result": "is_open"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "element",
+        "selector": "body",
+        "result": "page_loaded"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "screenshot",
+        "file": "./firefox_screenshot.png",
+        "result": "screenshot"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "find",
+        "selector": "h1",
+        "result": "title"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "navigate",
+        "action": "refresh",
+        "result": "refreshed"
+      }
+    }
+  ]
+}

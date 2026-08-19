@@ -1,0 +1,65 @@
+{
+  "meta": {
+    "name": "GnuPG Basic Usage Example",
+    "description": "Ejemplo básico de uso del plugin GnuPG",
+    "version": "1.0.0"
+  },
+  "task": [
+    {
+      "print": {
+        "text": "=== GnuPG Basic Usage Example ==="
+      }
+    },
+    {
+      "gnupg": {
+        "operator": "check_dependencies",
+        "result": "dependency_status"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{dependency_status.all_satisfied}} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "GnuPG está disponible y listo para usar"
+              }
+            },
+            {
+              "gnupg": {
+                "operator": "system_info",
+                "result": "system_info"
+              }
+            },
+            {
+              "print": {
+                "text": "Información del sistema: {{system_info.version}}"
+              }
+            },
+            {
+              "gnupg": {
+                "operator": "test_functionality",
+                "result": "test_results"
+              }
+            },
+            {
+              "print": {
+                "text": "Resultados de las pruebas: {{test_results.success}}"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "GnuPG no está disponible. Instala GnuPG primero."
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

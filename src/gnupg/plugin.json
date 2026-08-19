@@ -1,0 +1,31 @@
+{
+  "plugin": {
+    "name": "gnupg",
+    "version": "1.0.0",
+    "description": "GnuPG cryptographic operations for Sugar Language",
+    "author": "Sugar Team",
+    "license": "MIT",
+    "dependencies": {
+      "system": ["gpg"],
+      "python": ["python-gnupg>=0.5.0"]
+    },
+    "commands": {
+      "key_management": [
+        "generate_key", "list_keys", "import_key", "export_key",
+        "delete_key", "edit_key", "sign_key", "revoke_key", "trust_key"
+      ],
+      "encryption": [
+        "encrypt_file", "decrypt_file", "encrypt_text", "decrypt_text",
+        "symmetric_encrypt", "symmetric_decrypt"
+      ],
+      "signing": [
+        "sign_file", "verify_signature", "clearsign", "detached_sign",
+        "sign_text", "verify_text"
+      ],
+      "utility": [
+        "check_dependencies", "system_info", "test_functionality",
+        "configure_agent", "check_agent_status"
+      ]
+    }
+  }
+}

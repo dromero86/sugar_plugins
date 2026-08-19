@@ -1,0 +1,200 @@
+{
+  "meta": {
+    "name": "GnuPG Complete Workflow Example",
+    "description": "Ejemplo completo de workflow con GnuPG en Sugar Language",
+    "version": "1.0.0"
+  },
+  "task": [
+    {
+      "print": {
+        "text": "=== GnuPG Complete Workflow Example ==="
+      }
+    },
+    {
+      "print": {
+        "text": "1. Verificando dependencias..."
+      }
+    },
+    {
+      "gnupg": {
+        "operator": "check_dependencies",
+        "result": "dependency_status"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{dependency_status.all_satisfied}} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Todas las dependencias están satisfechas"
+              }
+            },
+            {
+              "print": {
+                "text": "2. Obteniendo información del sistema..."
+              }
+            },
+            {
+              "gnupg": {
+                "operator": "system_info",
+                "result": "system_info"
+              }
+            },
+            {
+              "print": {
+                "text": "Versión de GnuPG: {{system_info.version}}"
+              }
+            },
+            {
+              "print": {
+                "text": "3. Probando funcionalidad básica..."
+              }
+            },
+            {
+              "gnupg": {
+                "operator": "test_functionality",
+                "result": "test_results"
+              }
+            },
+            {
+              "print": {
+                "text": "Resultados de las pruebas: {{test_results.success}}"
+              }
+            },
+            {
+              "if": {
+                "condition": "{{test_results.success}} == true",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Todas las funcionalidades están operativas"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "4. Configurando agente GnuPG..."
+                      }
+                    },
+                    {
+                      "gnupg": {
+                        "operator": "configure_agent",
+                        "enable_ssh": true,
+                        "enable_gpg": true,
+                        "timeout": 3600,
+                        "max_cache_ttl": 7200,
+                        "default_cache_ttl": 600,
+                        "result": "agent_config"
+                      }
+                    },
+                    {
+                      "if": {
+                        "condition": "{{agent_config.success}} == true",
+                        "then": {
+                          "task": [
+                            {
+                              "print": {
+                                "text": "Agente configurado exitosamente"
+                              }
+                            },
+                            {
+                              "print": {
+                                "text": "5. Verificando estado del agente..."
+                              }
+                            },
+                            {
+                              "gnupg": {
+                                "operator": "check_agent_status",
+                                "check_gpg_agent": true,
+                                "check_ssh_agent": true,
+                                "result": "agent_status"
+                              }
+                            },
+                            {
+                              "print": {
+                                "text": "Estado del agente GnuPG: {{agent_status.gpg_agent.running}}"
+                              }
+                            },
+                            {
+                              "print": {
+                                "text": "Estado del agente SSH: {{agent_status.ssh_agent.running}}"
+                              }
+                            }
+                          ]
+                        },
+                        "else": {
+                          "task": [
+                            {
+                              "print": {
+                                "text": "Configuración del agente falló: {{agent_config.error}}"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                "else": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Algunas funcionalidades no están disponibles"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Tests fallidos: {{test_results.tests}}"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Dependencias no satisfechas"
+              }
+            },
+            {
+              "print": {
+                "text": "Estado de dependencias del sistema: {{dependency_status.system_dependencies.satisfied}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Estado de dependencias de Python: {{dependency_status.python_dependencies.satisfied}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Por favor instala las dependencias faltantes:"
+              }
+            },
+            {
+              "print": {
+                "text": "  - GnuPG: sudo apt-get install gnupg"
+              }
+            },
+            {
+              "print": {
+                "text": "  - Python: pip install python-gnupg"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "print": {
+        "text": "=== GnuPG Complete Workflow Example Completed ==="
+      }
+    }
+  ]
+}

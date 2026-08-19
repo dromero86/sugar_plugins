@@ -1,0 +1,168 @@
+{
+  "description": "Ejemplo avanzado de uso del PDF Plugin - Creación de reporte complejo",
+  "task": [
+    {
+      "print": {
+        "text": "Iniciando ejemplo avanzado del PDF Plugin"
+      }
+    },
+    {
+      "pdf": {
+        "operator": "check_dependencies",
+        "result": "dependency_status"
+      }
+    },
+    {
+      "if": {
+        "condition": "${dependency_status.dependency_status.all_satisfied} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Creando reporte avanzado..."
+              }
+            },
+            {
+              "pdf": {
+                "operator": "create_pdf",
+                "output_path": "reporte_avanzado.pdf",
+                "title": "Reporte de Sistema Avanzado",
+                "page_size": "A4",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Reporte Generado Automáticamente por Sugar PDF Plugin",
+                    "font_size": 16
+                  },
+                  {
+                    "type": "spacer",
+                    "height": 30
+                  },
+                  {
+                    "type": "text",
+                    "text": "Este es un ejemplo de las capacidades avanzadas del plugin:",
+                    "font_size": 12
+                  },
+                  {
+                    "type": "table",
+                    "data": [
+                      ["Funcionalidad", "Descripción", "Estado"],
+                      ["Lectura PDF", "Leer información básica y metadatos", "Implementado"],
+                      ["Extracción Texto", "Extraer texto con pdfplumber", "Implementado"],
+                      ["Creación PDF", "Crear PDFs con reportlab", "Implementado"],
+                      ["Análisis Contenido", "Analizar páginas y contenido", "Implementado"],
+                      ["Combinación PDFs", "Merge de múltiples archivos", "Implementado"],
+                      ["Manipulación", "Agregar texto e imágenes", "En desarrollo"],
+                      ["Conversión", "PDF a imágenes", "En desarrollo"]
+                    ]
+                  },
+                  {
+                    "type": "spacer",
+                    "height": 20
+                  },
+                  {
+                    "type": "text",
+                    "text": "Características del Plugin:",
+                    "font_size": 14
+                  },
+                  {
+                    "type": "text",
+                    "text": "• Verificación automática de dependencias",
+                    "font_size": 12
+                  },
+                  {
+                    "type": "text",
+                    "text": "• Manejo robusto de errores",
+                    "font_size": 12
+                  },
+                  {
+                    "type": "text",
+                    "text": "• Integración con SDK de Sugar",
+                    "font_size": 12
+                  },
+                  {
+                    "type": "text",
+                    "text": "• Soporte para variables de Sugar",
+                    "font_size": 12
+                  },
+                  {
+                    "type": "text",
+                    "text": "• Logging detallado de operaciones",
+                    "font_size": 12
+                  }
+                ],
+                "result": "reporte_creado"
+              }
+            },
+            {
+              "print": {
+                "text": "Analizando el reporte creado..."
+              }
+            },
+            {
+              "pdf": {
+                "operator": "analyze_pdf",
+                "file_path": "reporte_avanzado.pdf",
+                "result": "analisis_avanzado"
+              }
+            },
+            {
+              "print": {
+                "text": "Estadísticas del reporte:"
+              }
+            },
+            {
+              "print": {
+                "text": "   - Archivo: {{reporte_creado.output_path}}"
+              }
+            },
+            {
+              "print": {
+                "text": "   - Páginas: {{analisis_avanzado.page_count}}"
+              }
+            },
+            {
+              "print": {
+                "text": "   - Tamaño: {{analisis_avanzado.file_size_formatted}}"
+              }
+            },
+            {
+              "print": {
+                "text": "   - Caracteres: {{analisis_avanzado.total_text_length}}"
+              }
+            },
+            {
+              "print": {
+                "text": "   - Imágenes: {{analisis_avanzado.total_images}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Ejemplo avanzado completado exitosamente"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Dependencias faltantes para ejemplo avanzado"
+              }
+            },
+            {
+              "print": {
+                "text": "Instala las dependencias requeridas:"
+              }
+            },
+            {
+              "print": {
+                "text": "pip install PyPDF2>=3.0.0 pdfplumber>=0.9.0 reportlab>=4.0.0 Pillow>=10.0.0"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

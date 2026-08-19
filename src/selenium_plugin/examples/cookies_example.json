@@ -1,0 +1,128 @@
+{
+  "meta": {
+    "mode": "selenium",
+    "browser": "chrome",
+    "headless": false,
+    "timeout": 10,
+    "implicit_wait": 5
+  },
+  "task": [
+    {
+      "selenium": {
+        "operator": "open",
+        "url": "https://example.com",
+        "result": "is_open"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "cookies",
+        "action": "add",
+        "cookies": [
+          {
+            "name": "session_id",
+            "value": "abc123def456",
+            "domain": ".example.com",
+            "path": "/",
+            "secure": true,
+            "httpOnly": true,
+            "expiry": "2024-12-31T23:59:59Z"
+          },
+          {
+            "name": "user_id",
+            "value": "12345",
+            "domain": ".example.com",
+            "path": "/user"
+          },
+          {
+            "name": "theme",
+            "value": "dark",
+            "domain": ".example.com",
+            "path": "/settings"
+          },
+          {
+            "name": "language",
+            "value": "es",
+            "domain": ".example.com",
+            "path": "/",
+            "expiry": "365d"
+          },
+          {
+            "name": "analytics_id",
+            "value": "ga_123456789",
+            "domain": ".example.com",
+            "path": "/",
+            "expiry": "730d"
+          }
+        ],
+        "result": "cookies_added"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "cookies",
+        "action": "get",
+        "result": "all_cookies"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "cookies",
+        "action": "get_by_name",
+        "name": "session_id",
+        "result": "session_cookie"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "cookies",
+        "action": "get_by_domain",
+        "domain": ".example.com",
+        "result": "domain_cookies"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "navigate",
+        "action": "refresh",
+        "result": "refreshed"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "cookies",
+        "action": "get",
+        "result": "cookies_after_refresh"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "cookies",
+        "action": "delete",
+        "name": "analytics_id",
+        "result": "analytics_deleted"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "cookies",
+        "action": "get",
+        "result": "cookies_after_delete"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "cookies",
+        "action": "clear",
+        "result": "all_cleared"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "cookies",
+        "action": "get",
+        "result": "final_cookies"
+      }
+    }
+  ]
+}

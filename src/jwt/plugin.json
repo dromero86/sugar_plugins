@@ -1,0 +1,12 @@
+{
+  "name": "jwt",
+  "version": "1.0.0",
+  "description": "Plugin jwt para Sugar",
+  "author": "Sugar Team",
+  "main": "src/jwtPlugin.py",
+  "dependencies": [
+    "PyJWT>=2.8.0",
+    "cryptography>=3.4.0"
+  ],
+  "commands": []
+}

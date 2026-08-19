@@ -1,0 +1,60 @@
+{
+  "task": [
+    {
+      "print": {
+        "text": "=== SOAP Plugin - Uso Básico ==="
+      }
+    },
+    {
+      "print": {
+        "text": "1. Creando cliente SOAP..."
+      }
+    },
+    {
+      "soap_client": {
+        "operator": "create",
+        "wsdl_url": "https://webservices.example.com/service?wsdl",
+        "config": {
+          "timeout": 30,
+          "verify_ssl": true,
+          "headers": {
+            "User-Agent": "Sugar-SOAP-Client/3.0.0"
+          }
+        },
+        "result": "cliente_soap"
+      }
+    },
+    {
+      "print": {
+        "text": "Cliente SOAP creado exitosamente"
+      }
+    },
+    {
+      "print": {
+        "text": "2. Llamando método SOAP..."
+      }
+    },
+    {
+      "soap_client": {
+        "operator": "call",
+        "client": "{{cliente_soap}}",
+        "method": "GetUserInfo",
+        "parameters": {
+          "userId": 123,
+          "includeDetails": true
+        },
+        "result": "respuesta_usuario"
+      }
+    },
+    {
+      "print": {
+        "text": "Método SOAP ejecutado exitosamente"
+      }
+    },
+    {
+      "print": {
+        "text": "Respuesta: {{respuesta_usuario}}"
+      }
+    }
+  ]
+}

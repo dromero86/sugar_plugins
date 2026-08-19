@@ -1,0 +1,19 @@
+# Zip Plugin Requirements
+# =====================
+#
+# Este plugin utiliza las bibliotecas estándar de Python
+# No requiere dependencias externas adicionales
+
+# Bibliotecas estándar utilizadas:
+# - zipfile: Para archivos ZIP
+# - tarfile: Para archivos TAR
+# - gzip: Para compresión GZ
+# - bz2: Para compresión BZ2
+# - lzma: Para compresión XZ
+# - shutil: Para operaciones de archivos
+# - tempfile: Para archivos temporales
+# - pathlib: Para manejo de rutas
+# - typing: Para type hints
+
+# Nota: Todas estas bibliotecas están incluidas en Python 3.6+
+# No se requieren instalaciones adicionales

@@ -1,0 +1,72 @@
+{
+  "description": "Ejemplo básico de compresión RAR",
+  "task": [
+    {
+      "print": {
+        "text": "Iniciando compresión RAR básica..."
+      }
+    },
+    {
+      "rar": {
+        "operator": "rar_compress",
+        "source": "./documentos",
+        "destination": "./backup.rar",
+        "compression_level": 3,
+        "result": "compression_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Compresión completada: {{compression_result.status}}"
+      }
+    },
+    {
+      "if": {
+        "condition": "${compression_result.status} == 'success'",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Archivo creado: {{compression_result.destination}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Tamaño original: {{compression_result.original_size}} bytes"
+              }
+            },
+            {
+              "print": {
+                "text": "Tamaño comprimido: {{compression_result.compressed_size}} bytes"
+              }
+            },
+            {
+              "print": {
+                "text": "Ratio de compresión: {{compression_result.compression_ratio}}%"
+              }
+            },
+            {
+              "print": {
+                "text": "Archivos procesados: {{compression_result.files_count}}"
+              }
+            },
+            {
+              "print": {
+                "text": "⏱Tiempo de procesamiento: {{compression_result.processing_time}}s"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Error en compresión: {{compression_result.error}}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

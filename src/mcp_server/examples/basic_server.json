@@ -1,0 +1,152 @@
+{
+    "name": "MCP Server Básico",
+    "description": "Ejemplo básico de servidor MCP Server para Sugar",
+    "tasks": [
+        {
+            "print": {
+                "text": "Iniciando servidor MCP Server..."
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "start_server",
+                "host": "localhost",
+                "port": 3000,
+                "protocol": "websocket",
+                "result": "server_status"
+            }
+        },
+        {
+            "if": {
+                "condition": "${server_status.status} == 'success'",
+                "then": {
+                    "task": [
+                        {
+                            "print": {
+                                "text": "Servidor MCP iniciado exitosamente"
+                            }
+                        },
+                        {
+                            "print": {
+                                "text": "Endpoint: {{server_status.endpoint}}"
+                            }
+                        },
+                        {
+                            "print": {
+                                "text": "Protocolo: {{server_status.protocol}}"
+                            }
+                        }
+                    ]
+                },
+                "else": {
+                    "task": [
+                        {
+                            "print": {
+                                "text": "Error al iniciar servidor: {{server_status.message}}"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "get_server_status",
+                "result": "status_info"
+            }
+        },
+        {
+            "print": {
+                "text": "Estado del servidor:"
+            }
+        },
+        {
+            "print": {
+                "text": "   - Servidor ejecutándose: {{status_info.server_running}}"
+            }
+        },
+        {
+            "print": {
+                "text": "   - Herramientas registradas: {{status_info.tools_count}}"
+            }
+        },
+        {
+            "print": {
+                "text": "   - Recursos registrados: {{status_info.resources_count}}"
+            }
+        },
+        {
+            "print": {
+                "text": "   - Clientes conectados: {{status_info.clients_count}}"
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "list_tools",
+                "result": "tools_list"
+            }
+        },
+        {
+            "print": {
+                "text": "Herramientas disponibles:"
+            }
+        },
+        {
+            "foreach": {
+                "from": "tools_list.tools",
+                "to": "tool",
+                "task": [
+                    {
+                        "print": {
+                            "text": "   - {{tool.name}}: {{tool.description}}"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "mcp_server": {
+                "operator": "list_resources",
+                "result": "resources_list"
+            }
+        },
+        {
+            "print": {
+                "text": "Recursos disponibles:"
+            }
+        },
+        {
+            "foreach": {
+                "from": "resources_list.resources",
+                "to": "resource",
+                "task": [
+                    {
+                        "print": {
+                            "text": "   - {{resource.uri}}: {{resource.name}}"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "print": {
+                "text": "Servidor MCP listo para conexiones"
+            }
+        },
+        {
+            "print": {
+                "text": "Para conectar desde un cliente MCP:"
+            }
+        },
+        {
+            "print": {
+                "text": "   WebSocket: ws://localhost:3000/mcp"
+            }
+        },
+        {
+            "print": {
+                "text": "   TCP: tcp://localhost:3000"
+            }
+        }
+    ]
+}

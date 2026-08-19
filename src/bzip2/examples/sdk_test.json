@@ -1,0 +1,66 @@
+{
+  "task": [
+    {
+      "print": { "text": "Probando funcionalidades del SDK del plugin bzip2" }
+    },
+    {
+      "bzip2": {
+        "operator": "sdk_info",
+        "result": "sdk_info"
+      }
+    },
+    {
+      "print": { "text": "Información del SDK:" }
+    },
+    {
+      "print": { "text": "   - Plugin: {{sdk_info.plugin_name}}" }
+    },
+    {
+      "print": { "text": "   - Versión: {{sdk_info.version}}" }
+    },
+    {
+      "print": { "text": "   - Componentes SDK: {{sdk_info.sdk_components}}" }
+    },
+    {
+      "print": { "text": "   - Extensiones soportadas: {{sdk_info.supported_extensions}}" }
+    },
+    {
+      "print": { "text": "   - Niveles de compresión: {{sdk_info.compression_levels}}" }
+    },
+    {
+      "print": { "text": "   - Nivel por defecto: {{sdk_info.default_compression_level}}" }
+    },
+    {
+      "print": { "text": "Probando funcionalidades del SDK..." }
+    },
+    {
+      "bzip2": {
+        "operator": "test_sdk",
+        "result": "sdk_test"
+      }
+    },
+    {
+      "print": { "text": "Resultados de las pruebas:" }
+    },
+    {
+      "print": { "text": "   - Hooks: {{sdk_test.tests.hooks}}" }
+    },
+    {
+      "print": { "text": "   - Interpolación: {{sdk_test.tests.interpolation}}" }
+    },
+    {
+      "print": { "text": "   - Customización de comandos: {{sdk_test.tests.command_customization}}" }
+    },
+    {
+      "if": {
+        "condition": "${sdk_test.tests.hooks} == 'passed' and ${sdk_test.tests.interpolation} == 'passed' and ${sdk_test.tests.command_customization} == 'passed'",
+        "then": {
+          "print": { "text": "Todas las pruebas del SDK pasaron exitosamente" }
+        },
+        "else": {
+          "print": { "text": "Algunas pruebas del SDK fallaron" }
+        }
+      }
+    }
+  ]
+}

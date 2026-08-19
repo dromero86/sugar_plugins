@@ -1,0 +1,180 @@
+{
+  "task": [
+    {
+      "ncurses": {
+        "operator": "init",
+        "enable_colors": true
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "init_colors",
+        "theme": "dark"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "create_window",
+        "name": "main_window",
+        "x": 0,
+        "y": 0,
+        "width": "100%",
+        "height": "100%",
+        "title": "Demo de Widgets Sugar",
+        "border": true
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "set_active_window",
+        "window": "main_window"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "print",
+        "text": "Demo de Widgets Interactivos",
+        "x": 2,
+        "y": 1,
+        "color": "accent",
+        "attributes": ["bold"]
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "create_button",
+        "name": "btn_continuar",
+        "text": "Continuar",
+        "x": 2,
+        "y": 3,
+        "width": 12,
+        "action": "continue"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "create_button",
+        "name": "btn_salir",
+        "text": "Salir",
+        "x": 20,
+        "y": 3,
+        "width": 8,
+        "action": "exit"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "print",
+        "text": "Lista de opciones:",
+        "x": 2,
+        "y": 5,
+        "color": "foreground"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "create_list",
+        "name": "menu_opciones",
+        "items": [
+          "Ver estadísticas",
+          "Configuración",
+          "Exportar datos",
+          "Ayuda",
+          "Acerca de"
+        ],
+        "x": 2,
+        "y": 6,
+        "width": 25,
+        "height": 5,
+        "result": "opcion_seleccionada"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "print",
+        "text": "Campo de texto:",
+        "x": 2,
+        "y": 12,
+        "color": "foreground"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "get_string",
+        "prompt": "Nombre: ",
+        "x": 2,
+        "y": 13,
+        "max_length": 30,
+        "result": "nombre_usuario"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "refresh"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "print",
+        "text": "Información capturada:",
+        "x": 2,
+        "y": 15,
+        "color": "success"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "print",
+        "text": "Nombre: {{nombre_usuario.string}}",
+        "x": 2,
+        "y": 16,
+        "color": "foreground"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "print",
+        "text": "Opción seleccionada: {{opcion_seleccionada}}",
+        "x": 2,
+        "y": 17,
+        "color": "foreground"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "print",
+        "text": "Presiona 'q' para salir o cualquier otra tecla para continuar...",
+        "x": 2,
+        "y": 19,
+        "color": "warning"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "refresh"
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "on_key_press",
+        "key": "q",
+        "action": {
+          "ncurses": {
+            "operator": "end"
+          }
+        }
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "wait_for_event",
+        "timeout": -1
+      }
+    },
+    {
+      "ncurses": {
+        "operator": "end"
+      }
+    }
+  ]
+}

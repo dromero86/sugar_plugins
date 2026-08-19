@@ -1,0 +1,20 @@
+# Ejemplo básico de Sugar en YAML
+# Este archivo demuestra el soporte de YAML en Sugar
+
+task:
+  - print:
+      text: "🍬 ¡Hola desde YAML!"
+  
+  - let:
+      name: "mensaje"
+      value: "Sugar ahora soporta YAML"
+  
+  - print:
+      text: "{{mensaje}}"
+  
+  - let:
+      name: "numero"
+      value: 42
+  
+  - print:
+      text: "El número mágico es: {{numero}}"

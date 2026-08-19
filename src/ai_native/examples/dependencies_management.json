@@ -1,0 +1,186 @@
+{
+  "description": "Ejemplo de gestión de dependencias del plugin AI Native",
+  "task": [
+    {
+      "print": {
+        "text": "Iniciando gestión de dependencias del plugin AI Native..."
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "get_ai_info",
+        "result": "plugin_info"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Estado Actual del Plugin ==="
+      }
+    },
+    {
+      "print": {
+        "text": "Modelo actual: {{plugin_info.model_status.current_model}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Tipo de modelo: {{plugin_info.model_status.model_type}}"
+      }
+    },
+    {
+      "print": {
+        "text": "GPU disponible: {{plugin_info.model_status.gpu_available}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Dependencias Disponibles ==="
+      }
+    },
+    {
+      "print": {
+        "text": "OpenAI: {{plugin_info.available_models.openai.available}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Anthropic: {{plugin_info.available_models.anthropic.available}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Modelos Locales: {{plugin_info.available_models.local.available}}"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Instalando Dependencias ==="
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "install_dependencies",
+        "result": "install_result"
+      }
+    },
+    {
+      "print": {
+        "text": "Resultado de instalación: {{install_result.message}}"
+      }
+    },
+    {
+      "if": {
+        "condition": "{{install_result.success}} == true",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Dependencias instaladas exitosamente"
+              }
+            },
+            {
+              "print": {
+                "text": "=== Probando Modelo Avanzado ==="
+              }
+            },
+            {
+              "ai_native": {
+                "operator": "test_model",
+                "prompt": "Crear una función que procese datos JSON de una API REST con manejo de errores",
+                "result": "test_result"
+              }
+            },
+            {
+              "print": {
+                "text": "Resultado de prueba: {{test_result.success}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Tiempo de ejecución: {{test_result.execution_time}} segundos"
+              }
+            },
+            {
+              "if": {
+                "condition": "{{test_result.success}} == true",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "=== Código Generado ==="
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "{{test_result.generated_code}}"
+                      }
+                    }
+                  ]
+                },
+                "else": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Error en prueba: {{test_result.error_message}}"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Error instalando dependencias: {{install_result.error}}"
+              }
+            },
+            {
+              "print": {
+                "text": "ℹEl plugin continuará funcionando con capacidades limitadas"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "print": {
+        "text": "=== Información del Modelo ==="
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "get_model_info",
+        "result": "model_info"
+      }
+    },
+    {
+      "print": {
+        "text": "Modelo actual: {{model_info.current_model}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Tipo: {{model_info.model_type}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Capacidades: {{model_info.capabilities}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Uso de memoria: {{model_info.performance.memory_usage}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Gestión de dependencias completada"
+      }
+    }
+  ]
+}

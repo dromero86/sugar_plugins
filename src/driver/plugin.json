@@ -1,0 +1,12 @@
+{
+  "name": "driver",
+  "version": "1.0.0",
+  "description": "Plugin driver para Sugar",
+  "author": "Sugar Team",
+  "main": "src/driverPlugin.py",
+  "dependencies": [
+    "selenium>=4.0.0",
+    "webdriver-manager>=3.8.0"
+  ],
+  "commands": []
+}

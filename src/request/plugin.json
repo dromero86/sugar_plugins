@@ -1,0 +1,12 @@
+{
+  "name": "request",
+  "version": "1.0.0",
+  "description": "Plugin request para Sugar",
+  "author": "Sugar Team",
+  "main": "src/requestPlugin.py",
+  "dependencies": [
+    "requests>=2.25.0",
+    "urllib3>=1.26.0"
+  ],
+  "commands": []
+}

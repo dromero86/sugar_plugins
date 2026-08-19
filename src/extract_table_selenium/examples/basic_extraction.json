@@ -1,0 +1,25 @@
+{
+    "task": [
+        {
+            "plugin": {
+                "name": "extract_table_selenium",
+                "command": "extract_table",
+                "config": {
+                    "url": "https://example.com/table-page",
+                    "selector": "table",
+                    "config": {
+                        "headers": "first_row",
+                        "format": "objects",
+                        "scope": "tbody"
+                    },
+                    "result": "table_data"
+                }
+            }
+        },
+        {
+            "print": {
+                "text": "Extracted table data: {{table_data}}"
+            }
+        }
+    ]
+}

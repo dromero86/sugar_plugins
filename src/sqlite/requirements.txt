@@ -1,0 +1,2 @@
+# No se requieren dependencias externas para SQLite
+# SQLite3 viene incluido en Python por defecto

@@ -1,0 +1,2 @@
+# GnuPG Plugin Requirements
+python-gnupg>=0.5.0

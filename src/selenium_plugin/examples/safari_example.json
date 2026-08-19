@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "mode": "selenium",
+    "browser": "safari",
+    "timeout": 15,
+    "implicit_wait": 10
+  },
+  
+  "task": [
+    {
+      "selenium": {
+        "operator": "open",
+        "url": "https://www.apple.com",
+        "result": "is_open"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "time",
+        "seconds": 3,
+        "result": "is_waited"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "screenshot",
+        "file": "./safari_apple.png",
+        "result": "screenshot"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "find",
+        "selector": "nav",
+        "result": "navigation"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "javascript",
+        "from_string": "return document.title;",
+        "result": "page_title"
+      }
+    },
+    {
+      "print": {
+        "text": "Título de Apple: {{page_title}}"
+      }
+    }
+  ]
+}

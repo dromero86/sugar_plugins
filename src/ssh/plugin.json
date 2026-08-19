@@ -1,0 +1,12 @@
+{
+  "name": "ssh",
+  "version": "1.0.0",
+  "description": "Plugin ssh para Sugar",
+  "author": "Sugar Team",
+  "main": "src/sshPlugin.py",
+  "dependencies": [
+    "paramiko>=3.0.0",
+    "cryptography>=3.4.0"
+  ],
+  "commands": []
+}

@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "mode": "selenium",
+    "browser": "opera",
+    "options": [
+      "--disable-gpu",
+      "--no-sandbox",
+      "--disable-web-security",
+      "--window-size=1280,720"
+    ],
+    "detach": true,
+    "headless": false,
+    "timeout": 10
+  },
+  
+  "task": [
+    {
+      "selenium": {
+        "operator": "open",
+        "url": "https://www.opera.com",
+        "result": "is_open"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "time",
+        "seconds": 3,
+        "result": "is_waited"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "screenshot",
+        "file": "./opera_homepage.png",
+        "result": "screenshot"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "find",
+        "selector": ".download-button",
+        "result": "download_button"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "click",
+        "selector": ".download-button",
+        "result": "download_clicked"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "time",
+        "seconds": 2,
+        "result": "download_wait"
+      }
+    },
+    {
+      "print": {
+        "text": "Opera homepage visitada exitosamente"
+      }
+    }
+  ]
+}

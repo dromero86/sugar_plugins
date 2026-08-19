@@ -1,0 +1,60 @@
+{
+  "name": "Compresión Básica",
+  "description": "Ejemplo básico de compresión de archivos",
+  "version": "1.0.0",
+  "task": [
+    {
+      "print": {
+        "text": "Iniciando compresión básica..."
+      }
+    },
+    {
+      "zip": {
+        "operator": "compress",
+        "source": "./datos",
+        "destination": "./backup.zip",
+        "format": "zip",
+        "compression_level": 6,
+        "result": "compresion"
+      }
+    },
+    {
+      "if": {
+        "condition": "${compresion.status == 'success'}",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Compresión exitosa: {{compresion.destination}}"
+              }
+            },
+            {
+              "print": {
+                "text": "Tamaño original: {{compresion.original_size}} bytes"
+              }
+            },
+            {
+              "print": {
+                "text": "Tamaño comprimido: {{compresion.compressed_size}} bytes"
+              }
+            },
+            {
+              "print": {
+                "text": "Ratio: {{compresion.compression_ratio}}%"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Error: {{compresion.error}}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

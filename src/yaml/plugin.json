@@ -1,0 +1,38 @@
+{
+  "name": "yaml",
+  "version": "1.0.0",
+  "description": "YAML support for Sugar Language - write Sugar scripts using YAML syntax",
+  "author": "Sugar Team",
+  "license": "MIT",
+  "main": "YAMLPlugin.py",
+  "dependencies": {
+    "python": ["pyyaml>=6.0"],
+    "system": []
+  },
+  "commands": [
+    "process_file",
+    "convert_json_to_yaml",
+    "validate_yaml",
+    "convert_directory",
+    "register_cli"
+  ],
+  "features": [
+    "YAML file processing",
+    "JSON to YAML conversion",
+    "YAML validation",
+    "Directory conversion",
+    "Dynamic CLI parameter registration"
+  ],
+  "examples": [
+    "examples/basic_hello.yaml",
+    "examples/plugin_example.yaml",
+    "examples/advanced_features.yaml",
+    "examples/conversion_example.json"
+  ],
+  "tests": [
+    "tests/test_yaml_plugin.py"
+  ],
+  "documentation": [
+    "docs/README.md"
+  ]
+}

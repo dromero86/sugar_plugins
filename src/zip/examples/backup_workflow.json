@@ -1,0 +1,270 @@
+{
+  "name": "Workflow de Backup Completo",
+  "description": "Ejemplo completo de backup con verificación e información",
+  "version": "1.0.0",
+  "task": [
+    {
+      "let": {
+        "name": "timestamp",
+        "value": "${Date.now()}"
+      }
+    },
+    {
+      "let": {
+        "name": "backup_name",
+        "value": "backup_{{timestamp}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Iniciando workflow de backup completo..."
+      }
+    },
+    {
+      "print": {
+        "text": "Creando backup: {{backup_name}}"
+      }
+    },
+    {
+      "zip": {
+        "operator": "compress",
+        "source": "./datos_proyecto",
+        "destination": "./{{backup_name}}.zip",
+        "format": "zip",
+        "compression_level": 9,
+        "include_hidden": false,
+        "result": "backup_resultado"
+      }
+    },
+    {
+      "if": {
+        "condition": "${backup_resultado.status == 'success'}",
+        "then": {
+          "task": [
+            {
+              "print": {
+                "text": "Backup creado exitosamente"
+              }
+            },
+            {
+              "zip": {
+                "operator": "info",
+                "source": "{{backup_resultado.destination}}",
+                "result": "info_backup"
+              }
+            },
+            {
+              "print": {
+                "text": "Información del backup:"
+              }
+            },
+            {
+              "print": {
+                "text": "   Formato: {{info_backup.format}}"
+              }
+            },
+            {
+              "print": {
+                "text": "   Tamaño: {{info_backup.size_human}}"
+              }
+            },
+            {
+              "print": {
+                "text": "   Archivos: {{info_backup.files_count}}"
+              }
+            },
+            {
+              "zip": {
+                "operator": "list",
+                "source": "{{backup_resultado.destination}}",
+                "result": "lista_archivos"
+              }
+            },
+            {
+              "print": {
+                "text": "Contenido del backup:"
+              }
+            },
+            {
+              "foreach": {
+                "variable": "archivo",
+                "array": "{{lista_archivos.files}}",
+                "task": [
+                  {
+                    "print": {
+                      "text": "   - {{archivo}}"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "zip": {
+                "operator": "test",
+                "source": "{{backup_resultado.destination}}",
+                "result": "verificacion"
+              }
+            },
+            {
+              "if": {
+                "condition": "${verificacion.is_valid}",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Verificación de integridad: OK"
+                      }
+                    }
+                  ]
+                },
+                "else": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Verificación de integridad: FALLÓ"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "print": {
+                "text": "Creando copia en formato TAR.GZ..."
+              }
+            },
+            {
+              "zip": {
+                "operator": "convert",
+                "source": "{{backup_resultado.destination}}",
+                "destination": "./{{backup_name}}.tar.gz",
+                "target_format": "tar.gz",
+                "result": "conversion_resultado"
+              }
+            },
+            {
+              "if": {
+                "condition": "${conversion_resultado.status == 'success'}",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Conversión exitosa"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Tamaño TAR.GZ: {{conversion_resultado.compressed_size}} bytes"
+                      }
+                    }
+                  ]
+                },
+                "else": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Error en conversión: {{conversion_resultado.error}}"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "print": {
+                "text": "Extrayendo para verificación final..."
+              }
+            },
+            {
+              "zip": {
+                "operator": "extract",
+                "source": "{{backup_resultado.destination}}",
+                "destination": "./verificacion_backup",
+                "overwrite": true,
+                "result": "extraccion_resultado"
+              }
+            },
+            {
+              "if": {
+                "condition": "${extraccion_resultado.status == 'success'}",
+                "then": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Extracción exitosa"
+                      }
+                    },
+                    {
+                      "print": {
+                        "text": "Archivos extraídos: {{extraccion_resultado.extracted_files}}"
+                      }
+                    }
+                  ]
+                },
+                "else": {
+                  "task": [
+                    {
+                      "print": {
+                        "text": "Error en extracción: {{extraccion_resultado.error}}"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "print": {
+                "text": "Limpiando archivos temporales..."
+              }
+            },
+            {
+              "file": {
+                "operator": "delete",
+                "path": "./verificacion_backup"
+              }
+            },
+            {
+              "print": {
+                "text": "Workflow de backup completado exitosamente!"
+              }
+            },
+            {
+              "print": {
+                "text": "Archivos generados:"
+              }
+            },
+            {
+              "print": {
+                "text": "   - {{backup_resultado.destination}} (ZIP)"
+              }
+            },
+            {
+              "print": {
+                "text": "   - {{conversion_resultado.destination}} (TAR.GZ)"
+              }
+            }
+          ]
+        },
+        "else": {
+          "task": [
+            {
+              "print": {
+                "text": "Error en backup: {{backup_resultado.error}}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "variables": {
+    "directorio_datos": "./datos_proyecto",
+    "compression_level": 9,
+    "include_hidden": false
+  },
+  "metadata": {
+    "author": "Sugar Team",
+    "created": "2024-01-01",
+    "description": "Workflow completo de backup con verificación"
+  }
+}

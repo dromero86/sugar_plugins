@@ -1,0 +1,33 @@
+# RAR Plugin Requirements
+# ======================
+#
+# Este plugin requiere la biblioteca rarfile para manejar archivos RAR
+# y herramientas del sistema para compresión/descompresión
+
+# Dependencias de Python
+rarfile>=4.0
+psutil>=5.8.0
+
+# Dependencias del sistema (ejecutables)
+# - unrar: Para extraer archivos RAR
+# - rar: Para crear archivos RAR (opcional, unrar es suficiente para extracción)
+
+# Instalación en diferentes sistemas:
+# 
+# Ubuntu/Debian:
+# sudo apt-get install unrar
+# 
+# CentOS/RHEL/Fedora:
+# sudo yum install unrar
+# sudo dnf install unrar
+# 
+# macOS:
+# brew install unrar
+# 
+# Windows:
+# Descargar e instalar WinRAR desde https://www.win-rar.com/
+# o instalar unrar desde https://www.win-rar.com/unrar.html
+
+# Nota: rarfile detectará automáticamente la ubicación de unrar/rar
+# en el sistema PATH. Si no está en PATH, configurar manualmente
+# en el código del plugin.

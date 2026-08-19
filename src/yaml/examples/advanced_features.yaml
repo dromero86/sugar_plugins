@@ -1,0 +1,96 @@
+# Ejemplo avanzado de Sugar con YAML
+# Demuestra características avanzadas de YAML
+
+# Definir configuraciones reutilizables
+configuraciones: &db_config
+  host: "localhost"
+  port: 5432
+  database: "mydb"
+  username: "user"
+  password: "pass"
+
+# Variables globales
+variables:
+  nombre: "Sugar YAML"
+  version: "2.0.0"
+  features:
+    - "Soporte YAML"
+    - "Plugins"
+    - "AST"
+    - "Modularidad"
+
+task:
+  # Configuración inicial
+  - let:
+      name: "app_name"
+      value: "{{variables.nombre}}"
+  
+  - let:
+      name: "app_version"
+      value: "{{variables.version}}"
+  
+  - print:
+      text: "🚀 Iniciando {{app_name}} v{{app_version}}"
+  
+  # Mostrar características
+  - print:
+      text: "📋 Características disponibles:"
+  
+  - for:
+      variable: "feature"
+      in: "{{variables.features}}"
+      task:
+        - print:
+            text: "  • {{feature}}"
+  
+  # Ejemplo con configuración de base de datos
+  - let:
+      name: "db_settings"
+      value: "{{configuraciones}}"
+  
+  - print:
+      text: "🔗 Configuración de BD: {{db_settings.host}}:{{db_settings.port}}"
+  
+  # Ejemplo con operaciones matemáticas
+  - simple:
+      operator: "add"
+      left: 100
+      right: 200
+      result: "total"
+  
+  - simple:
+      operator: "multiply"
+      left: "{{total}}"
+      right: 2
+      result: "doble"
+  
+  - print:
+      text: "🧮 Total: {{total}}, Doble: {{doble}}"
+  
+  # Ejemplo con manejo de errores
+  - try:
+      task:
+        - simple:
+            operator: "divide"
+            a: 100
+            b: 0
+            result: "division"
+    catch:
+      task:
+        - print:
+            text: "⚠️ Error: División por cero detectada"
+  
+  # Ejemplo con bucles anidados
+  - for:
+      variable: "i"
+      in: "[1, 2, 3]"
+      task:
+        - for:
+            variable: "j"
+            in: "[A, B, C]"
+            task:
+              - print:
+                  text: "Iteración {{i}}-{{j}}"
+  
+  - print:
+      text: "✅ Ejemplo YAML completado exitosamente"

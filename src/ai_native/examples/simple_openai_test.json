@@ -1,0 +1,39 @@
+{
+  "description": "Prueba simple del plugin AI Native con OpenAI",
+  "task": [
+    {
+      "print": {
+        "text": "Prueba simple con OpenAI"
+      }
+    },
+    {
+      "ai_native": {
+        "operator": "generate_code",
+        "description": "Crear una función simple en Python que sume dos números",
+        "context": {
+          "domain": "data_processing"
+        },
+        "options": {
+          "language": "python",
+          "style": "simple"
+        },
+        "result": "simple_function"
+      }
+    },
+    {
+      "print": {
+        "text": "=== Función Generada ==="
+      }
+    },
+    {
+      "print": {
+        "text": "{{simple_function}}"
+      }
+    },
+    {
+      "print": {
+        "text": "Prueba completada!"
+      }
+    }
+  ]
+}
