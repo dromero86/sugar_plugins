@@ -1,134 +1,289 @@
-# Funciones del Navegador (Selenium Plugin)
+# Funciones del Navegador (Navigator Plugin)
 
-> Este documento documentaba originalmente un plugin llamado `navigator_selenium`, con sintaxis `{"plugin": {"name": "navigator_selenium", "command": ..., "config": {...}}}`. Esa etapa quedó atrás: la especificación mutó hasta el plugin actual, `selenium_plugin` (v2.1.0), con la sintaxis unificada `{"selenium": {"operator": ..., ...}}`. Este documento está actualizado a esa versión actual.
-
-Estas funciones permiten interactuar con un navegador web usando el plugin `selenium_plugin`.
+Estas funciones permiten interactuar con un navegador web usando el plugin `navigator_selenium`.
 
 ## Plugin
-`selenium_plugin` (comando: `selenium`)
+`navigator_selenium`
 
 ## Uso
 
 ```json
 {
-    "task": [
-        {
-            "selenium": {
-                "operator": "open",
-                "url": "https://example.com",
-                "result": "navigation_result"
-            }
+    "plugin": {
+        "name": "navigator_selenium",
+        "command": "navigate",
+        "config": {
+            "url": "https://example.com",
+            "wait_for_load": true,
+            "result": "navigation_result"
         }
-    ]
+    }
 }
 ```
 
-## Sintaxis General
+## Comandos Disponibles
 
+### Sintaxis General
 ```json
 {
-  "selenium": {
-    "operator": "nombre_del_operador",
-    "...": "parámetros propios del operador",
-    "result": "nombre_variable_resultado"
+  "plugin": {
+    "name": "navigator_selenium",
+    "command": "comando",
+    "config": {
+      "parametros": "valores"
+    }
   }
 }
 ```
 
-Ver `docs/README.md` para la referencia completa de los 28 operadores disponibles. Los equivalentes directos de los comandos que documentaba `navigator_selenium` son:
+### Comandos Disponibles
 
-| Comando `navigator_selenium` (histórico) | Operador `selenium_plugin` (actual) |
-|---|---|
-| `navigate` | `open` (o `navigate` para refresh/back/forward) |
-| `click` | `click` |
-| `input` | `type` |
-| `wait` | `wait` |
-| `screenshot` | `screenshot` |
-| `javascript` | `javascript` |
-| `http` | **No es parte de este plugin** — ver más abajo |
+**Operaciones de Navegación:**
+- `navigate` - Navegar a una URL
+- `click` - Hacer clic en un elemento
+- `input` - Ingresar texto en elementos
+- `wait` - Esperar por tiempo o elementos
+- `screenshot` - Capturar pantalla
+
+**Operaciones HTTP:**
+- `http` - Realizar requests HTTP (GET, POST, PUT, DELETE, PATCH)
+
+**Operaciones JavaScript:**
+- `javascript` - Ejecutar código JavaScript
 
 ### Ejemplos de Uso
 
 **Operaciones de Navegación:**
 ```json
-{ "selenium": { "operator": "open", "url": "https://example.com", "result": "is_open" } }
+{
+  "plugin": {
+    "name": "navigator_selenium",
+    "command": "navigate",
+    "config": {
+      "url": "https://example.com",
+      "wait_for_load": true
+    }
+  }
+}
 
-{ "selenium": { "operator": "click", "selector": "#submit-button", "result": "click_result" } }
+{
+  "plugin": {
+    "name": "navigator_selenium",
+    "command": "click",
+    "config": {
+      "selector": "#submit-button",
+      "type": "css"
+    }
+  }
+}
 
-{ "selenium": { "operator": "type", "selector": "#username", "value": "user123", "result": "typed" } }
+{
+  "plugin": {
+    "name": "navigator_selenium",
+    "command": "input",
+    "config": {
+      "selector": "#username",
+      "text": "user123",
+      "type": "css"
+    }
+  }
+}
 ```
 
-**Esperas:**
+**Operaciones HTTP:**
 ```json
-{ "selenium": { "operator": "wait", "type": "element", "selector": ".dynamic-content", "result": "wait_result" } }
+{
+  "plugin": {
+    "name": "navigator_selenium",
+    "command": "http",
+    "config": {
+      "GET": "https://httpbin.org/get",
+      "headers": {
+        "User-Agent": "Sugar-Navigator/1.0"
+      }
+    }
+  }
+}
 ```
 
-**Screenshot:**
+**Operaciones JavaScript:**
 ```json
-{ "selenium": { "operator": "screenshot", "file": "page_screenshot.png", "result": "screenshot_result" } }
+{
+  "plugin": {
+    "name": "navigator_selenium",
+    "command": "javascript",
+    "config": {
+      "code": "return document.title;",
+      "result": "page_title"
+    }
+  }
+}
 ```
 
-## JAVASCRIPT
+{
+  "plugin": {
+    "name": "navigator_selenium",
+    "command": "wait",
+    "config": {
+      "type": "element",
+      "selector": ".dynamic-content",
+      "selector_type": "css"
+    }
+  }
+}
 
-Ejecuta código JavaScript en la página actual.
+{
+  "plugin": {
+    "name": "navigator_selenium",
+    "command": "screenshot",
+    "config": {
+      "file": "page_screenshot.png"
+    }
+  }
+}
+```
 
-### Operador
-`javascript`
+## HTTP (Plugin)
+
+Realiza solicitudes HTTP usando el plugin `navigator_selenium`.
+
+### Comando
+`http`
 
 ### Parámetros
-- `from_string` (string): código JavaScript inline a ejecutar.
-- `from_file` (string): ruta a un archivo `.js` a ejecutar.
-- `result` (string): variable donde guardar el valor devuelto por el script.
+* GET (string): URL para una solicitud GET.
+* POST (string): URL para una solicitud POST.
+* PUT (string): URL para una solicitud PUT.
+* DELETE (string): URL para una solicitud DELETE.
+* PATCH (string): URL para una solicitud PATCH.
+* headers (object): Headers de la solicitud.
+* data/body (object): Datos a enviar en la solicitud.
+* cookies (object): Cookies de la sesión.
+* timeout (number): Timeout en segundos.
+* value (string): Nombre de una variable que contiene la URL.
+* replace (object): Objeto de pares clave-valor para reemplazar marcadores de posición en la URL (ej. {{foo}}).
+* headers (object, opcional): Diccionario de cabeceras HTTP a enviar con la solicitud.
+* cookies (array, opcional): Array de objetos cookie a enviar con la solicitud. Cada objeto cookie debe incluir name, value, domain y opcionalmente path, expiry, httpOnly, secure.
+* body (object/string, opcional): Cuerpo de la solicitud para métodos como POST. Puede ser JSON, texto, form-encoded, graphql, o binario.
 
 ### Ejemplos de Uso
 ```json
 {
-    "selenium": {
-        "operator": "javascript",
-        "from_string": "return document.title;",
-        "result": "page_title"
+    "plugin": {
+        "name": "navigator_selenium",
+        "command": "http",
+        "config": {
+            "GET": "http://www.example.com"
+        }
     }
 }
-```
 
-```json
 {
-    "selenium": {
-        "operator": "javascript",
-        "from_file": "./path/to/file.js",
-        "result": "js_result"
+    "plugin": {
+        "name": "navigator_selenium",
+        "command": "http",
+        "config": {
+            "POST": "http://www.example.com/api/data",
+            "data": {
+                "key": "value_to_send",
+                "another_field": 123
+            },
+            "headers": {
+                "Authorization": "Bearer {{token}}",
+                "Content-Type": "application/json",
+                "Accept": "*/*"
+            }
+        }
+    }
+}
+
+{
+    "plugin": {
+        "name": "navigator_selenium",
+        "command": "http",
+        "config": {
+            "GET": "http://www.example.com/{{foo_id}}/data/{{bar_param}}"
+        }
     }
 }
 ```
 
-## HTTP
+## JAVASCRIPT (Plugin)
 
-`selenium_plugin` **no implementa peticiones HTTP** — eso quedó fuera de su alcance (originalmente lo tenía `navigator_selenium`, que mezclaba HTTP + navegador en un solo plugin). Para hacer requests HTTP dentro de un script Sugar, usar la keyword `http` nativa de Sugar core o el plugin `request`, no `selenium`:
+Ejecuta código JavaScript usando el plugin `navigator_selenium`.
 
+### Comando
+`javascript`
+
+### Parámetros
+* code (string): Cadena de código JavaScript a ejecutar.
+* file (string): Ruta a un archivo JavaScript para ejecutar.
+* wait (number): Tiempo de espera después de la ejecución.
+
+### Ejemplos de Uso
 ```json
-{ "http": { "GET": "https://httpbin.org/get" } }
-```
-
-## Migración desde `navigator_selenium`
-
-```json
-// Antes (navigator_selenium)
 {
     "plugin": {
         "name": "navigator_selenium",
         "command": "javascript",
-        "config": { "code": "return document.title;", "result": "page_title" }
+        "config": {
+            "code": "return document.title;",
+            "result": "page_title"
+        }
     }
 }
 
-// Ahora (selenium_plugin)
 {
-    "selenium": {
-        "operator": "javascript",
-        "from_string": "return document.title;",
-        "result": "page_title"
+    "plugin": {
+        "name": "navigator_selenium",
+        "command": "javascript",
+        "config": {
+            "file": "path/to/file.js"
+        }
     }
 }
 ```
 
-**Nota:** `code` pasó a llamarse `from_string` (o `from_file` para archivos), y el `config` anidado desapareció — los parámetros van directo dentro de `selenium`.
+## Migración desde Core
+
+Si estás migrando desde el módulo Navigator core, reemplaza:
+
+```json
+// Antes (Core)
+{
+    "GET": "https://example.com"
+}
+
+// Después (Plugin)
+{
+    "plugin": {
+        "name": "navigator_selenium",
+        "command": "http",
+        "config": {
+            "GET": "https://example.com"
+        }
+    }
+}
+```
+
+```json
+// Antes (Core)
+{
+    "javascript": {
+        "code": "return document.title;"
+    }
+}
+
+// Después (Plugin)
+{
+    "plugin": {
+        "name": "navigator_selenium",
+        "command": "javascript",
+        "config": {
+            "code": "return document.title;"
+        }
+    }
+}
+```
+
+**Nota:** Se recomienda usar la nueva sintaxis de plugin para nuevos proyectos, ya que proporciona una implementación más robusta y mantenible basada en Selenium WebDriver.

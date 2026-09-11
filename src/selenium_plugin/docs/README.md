@@ -1,19 +1,17 @@
-# Plugin Selenium v2.1 para Sugar
+# Plugin Selenium v2.0 para Sugar
 
 ## 📋 Descripción General
 
-El plugin Selenium v2.1 para Sugar proporciona capacidades avanzadas de automatización web usando la sintaxis unificada `@selenium/`.
+El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automatización web usando la sintaxis unificada `@selenium/`. Esta versión ha sido completamente rediseñada para ofrecer una experiencia más consistente, robusta y escalable.
 
 ### 🎯 Características Principales
 
 - **Sintaxis unificada** `@selenium/` con operadores específicos
-- **Soporte para Chrome, Firefox y Edge**
+- **Soporte completo** para todos los navegadores de Selenium
 - **Sistema avanzado de cookies** con arrays y propiedades completas
-- **28 operadores disponibles** para automatización completa
-- **Descarga automática de drivers** vía WebDriver Manager
+- **19 operadores disponibles** para automatización completa
+- **Descarga automática de drivers** para todos los navegadores
 - **Gestión robusta de errores** y timeouts configurables
-- **Selectores CSS y XPath** (autodetectados, o con prefijo explícito `xpath=`)
-- **Dependencias del plugin autocontenidas**: el plugin trae su propio entorno (`venv`) con `selenium`/`webdriver-manager`/`requests`, sin que Sugar core dependa de ellas
 
 ---
 
@@ -26,8 +24,9 @@ El plugin Selenium v2.1 para Sugar proporciona capacidades avanzadas de automati
 | **Chrome** | `chrome` | ✅ Completo | Multiplataforma | Headless, Detach, Auto-Download |
 | **Firefox** | `firefox` | ✅ Completo | Multiplataforma | Headless, Auto-Download |
 | **Edge** | `edge` | ✅ Completo | Multiplataforma | Headless, Detach, Auto-Download |
-
-> Safari, Opera e Internet Explorer no están soportados actualmente (no figuran en `SUPPORTED_BROWSERS`); configurar `browser` con alguno de esos valores falla con "Navegador no soportado".
+| **Safari** | `safari` | ✅ Completo | Solo macOS | Auto-Download, Limitaciones headless |
+| **Opera** | `opera` | ✅ Completo | Multiplataforma | Headless, Detach, Auto-Download |
+| **Internet Explorer** | `ie` | ⚠️ Limitado | Solo Windows | Sin headless, Deprecated |
 
 ### Configuración por Navegador
 
@@ -35,7 +34,7 @@ El plugin Selenium v2.1 para Sugar proporciona capacidades avanzadas de automati
 {
   "meta": {
     "mode": "selenium",
-    "browser": "firefox",  // chrome, firefox, edge
+    "browser": "firefox",  // chrome, firefox, edge, safari, opera, ie
     "options": ["--width=1280", "--height=720"],
     "headless": true,
     "detach": false,
@@ -273,130 +272,6 @@ El plugin Selenium v2.1 para Sugar proporciona capacidades avanzadas de automati
     "result": "alert_action"
   }
 }
-```
-
-### 20. **page** - Información de la página actual
-Devuelve `url`, `title` y `source` (HTML) de la página actual.
-```json
-{
-  "selenium": {
-    "operator": "page",
-    "result": "pagina"
-  }
-}
-```
-
-### 21. **state** - Estado de un elemento
-Devuelve `exists`, `displayed`, `enabled` y `selected`. Si el elemento no existe, devuelve todo en `false` en vez de fallar.
-```json
-{
-  "selenium": {
-    "operator": "state",
-    "selector": "#btn",
-    "result": "estado_btn"
-  }
-}
-```
-
-### 22. **dblclick** - Doble clic en elemento
-```json
-{
-  "selenium": {
-    "operator": "dblclick",
-    "selector": "#item",
-    "result": "dbl_ok"
-  }
-}
-```
-
-### 23. **rightclick** - Clic derecho (context click) en elemento
-```json
-{
-  "selenium": {
-    "operator": "rightclick",
-    "selector": "#item",
-    "result": "ctx_ok"
-  }
-}
-```
-
-### 24. **keys** - Enviar teclas especiales
-Envía una tecla (o lista de teclas) de `selenium.webdriver.common.keys.Keys` (`ENTER`, `ESCAPE`, `TAB`, `ARROW_DOWN`, etc., sin distinguir mayúsculas/minúsculas) a un selector, o al elemento activo si no se pasa `selector`.
-```json
-{
-  "selenium": {
-    "operator": "keys",
-    "selector": "#buscador",
-    "keys": ["ENTER"],
-    "result": "keys_ok"
-  }
-}
-```
-
-### 25. **quit** - Cerrar la sesión del navegador
-Cierra el navegador a mitad de script. La siguiente operación `selenium` que se ejecute levanta un driver nuevo automáticamente.
-```json
-{
-  "selenium": {
-    "operator": "quit",
-    "result": "quit_ok"
-  }
-}
-```
-
-### 26. **storage** - Gestión de localStorage/sessionStorage
-Mismo diseño que `cookies`, pero para Web Storage. `type` acepta `local` (default) o `session`. `action` acepta `get`, `get_all`, `set`, `remove`, `clear`.
-```json
-{
-  "selenium": {
-    "operator": "storage",
-    "action": "set",
-    "key": "token",
-    "value": "abc123",
-    "result": "storage_set"
-  }
-}
-```
-
-> No funciona en páginas `data:` (origen nulo) por restricción del propio navegador, no del plugin.
-
-### 27. **drag_and_drop** - Arrastrar un elemento hasta otro
-```json
-{
-  "selenium": {
-    "operator": "drag_and_drop",
-    "source": "#origen",
-    "target": "#destino",
-    "result": "drag_ok"
-  }
-}
-```
-
-> Funciona con drag-and-drop implementado con eventos de mouse (mousedown/mousemove/mouseup). El drag-and-drop nativo HTML5 (`draggable="true"` + eventos `dragstart`/`drop`) no siempre responde a esto — es una limitación conocida de Selenium/WebDriver, no de este plugin.
-
-### 28. **pdf** - Imprimir la página actual a PDF
-Usa el comando estándar "Print Page" de WebDriver (soportado tanto en Chrome/Edge como en Firefox).
-```json
-{
-  "selenium": {
-    "operator": "pdf",
-    "file": "./pagina.pdf",
-    "result": "pdf_ok"
-  }
-}
-```
-
-### Extensiones a operadores existentes
-
-- **`screenshot`** acepta `selector` opcional: si se pasa, captura solo ese elemento en vez de la página completa.
-- **`find`** acepta `attribute` opcional: además de `text`/`tag`, devuelve el valor de ese atributo del elemento (ej. `href`, `value`, `data-id`).
-- **`wait`** suma los tipos `invisible` (espera a que un elemento desaparezca), `url_changes` (espera a que la URL cambie respecto a `from_url`, o a la URL actual si no se pasa) y `title_contains` (espera a que el `<title>` contenga un texto).
-
-### Selectores: CSS y XPath
-
-Todos los operadores que reciben `selector` aceptan CSS (comportamiento de siempre) o XPath. XPath se detecta automáticamente si el selector empieza con `//`, `.//` o `(`, o se puede forzar con el prefijo `xpath=`:
-```json
-{ "selenium": { "operator": "click", "selector": "//button[text()='Enviar']" } }
 ```
 
 ---
@@ -766,30 +641,19 @@ Cada cookie soporta todos los elementos clave:
 
 ## 🚀 Instalación y Uso
 
-El plugin trae sus propias dependencias (`selenium`, `webdriver-manager`, `requests`) en un `venv` propio, sin que Sugar core dependa de ellas.
-
-### 1. Instalar el plugin en Sugar
-Los plugins se copian (o enlazan) a la carpeta de plugins del usuario:
+### 1. Instalación
 ```bash
-ln -s /ruta/a/sugar_plugins/src/selenium_plugin ~/.sugar/plugins/selenium_plugin
+pip install -e plugins/src/selenium/
 ```
 
-### 2. Instalar dependencias del plugin
-Se puede usar un `venv` propio del plugin, o uno **compartido en la raíz del proyecto de plugins** (recomendado si tenés varios plugins con dependencias Python): Sugar busca, en este orden, `<plugin>/venv/`, `<plugin>/site-packages/`, y subiendo por los directorios padre del plugin, `virtual/` o `.venv/` — el primero que encuentra, gana.
-
+### 2. Verificar Dependencias
 ```bash
-# Venv compartido en la raíz del proyecto (ej. sugar_plugins/virtual)
-cd sugar_plugins
-python3 -m venv virtual
-virtual/bin/pip install -r src/selenium_plugin/requirements.txt
-
-# El plugin lo referencia con un symlink
-ln -s ../../virtual src/selenium_plugin/venv
+pip install selenium>=4.0.0 webdriver-manager>=3.8.0
 ```
 
 ### 3. Ejecutar Script
 ```bash
-sugar -f script.json
+sugar script.json
 ```
 
 ---
@@ -899,22 +763,20 @@ sugar -f script.json
 ## ⚠️ Consideraciones y Limitaciones
 
 ### Limitaciones Conocidas
-- **Navegadores soportados:** solo Chrome, Firefox y Edge (Safari/Opera/IE no están implementados)
+- **Safari:** Solo disponible en macOS
+- **Internet Explorer:** Deprecated, limitado a Windows
+- **Headless:** No soportado en Safari (versiones antiguas)
 - **Detach:** No soportado en Firefox
-- **`drag_and_drop`:** funciona con drag-and-drop basado en eventos de mouse; el drag-and-drop nativo HTML5 no siempre responde
-- **`download`:** el archivo se guarda en la carpeta de descargas por defecto del navegador, no directamente en `file` — para que coincidan hace falta configurar las preferencias de descarga del navegador vía `meta.options`. El operador verifica en disco y devuelve `success: false` si el archivo no aparece a tiempo, en vez de asumir éxito.
-- **Un solo driver por instancia de plugin:** si Sugar corre tareas `selenium` en paralelo (`thread`/`parallel`), comparten el mismo navegador — hay un lock que evita que se pisen al inicializar, pero las operaciones sobre ese driver no son paralelas entre sí (WebDriver no lo soporta)
 
 ### Requisitos del Sistema
-- **Python:** >= 3.9 (misma versión que usa Sugar core)
-- **Navegadores:** Chrome, Firefox o Edge instalados según configuración
+- **Python:** >= 3.8
+- **Navegadores:** Instalados según configuración
 - **Permisos:** Escritura para descarga de drivers
-- **Conexión:** Internet para descarga automática de drivers
-- **Entorno de dependencias:** el plugin necesita su propio `venv` (o uno compartido en la raíz del proyecto de plugins) con `selenium`/`webdriver-manager`/`requests` instalados — ver sección de instalación
+- **Conexión:** Internet para descarga automática
 
 ### Compatibilidad
 - **v1.0:** No compatible (requiere migración)
-- **v2.1:** Compatible con Chrome, Firefox y Edge
+- **v2.0:** Compatible con todos los navegadores modernos
 - **Futuro:** Diseñado para extensibilidad
 
 ---
@@ -929,5 +791,6 @@ Para consultas sobre el plugin:
 
 ---
 
-**Versión:** 2.1.0  
+**Versión:** 2.0.0  
+**Última actualización:** Diciembre 2024  
 **Autor:** Sugar Team
