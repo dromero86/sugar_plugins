@@ -718,6 +718,5 @@ Para problemas específicos con cookies:
 
 ---
 
-**Versión:** 2.0.0  
-**Última actualización:** Diciembre 2024  
+**Versión:** 2.1.0
 **Autor:** Sugar Team

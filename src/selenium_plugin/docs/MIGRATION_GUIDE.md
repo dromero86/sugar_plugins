@@ -524,6 +524,5 @@ Si encuentra problemas durante la migración:
 
 ---
 
-**Versión:** 2.0.0  
-**Fecha:** Diciembre 2024  
+**Versión:** 2.1.0
 **Autor:** Sugar Team

@@ -43,7 +43,7 @@ class TestSeleniumPlugin(unittest.TestCase):
     
     def test_plugin_initialization(self):
         """Prueba la inicialización del plugin."""
-        self.assertEqual(self.plugin.VERSION, "2.0.0")
+        self.assertEqual(self.plugin.VERSION, "2.1.0")
         self.assertEqual(self.plugin.DESCRIPTION, "Plugin Selenium para Sugar con sintaxis @selenium/")
         self.assertEqual(self.plugin.AUTHOR, "Sugar Team")
         self.assertEqual(self.plugin.LICENSE, "MIT")

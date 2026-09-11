@@ -1,36 +1,14 @@
-# Navigator Plugin
+# Selenium Plugin (antes "Navigator Plugin")
 
-El plugin `navigator_selenium` proporciona funcionalidades de navegación web y automatización usando Selenium WebDriver.
+> Este documento documentaba originalmente un plugin llamado `navigator_selenium`, con sintaxis `{"plugin": {"name": "navigator_selenium", "command": ..., "config": {...}}}`. La especificación mutó hasta el plugin actual, `selenium_plugin` (v2.1.0), con la sintaxis unificada `{"selenium": {"operator": ..., ...}}`. Este documento está actualizado a esa versión actual — para la referencia completa de los 28 operadores ver `docs/README.md`.
+
+El plugin `selenium_plugin` proporciona funcionalidades de navegación web y automatización usando Selenium WebDriver.
 
 ## Instalación
 
-```bash
-pip install -r plugins/navigator_selenium/requirements.txt
-```
+El plugin es autocontenido: trae sus propias dependencias (`selenium`, `webdriver-manager`, `requests`) vía un `venv` propio o uno compartido en la raíz del proyecto de plugins — ver "Instalación y Uso" en `docs/README.md`.
 
 ## Uso Básico
-
-### HTTP Requests
-
-```json
-{
-    "task": [
-        {
-            "plugin": {
-                "name": "navigator_selenium",
-                "command": "http",
-                "config": {
-                    "GET": "https://httpbin.org/get",
-                    "headers": {
-                        "User-Agent": "Sugar-Navigator/1.0"
-                    },
-                    "result": "response"
-                }
-            }
-        }
-    ]
-}
-```
 
 ### JavaScript Execution
 
@@ -38,204 +16,137 @@ pip install -r plugins/navigator_selenium/requirements.txt
 {
     "task": [
         {
-            "plugin": {
-                "name": "navigator_selenium",
-                "command": "javascript",
-                "config": {
-                    "code": "return document.title;",
-                    "result": "page_title"
-                }
+            "selenium": {
+                "operator": "javascript",
+                "from_string": "return document.title;",
+                "result": "page_title"
             }
         }
     ]
 }
 ```
 
-## Comandos Disponibles
+### HTTP Requests
 
-### HTTP Commands
+`selenium_plugin` **no hace peticiones HTTP** — eso no es parte de su alcance (a diferencia del viejo `navigator_selenium`, que mezclaba HTTP y navegador). Para eso usar la keyword `http` nativa de Sugar o el plugin `request`:
 
-#### GET Request
+```json
+{ "http": { "GET": "https://httpbin.org/get", "headers": { "User-Agent": "Sugar/1.0" }, "result": "response" } }
+```
+
+## Operadores Disponibles
+
+Referencia completa en `docs/README.md`. Los que se usan en los ejemplos de este documento:
+
+### Navegar
 
 ```json
 {
-    "plugin": {
-        "name": "navigator_selenium",
-        "command": "http",
-        "config": {
-            "GET": "https://api.example.com/data",
-            "headers": {
-                "Authorization": "Bearer token123"
-            },
-            "result": "api_response"
-        }
+    "selenium": {
+        "operator": "open",
+        "url": "https://example.com",
+        "result": "navigation_result"
     }
 }
 ```
 
-#### POST Request
+### Clic en elemento
 
 ```json
 {
-    "plugin": {
-        "name": "navigator_selenium",
-        "command": "http",
-        "config": {
-            "POST": "https://api.example.com/users",
-            "data": {
-                "name": "John Doe",
-                "email": "john@example.com"
-            },
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            "result": "create_response"
-        }
+    "selenium": {
+        "operator": "click",
+        "selector": "#submit-button",
+        "result": "click_result"
     }
 }
 ```
 
-### Browser Commands
-
-#### Navigate
+### Escribir texto
 
 ```json
 {
-    "plugin": {
-        "name": "navigator_selenium",
-        "command": "navigate",
-        "config": {
-            "url": "https://example.com",
-            "wait_for_load": true,
-            "result": "navigation_result"
-        }
+    "selenium": {
+        "operator": "type",
+        "selector": "#username",
+        "value": "myuser",
+        "result": "input_result"
     }
 }
 ```
 
-#### Click Element
+### Esperar
 
 ```json
 {
-    "plugin": {
-        "name": "navigator_selenium",
-        "command": "click",
-        "config": {
-            "selector": "#submit-button",
-            "type": "css",
-            "result": "click_result"
-        }
+    "selenium": {
+        "operator": "wait",
+        "type": "element",
+        "selector": ".loading-spinner",
+        "result": "wait_result"
     }
 }
 ```
 
-#### Input Text
+### Screenshot
 
 ```json
 {
-    "plugin": {
-        "name": "navigator_selenium",
-        "command": "input",
-        "config": {
-            "selector": "#username",
-            "text": "myuser",
-            "type": "css",
-            "result": "input_result"
-        }
+    "selenium": {
+        "operator": "screenshot",
+        "file": "screenshot.png",
+        "result": "screenshot_result"
     }
 }
 ```
 
-#### Wait
+### Ejecutar JavaScript
 
 ```json
 {
-    "plugin": {
-        "name": "navigator_selenium",
-        "command": "wait",
-        "config": {
-            "type": "element",
-            "selector": ".loading-spinner",
-            "selector_type": "css",
-            "result": "wait_result"
-        }
+    "selenium": {
+        "operator": "javascript",
+        "from_string": "return document.querySelector('h1').textContent;",
+        "result": "heading_text"
     }
 }
 ```
 
-#### Screenshot
-
 ```json
 {
-    "plugin": {
-        "name": "navigator_selenium",
-        "command": "screenshot",
-        "config": {
-            "file": "screenshot.png",
-            "result": "screenshot_result"
-        }
+    "selenium": {
+        "operator": "javascript",
+        "from_file": "script.js",
+        "result": "file_result"
     }
 }
 ```
 
-### JavaScript Commands
+## Selectores
 
-#### Execute Code
-
-```json
-{
-    "plugin": {
-        "name": "navigator_selenium",
-        "command": "javascript",
-        "config": {
-            "code": "return document.querySelector('h1').textContent;",
-            "result": "heading_text"
-        }
-    }
-}
-```
-
-#### Execute from File
-
-```json
-{
-    "plugin": {
-        "name": "navigator_selenium",
-        "command": "javascript",
-        "config": {
-            "file": "script.js",
-            "result": "file_result"
-        }
-    }
-}
-```
-
-## Tipos de Selectores
-
-- **css**: Selector CSS (por defecto)
-- **xpath**: Selector XPath
-- **id**: ID del elemento
+Todos los operadores que reciben `selector` aceptan CSS (por defecto) o XPath — se detecta automáticamente si el selector empieza con `//`, `.//` o `(`, o se puede forzar con el prefijo `xpath=`. No hay un parámetro separado `type`/`selector_type`: es el propio texto del selector el que decide.
 
 ## Configuración
 
-### Inicialización del Plugin
+La configuración del navegador va en `meta`, no en un comando `init` separado:
 
 ```json
 {
-    "plugin": {
-        "name": "navigator_selenium",
-        "init": {
-            "headless": false,
-            "timeout": 30
-        }
-    }
+  "meta": {
+    "mode": "selenium",
+    "browser": "firefox",
+    "headless": true,
+    "timeout": 10,
+    "implicit_wait": 5
+  },
+  "task": [ ]
 }
 ```
 
-### Opciones de Configuración
-
-- **headless**: Ejecutar navegador en modo headless (por defecto: false)
-- **timeout**: Timeout por defecto para operaciones en segundos (por defecto: 30)
+- **browser**: `chrome`, `firefox` o `edge` (Safari/Opera/IE no están soportados)
+- **headless**: ejecutar navegador en modo headless (por defecto: `false`)
+- **timeout**: timeout por defecto para esperas explícitas, en segundos (por defecto: `10`)
+- **implicit_wait**: espera implícita para búsqueda de elementos, en segundos (por defecto: `5`)
 
 ## Ejemplos Complejos
 
@@ -243,85 +154,57 @@ pip install -r plugins/navigator_selenium/requirements.txt
 
 ```json
 {
+    "meta": { "mode": "selenium", "browser": "firefox", "headless": true },
     "task": [
         {
-            "plugin": {
-                "name": "navigator_selenium",
-                "command": "navigate",
-                "config": {
-                    "url": "https://httpbin.org/forms/post",
-                    "wait_for_load": true
-                }
+            "selenium": {
+                "operator": "open",
+                "url": "https://httpbin.org/forms/post"
             }
         },
         {
-            "plugin": {
-                "name": "navigator_selenium",
-                "command": "input",
-                "config": {
-                    "selector": "input[name='custname']",
-                    "text": "John Doe",
-                    "type": "css"
-                }
+            "selenium": {
+                "operator": "type",
+                "selector": "input[name='custname']",
+                "value": "John Doe"
             }
         },
         {
-            "plugin": {
-                "name": "navigator_selenium",
-                "command": "input",
-                "config": {
-                    "selector": "input[name='custemail']",
-                    "text": "john@example.com",
-                    "type": "css"
-                }
+            "selenium": {
+                "operator": "type",
+                "selector": "input[name='custemail']",
+                "value": "john@example.com"
             }
         },
         {
-            "plugin": {
-                "name": "navigator_selenium",
-                "command": "screenshot",
-                "config": {
-                    "file": "form_filled.png"
-                }
+            "selenium": {
+                "operator": "screenshot",
+                "file": "form_filled.png"
             }
         }
     ]
 }
 ```
 
-### Workflow HTTP + JavaScript
+### Workflow HTTP + navegador
+
+HTTP y navegador ahora son cosas separadas — HTTP va por `http` (Sugar core), navegación por `selenium`:
 
 ```json
 {
+    "meta": { "mode": "selenium", "browser": "firefox" },
     "task": [
         {
-            "plugin": {
-                "name": "navigator_selenium",
-                "command": "http",
-                "config": {
-                    "GET": "https://httpbin.org/json",
-                    "result": "api_data"
-                }
-            }
+            "http": { "GET": "https://httpbin.org/json", "result": "api_data" }
         },
         {
-            "plugin": {
-                "name": "navigator_selenium",
-                "command": "navigate",
-                "config": {
-                    "url": "https://example.com",
-                    "wait_for_load": true
-                }
-            }
+            "selenium": { "operator": "open", "url": "https://example.com" }
         },
         {
-            "plugin": {
-                "name": "navigator_selenium",
-                "command": "javascript",
-                "config": {
-                    "code": "document.title = 'Data: ' + arguments[0];",
-                    "result": "title_change"
-                }
+            "selenium": {
+                "operator": "javascript",
+                "from_string": "document.title = 'Data: ' + arguments[0];",
+                "result": "title_change"
             }
         }
     ]
@@ -330,68 +213,22 @@ pip install -r plugins/navigator_selenium/requirements.txt
 
 ## Manejo de Errores
 
-El plugin proporciona manejo de errores para:
+El plugin devuelve `{"success": false, "error": "..."}` en vez de propagar excepciones sin control, para:
 
-- Errores de red en requests HTTP
 - Elementos no encontrados en operaciones de navegador
 - Errores de ejecución de JavaScript
-- Timeouts
+- Timeouts en esperas explícitas
+- Fallos al inicializar el driver (navegador no soportado, binario no encontrado, etc.)
 
 ## Dependencias
 
-- selenium>=4.0.0
-- webdriver-manager>=3.8.0
-- requests>=2.25.0
-
-## Migración desde Navigator Core
-
-Si estás migrando desde el módulo Navigator core, reemplaza:
-
-```json
-// Antes (Core)
-{
-    "GET": "https://example.com"
-}
-
-// Después (Plugin)
-{
-    "plugin": {
-        "name": "navigator_selenium",
-        "command": "http",
-        "config": {
-            "GET": "https://example.com"
-        }
-    }
-}
-```
-
-```json
-// Antes (Core)
-{
-    "javascript": {
-        "code": "return document.title;"
-    }
-}
-
-// Después (Plugin)
-{
-    "plugin": {
-        "name": "navigator_selenium",
-        "command": "javascript",
-        "config": {
-            "code": "return document.title;"
-        }
-    }
-}
-```
+- `selenium>=4.0.0`
+- `webdriver-manager>=3.8.0`
+- `requests>=2.25.0`
 
 ## Notas Importantes
 
-1. **Inicialización**: El plugin debe ser inicializado antes de usar comandos de navegador
-2. **Cleanup**: El plugin maneja automáticamente la limpieza de recursos
-3. **Selenium**: Requiere Chrome/Chromium instalado en el sistema
-4. **Headless**: Para entornos sin GUI, usar `headless: true`
-
----
-
-**Nota**: Este plugin reemplaza la funcionalidad del módulo Navigator core, proporcionando una implementación más robusta y mantenible basada en Selenium WebDriver.
+1. **Inicialización lazy**: el driver se levanta automáticamente en la primera operación `selenium` de la sesión, no hace falta un comando `init` aparte.
+2. **Cleanup**: el plugin cierra el driver automáticamente al terminar; también se puede cerrar explícitamente a mitad de script con el operador `quit`.
+3. **Navegadores soportados**: Chrome, Firefox y Edge — deben estar instalados en el sistema.
+4. **Headless**: para entornos sin GUI, usar `"headless": true` en `meta`.
