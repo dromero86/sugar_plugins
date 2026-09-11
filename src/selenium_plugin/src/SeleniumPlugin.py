@@ -294,6 +294,15 @@ class SeleniumPlugin(PluginBase):
         # navegadores ChromeOptions/EdgeOptions no tienen ese método, así
         # que 'prefs' se ignora ahí.
         custom_prefs = meta.get('prefs', {})
+
+        # Por defecto, que Firefox no intente usar el proxy configurado a
+        # nivel sistema/escritorio (network.proxy.type=5 es el default de
+        # Firefox: "usar la configuración del sistema"). Un proxy mal
+        # configurado ahí puede hacer que la sesión de WebDriver falle al
+        # arrancar. Se puede pisar pasando 'network.proxy.type' en prefs.
+        if browser_name == 'firefox' and 'network.proxy.type' not in custom_prefs:
+            custom_prefs = {**custom_prefs, 'network.proxy.type': 0}
+
         if custom_prefs and hasattr(options, 'set_preference'):
             for pref_key, pref_value in custom_prefs.items():
                 options.set_preference(pref_key, pref_value)
@@ -310,20 +319,39 @@ class SeleniumPlugin(PluginBase):
         
         # Obtener driver path
         driver_path = meta.get('driver', {}).get('bin')
-        
+
         Output.Console(self.plugin_name, f"DEBUG: Driver path configurado: {driver_path}")
-        
+
+        # Evitar que un proxy del sistema (http_proxy/HTTPS_PROXY/etc.) intercepte
+        # la conexión local Selenium<->driver (geckodriver/chromedriver/msedgedriver
+        # escuchan en localhost); si el tráfico local se enruta por un proxy mal
+        # configurado, el navegador puede terminar con una sesión inválida al
+        # intentar resolver una dirección no ruteable (ej. 0.0.5.0) en vez de
+        # 127.0.0.1. Ver: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalidsessionidexception
+        for no_proxy_var in ('no_proxy', 'NO_PROXY'):
+            existing = os.environ.get(no_proxy_var, '')
+            hosts = {h.strip() for h in existing.split(',') if h.strip()}
+            hosts.update({'127.0.0.1', 'localhost'})
+            os.environ[no_proxy_var] = ','.join(sorted(hosts))
+
+        # Forzar al driver a bindear explícitamente en el loopback local en
+        # vez de dejar que resuelva la dirección automáticamente.
+        service_kwargs = {}
+        if browser_name == 'firefox':
+            service_kwargs['service_args'] = ['--host', '127.0.0.1']
+            service_kwargs['log_output'] = '/tmp/sugar_geckodriver_debug.log'
+
         try:
             if driver_path and os.path.exists(driver_path):
                 # Usar driver personalizado
                 Output.Console(self.plugin_name, f"DEBUG: Usando driver personalizado: {driver_path}")
-                service = browser_config['service'](executable_path=driver_path)
+                service = browser_config['service'](executable_path=driver_path, **service_kwargs)
             else:
                 # Descargar driver automáticamente
                 Output.Console(self.plugin_name, "DEBUG: Descargando driver automáticamente...")
                 driver_manager = browser_config['driver_manager']()
                 driver_path = driver_manager.install()
-                service = browser_config['service'](executable_path=driver_path)
+                service = browser_config['service'](executable_path=driver_path, **service_kwargs)
                 Output.Console(self.plugin_name, f"DEBUG: Driver descargado en: {driver_path}")
             
             # Crear driver
