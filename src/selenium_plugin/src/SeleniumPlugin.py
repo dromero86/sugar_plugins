@@ -288,7 +288,19 @@ class SeleniumPlugin(PluginBase):
         for option in custom_options:
             options.add_argument(option)
             Output.Console(self.plugin_name, f"DEBUG: Agregada opción: {option}")
-        
+
+        # Preferencias personalizadas (ej. user-agent, anti-detección).
+        # Solo Firefox las soporta vía options.set_preference; en otros
+        # navegadores ChromeOptions/EdgeOptions no tienen ese método, así
+        # que 'prefs' se ignora ahí.
+        custom_prefs = meta.get('prefs', {})
+        if custom_prefs and hasattr(options, 'set_preference'):
+            for pref_key, pref_value in custom_prefs.items():
+                options.set_preference(pref_key, pref_value)
+                Output.Console(self.plugin_name, f"DEBUG: Agregada preferencia: {pref_key}={pref_value}")
+        elif custom_prefs:
+            Output.Console(self.plugin_name, f"ADVERTENCIA: 'prefs' no soportado para navegador {browser_name}, ignorado")
+
         # Configurar timeouts
         self.wait_timeout = meta.get('timeout', 10)
         self.implicit_wait = meta.get('implicit_wait', 5)

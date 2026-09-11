@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "mode": "selenium",
+    "browser": "firefox",
+    "options": [
+      "--width=1280",
+      "--height=720",
+      "--no-sandbox"
+    ],
+    "headless": false,
+    "timeout": 15,
+    "implicit_wait": 5
+  },
+  "task": [
+    {
+      "selenium": {
+        "operator": "open",
+        "url": "https://example.com",
+        "result": "is_open"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "wait",
+        "type": "element",
+        "selector": "body",
+        "result": "page_loaded"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "screenshot",
+        "file": "./example_screenshot.png",
+        "result": "screenshot"
+      }
+    },
+    {
+      "selenium": {
+        "operator": "quit"
+      }
+    }
+  ]
+}
