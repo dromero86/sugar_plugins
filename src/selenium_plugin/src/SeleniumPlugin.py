@@ -21,14 +21,10 @@ import time
 import base64
 import json
 import datetime
+import threading
 from typing import Any, Dict, List, Optional, Union
 from pathlib import Path
 from urllib.parse import urlparse
-
-import sys
-import os
-# Asegurar que el módulo real de selenium esté en el path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))))
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -38,7 +34,8 @@ from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import (
     TimeoutException, NoSuchElementException, WebDriverException,
-    ElementClickInterceptedException, ElementNotInteractableException
+    ElementClickInterceptedException, ElementNotInteractableException,
+    NoAlertPresentException
 )
 
 # Chrome
@@ -107,9 +104,18 @@ class SeleniumPlugin(PluginBase):
     - window: Gestión de ventanas
     - frame: Cambiar frames
     - alert: Manejar alertas
+    - page: Información de la página actual (url, title, source)
+    - state: Estado de un elemento (displayed, enabled, selected)
+    - dblclick: Doble clic en elemento
+    - rightclick: Clic derecho (context click) en elemento
+    - keys: Enviar teclas especiales (ENTER, ESCAPE, TAB, etc.)
+    - quit: Cerrar la sesión del navegador a mitad de script
+    - storage: Gestión de localStorage/sessionStorage
+    - drag_and_drop: Arrastrar un elemento hasta otro
+    - pdf: Imprimir la página actual a PDF
     """
     
-    VERSION = "2.0.0"
+    VERSION = "2.1.0"
     DESCRIPTION = "Plugin Selenium para Sugar con sintaxis @selenium/"
     AUTHOR = "Sugar Team"
     LICENSE = "MIT"
@@ -158,6 +164,13 @@ class SeleniumPlugin(PluginBase):
         self.wait_timeout = 10
         self.implicit_wait = 5
         self.output = Output()
+        # Una sola instancia de plugin (y por lo tanto un solo self.driver)
+        # es compartida si Sugar ejecuta tareas selenium en paralelo
+        # (thread/parallel). Este lock evita que dos threads inicialicen
+        # el driver al mismo tiempo y se pisen entre sí; no hace que las
+        # operaciones sobre un mismo driver ya inicializado sean paralelas
+        # entre sí (Selenium/WebDriver no soporta eso de todos modos).
+        self._driver_lock = threading.Lock()
         
     def get_available_commands(self) -> List[str]:
         """
@@ -197,12 +210,15 @@ class SeleniumPlugin(PluginBase):
             if not command:
                 raise ValueError("Operador 'operator' requerido en configuración selenium")
             
-            # Inicializar driver si no existe
-            if self.driver is None:
-                Output.Console(self.plugin_name, "DEBUG: Driver no existe, inicializando...")
-                self._initialize_driver()
-            else:
-                Output.Console(self.plugin_name, "DEBUG: Driver ya existe, reutilizando...")
+            # Inicializar driver si no existe. Con lock para evitar que dos
+            # threads (tareas selenium en paralelo) inicialicen el driver
+            # al mismo tiempo y se pisen entre sí.
+            with self._driver_lock:
+                if self.driver is None:
+                    Output.Console(self.plugin_name, "DEBUG: Driver no existe, inicializando...")
+                    self._initialize_driver()
+                else:
+                    Output.Console(self.plugin_name, "DEBUG: Driver ya existe, reutilizando...")
             
             # Ejecutar comando
             Output.Console(self.plugin_name, f"DEBUG: Ejecutando comando: {command}")
@@ -267,23 +283,7 @@ class SeleniumPlugin(PluginBase):
             if detach:
                 options.add_experimental_option("detach", True)
             options.add_argument('--no-sandbox')
-            
-        elif browser_name == 'safari':
-            # Safari tiene limitaciones con headless
-            if headless:
-                Output.Console(self.plugin_name, "Safari no soporta modo headless completamente")
-                
-        elif browser_name == 'opera':
-            if headless:
-                options.add_argument('--headless')
-            if detach:
-                options.add_experimental_option("detach", True)
-                
-        elif browser_name == 'ie':
-            # IE no soporta headless
-            if headless:
-                Output.Console(self.plugin_name, "Internet Explorer no soporta modo headless")
-        
+
         # Aplicar opciones personalizadas
         for option in custom_options:
             options.add_argument(option)
@@ -315,8 +315,9 @@ class SeleniumPlugin(PluginBase):
                 Output.Console(self.plugin_name, f"DEBUG: Driver descargado en: {driver_path}")
             
             # Crear driver
-            Output.Console(self.plugin_name, "DEBUG: Creando driver de Chrome...")
-            self.driver = webdriver.Chrome(service=service, options=options)
+            Output.Console(self.plugin_name, f"DEBUG: Creando driver de {browser_config['name']}...")
+            driver_class = getattr(webdriver, browser_config['name'])
+            self.driver = driver_class(service=service, options=options)
             self.driver.implicitly_wait(self.implicit_wait)
             
             Output.Console(self.plugin_name, f"Driver {browser_config['name']} inicializado correctamente")
@@ -374,6 +375,16 @@ class SeleniumPlugin(PluginBase):
                 return self._execute_select(interpolated_config)
             elif command == 'hover':
                 return self._execute_hover(interpolated_config)
+            elif command == 'drag_and_drop':
+                return self._execute_drag_and_drop(interpolated_config)
+            elif command == 'pdf':
+                return self._execute_pdf(interpolated_config)
+            elif command == 'dblclick':
+                return self._execute_dblclick(interpolated_config)
+            elif command == 'rightclick':
+                return self._execute_rightclick(interpolated_config)
+            elif command == 'keys':
+                return self._execute_keys(interpolated_config)
             elif command == 'scroll':
                 return self._execute_scroll(interpolated_config)
             elif command == 'upload':
@@ -388,6 +399,14 @@ class SeleniumPlugin(PluginBase):
                 return self._execute_frame(interpolated_config)
             elif command == 'alert':
                 return self._execute_alert(interpolated_config)
+            elif command == 'page':
+                return self._execute_page(interpolated_config)
+            elif command == 'state':
+                return self._execute_state(interpolated_config)
+            elif command == 'quit':
+                return self._execute_quit(interpolated_config)
+            elif command == 'storage':
+                return self._execute_storage(interpolated_config)
             else:
                 raise ValueError(f"Comando no soportado: {command}")
                 
@@ -453,12 +472,8 @@ class SeleniumPlugin(PluginBase):
         if not selector:
             raise ValueError("Selector requerido para operación click")
 
-        Output.Console(self.plugin_name, f"DEBUG: Selector CSS: {selector}")
-        
-        # Validar selector
-        if not self._validate_selector(selector):
-            Output.Console(self.plugin_name, f"ADVERTENCIA: Selector puede estar malformado: {selector}")
-        
+        Output.Console(self.plugin_name, f"DEBUG: Selector: {selector}")
+
         element = self._find_element(selector)
         element.click()
         
@@ -573,8 +588,8 @@ class SeleniumPlugin(PluginBase):
                 raise ValueError("Selector requerido para wait element")
             
             wait = WebDriverWait(self.driver, self.wait_timeout)
-            element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
-            
+            element = wait.until(EC.presence_of_element_located(self._resolve_by(selector)))
+
             result_key = config.get('result', 'element_found')
             return {result_key: True, "success": True}
             
@@ -584,23 +599,62 @@ class SeleniumPlugin(PluginBase):
                 raise ValueError("Selector requerido para wait clickable")
             
             wait = WebDriverWait(self.driver, self.wait_timeout)
-            element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, selector)))
-            
+            element = wait.until(EC.element_to_be_clickable(self._resolve_by(selector)))
+
             result_key = config.get('result', 'clickable')
             return {result_key: True, "success": True}
-        
+
+        elif wait_type == 'invisible':
+            selector = config.get('selector')
+            if not selector:
+                raise ValueError("Selector requerido para wait invisible")
+
+            wait = WebDriverWait(self.driver, self.wait_timeout)
+            wait.until(EC.invisibility_of_element_located(self._resolve_by(selector)))
+
+            result_key = config.get('result', 'invisible')
+            return {result_key: True, "success": True}
+
+        elif wait_type == 'url_changes':
+            # 'from_url' es la URL de referencia contra la que se espera el
+            # cambio; si no se pasa, se toma la URL actual al momento de
+            # empezar a esperar.
+            from_url = config.get('from_url', self.driver.current_url)
+
+            wait = WebDriverWait(self.driver, self.wait_timeout)
+            wait.until(EC.url_changes(from_url))
+
+            result_key = config.get('result', 'url_changed')
+            return {result_key: True, "success": True, "url": self.driver.current_url}
+
+        elif wait_type == 'title_contains':
+            title = config.get('title')
+            if not title:
+                raise ValueError("'title' requerido para wait title_contains")
+
+            wait = WebDriverWait(self.driver, self.wait_timeout)
+            wait.until(EC.title_contains(title))
+
+            result_key = config.get('result', 'title_matched')
+            return {result_key: True, "success": True, "title": self.driver.title}
+
         else:
             raise ValueError(f"Tipo de espera no soportado: {wait_type}")
     
     def _execute_screenshot(self, config: Dict[str, Any]) -> Dict[str, Any]:
-        """Captura pantalla."""
+        """Captura pantalla (de toda la página, o de un elemento si se pasa 'selector')."""
         file_path = config.get('file', f"screenshot_{int(time.time())}.png")
-        
+        selector = config.get('selector')
+
         # Crear directorio si no existe
         Path(file_path).parent.mkdir(parents=True, exist_ok=True)
-        
-        self.driver.save_screenshot(file_path)
-        
+
+        if selector:
+            element = self._find_element(selector)
+            element.screenshot(file_path)
+        else:
+            self.driver.save_screenshot(file_path)
+
         result_key = config.get('result', 'screenshot')
         return {result_key: file_path, "success": True}
     
@@ -619,22 +673,65 @@ class SeleniumPlugin(PluginBase):
         
         result_key = config.get('result', 'navigated')
         return {result_key: True, "success": True, "action": action}
-    
+
+    def _execute_page(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """Información de la página actual: url, title, source."""
+        info = {
+            "url": self.driver.current_url,
+            "title": self.driver.title,
+            "source": self.driver.page_source,
+        }
+
+        result_key = config.get('result', 'page')
+        return {result_key: info, "success": True}
+
+    def _execute_state(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """Chequea el estado de un elemento: is_displayed, is_enabled, is_selected."""
+        selector = config.get('selector')
+        if not selector:
+            raise ValueError("Selector requerido para operación state")
+
+        try:
+            element = self._find_element(selector)
+        except ValueError:
+            # Elemento no encontrado: no está visible/habilitado/seleccionado.
+            info = {"exists": False, "displayed": False, "enabled": False, "selected": False}
+            result_key = config.get('result', 'state')
+            return {result_key: info, "success": True}
+
+        info = {
+            "exists": True,
+            "displayed": element.is_displayed(),
+            "enabled": element.is_enabled(),
+            "selected": element.is_selected(),
+        }
+
+        result_key = config.get('result', 'state')
+        return {result_key: info, "success": True}
+
     def _execute_find(self, config: Dict[str, Any]) -> Dict[str, Any]:
         """Busca elementos."""
         selector = config.get('selector')
         multiple = config.get('multiple', False)
-        
+        attribute = config.get('attribute')
+
         if not selector:
             raise ValueError("Selector requerido para operación find")
-        
+
+        def describe(el):
+            info = {"text": el.text, "tag": el.tag_name}
+            if attribute:
+                info["attribute"] = el.get_attribute(attribute)
+            return info
+
         if multiple:
-            elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
-            result = [{"text": el.text, "tag": el.tag_name} for el in elements]
+            by, value = self._resolve_by(selector)
+            elements = self.driver.find_elements(by, value)
+            result = [describe(el) for el in elements]
         else:
             element = self._find_element(selector)
-            result = {"text": element.text, "tag": element.tag_name}
-        
+            result = describe(element)
+
         result_key = config.get('result', 'found')
         return {result_key: result, "success": True}
     
@@ -700,7 +797,98 @@ class SeleniumPlugin(PluginBase):
         
         result_key = config.get('result', 'hovered')
         return {result_key: True, "success": True}
-    
+
+    def _execute_drag_and_drop(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Arrastra el elemento 'source' hasta el elemento 'target'. Usa
+        eventos de mouse simulados (ActionChains.drag_and_drop), que
+        funcionan con drag-and-drop implementado a mano con mousedown/
+        mousemove/mouseup; el drag-and-drop nativo HTML5 (atributo
+        draggable + eventos dragstart/drop) no siempre responde a esto,
+        es una limitación conocida de Selenium/WebDriver, no de este plugin.
+        """
+        source_selector = config.get('source')
+        target_selector = config.get('target')
+        if not source_selector:
+            raise ValueError("'source' requerido para operación drag_and_drop")
+        if not target_selector:
+            raise ValueError("'target' requerido para operación drag_and_drop")
+
+        source = self._find_element(source_selector)
+        target = self._find_element(target_selector)
+        ActionChains(self.driver).drag_and_drop(source, target).perform()
+
+        result_key = config.get('result', 'dragged')
+        return {result_key: True, "success": True}
+
+    def _execute_pdf(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """Imprime la página actual a PDF (comando 'Print Page' de WebDriver)."""
+        file_path = config.get('file', f"page_{int(time.time())}.pdf")
+        Path(file_path).parent.mkdir(parents=True, exist_ok=True)
+
+        pdf_base64 = self.driver.print_page()
+        with open(file_path, 'wb') as f:
+            f.write(base64.b64decode(pdf_base64))
+
+        result_key = config.get('result', 'pdf')
+        return {result_key: file_path, "success": True}
+
+    def _execute_dblclick(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """Doble clic en elemento."""
+        selector = config.get('selector')
+        if not selector:
+            raise ValueError("Selector requerido para operación dblclick")
+
+        element = self._find_element(selector)
+        ActionChains(self.driver).double_click(element).perform()
+
+        result_key = config.get('result', 'dblclicked')
+        return {result_key: True, "success": True}
+
+    def _execute_rightclick(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """Clic derecho (context click) en elemento."""
+        selector = config.get('selector')
+        if not selector:
+            raise ValueError("Selector requerido para operación rightclick")
+
+        element = self._find_element(selector)
+        ActionChains(self.driver).context_click(element).perform()
+
+        result_key = config.get('result', 'rightclicked')
+        return {result_key: True, "success": True}
+
+    def _execute_keys(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Envía una o más teclas especiales (ENTER, ESCAPE, TAB, flechas, etc.)
+        a un elemento, o al elemento activo si no se pasa 'selector'.
+
+        'keys' acepta un nombre de tecla (ej. 'ENTER') o una lista de
+        nombres (ej. ['CONTROL', 'a']) — deben coincidir con atributos de
+        selenium.webdriver.common.keys.Keys (case-insensitive).
+        """
+        selector = config.get('selector')
+        key_names = config.get('keys')
+        if not key_names:
+            raise ValueError("'keys' requerido para operación keys")
+        if isinstance(key_names, str):
+            key_names = [key_names]
+
+        resolved_keys = []
+        for name in key_names:
+            key_value = getattr(Keys, name.upper(), None)
+            if key_value is None:
+                raise ValueError(f"Tecla no reconocida: {name}")
+            resolved_keys.append(key_value)
+
+        if selector:
+            element = self._find_element(selector)
+            element.send_keys(*resolved_keys)
+        else:
+            ActionChains(self.driver).send_keys(*resolved_keys).perform()
+
+        result_key = config.get('result', 'keys_sent')
+        return {result_key: True, "success": True}
+
     def _execute_scroll(self, config: Dict[str, Any]) -> Dict[str, Any]:
         """Desplazamiento."""
         scroll_type = config.get('type', 'to_element')
@@ -752,16 +940,22 @@ class SeleniumPlugin(PluginBase):
         """Descarga archivo."""
         url = config.get('url')
         file_path = config.get('file')
-        
+        timeout = config.get('timeout', 10)
+
         if not url:
             raise ValueError("URL requerida para operación download")
         if not file_path:
             raise ValueError("Ruta de archivo requerida para operación download")
-        
+
         # Crear directorio si no existe
         Path(file_path).parent.mkdir(parents=True, exist_ok=True)
-        
-        # Descargar usando JavaScript
+
+        # Descargar usando JavaScript. NOTA: esto hace que el navegador
+        # guarde el archivo en SU carpeta de descargas por defecto, no
+        # necesariamente en 'file_path' — eso depende de que el navegador
+        # esté configurado (vía meta.options/prefs) para descargar
+        # directamente ahí. Por eso el resultado se verifica en disco en
+        # vez de asumir éxito.
         script = f"""
         var link = document.createElement('a');
         link.href = '{url}';
@@ -770,11 +964,26 @@ class SeleniumPlugin(PluginBase):
         link.click();
         document.body.removeChild(link);
         """
-        
+
         self.driver.execute_script(script)
-        
+
         result_key = config.get('result', 'downloaded')
-        return {result_key: True, "success": True, "file": file_path}
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            if os.path.isfile(file_path) and os.path.getsize(file_path) > 0:
+                return {result_key: True, "success": True, "file": file_path}
+            time.sleep(0.5)
+
+        return {
+            result_key: False,
+            "success": False,
+            "file": file_path,
+            "error": (
+                f"El navegador no guardó el archivo en '{file_path}' dentro de {timeout}s. "
+                "Esta operación depende de que el navegador esté configurado para descargar "
+                "directamente en esa ruta (ver meta.options/prefs de descarga)."
+            ),
+        }
     
     def _execute_cookies(self, config: Dict[str, Any]) -> Dict[str, Any]:
         """Gestión de cookies."""
@@ -866,7 +1075,7 @@ class SeleniumPlugin(PluginBase):
                 try:
                     dt = datetime.datetime.fromisoformat(expiry.replace('Z', '+00:00'))
                     cookie['expiry'] = int(dt.timestamp())
-                except:
+                except (ValueError, TypeError):
                     # Si no se puede parsear, usar como está
                     cookie['expiry'] = expiry
             else:
@@ -946,46 +1155,114 @@ class SeleniumPlugin(PluginBase):
                 alert.send_keys(text)
             else:
                 raise ValueError(f"Acción de alerta no soportada: {action}")
-                
-        except:
+
+        except NoAlertPresentException:
             # No hay alerta activa
             pass
         
         result_key = config.get('result', 'alert_action')
         return {result_key: True, "success": True, "action": action}
-    
+
+    def _execute_quit(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """Cierra la sesión del navegador a mitad de script. La próxima
+        operación selenium que se ejecute levanta un driver nuevo."""
+        if self.driver:
+            try:
+                self.driver.quit()
+            except Exception:
+                pass
+            self.driver = None
+
+        result_key = config.get('result', 'quit')
+        return {result_key: True, "success": True}
+
+    def _execute_storage(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """Gestión de localStorage/sessionStorage (mismo patrón que 'cookies')."""
+        storage_type = config.get('type', 'local')
+        if storage_type not in ('local', 'session'):
+            raise ValueError(f"Tipo de storage no soportado: {storage_type}")
+        js_storage = 'localStorage' if storage_type == 'local' else 'sessionStorage'
+
+        action = config.get('action', 'get')
+
+        if action == 'get':
+            key = config.get('key')
+            if not key:
+                raise ValueError("'key' requerido para storage get")
+            value = self.driver.execute_script(
+                f"return window.{js_storage}.getItem(arguments[0]);", key
+            )
+            result_key = config.get('result', 'storage_value')
+            return {result_key: value, "success": True}
+
+        elif action == 'get_all':
+            script = f"""
+            var s = window.{js_storage};
+            var out = {{}};
+            for (var i = 0; i < s.length; i++) {{
+                var k = s.key(i);
+                out[k] = s.getItem(k);
+            }}
+            return out;
+            """
+            value = self.driver.execute_script(script)
+            result_key = config.get('result', 'storage')
+            return {result_key: value, "success": True}
+
+        elif action == 'set':
+            key = config.get('key')
+            value = config.get('value')
+            if not key:
+                raise ValueError("'key' requerido para storage set")
+            self.driver.execute_script(
+                f"window.{js_storage}.setItem(arguments[0], arguments[1]);", key, value
+            )
+            result_key = config.get('result', 'storage_set')
+            return {result_key: True, "success": True}
+
+        elif action == 'remove':
+            key = config.get('key')
+            if not key:
+                raise ValueError("'key' requerido para storage remove")
+            self.driver.execute_script(
+                f"window.{js_storage}.removeItem(arguments[0]);", key
+            )
+            result_key = config.get('result', 'storage_removed')
+            return {result_key: True, "success": True}
+
+        elif action == 'clear':
+            self.driver.execute_script(f"window.{js_storage}.clear();")
+            result_key = config.get('result', 'storage_cleared')
+            return {result_key: True, "success": True}
+
+        else:
+            raise ValueError(f"Acción de storage no soportada: {action}")
+
+    def _resolve_by(self, selector: str) -> tuple:
+        """
+        Determina el mecanismo de localización (By.XPATH o By.CSS_SELECTOR)
+        a partir del selector recibido.
+
+        Convenciones soportadas:
+          - Prefijo explícito 'xpath=...' -> XPath, sin el prefijo.
+          - Selectores que empiezan con '//', './/' o '(' -> XPath (formas
+            típicas de una expresión XPath).
+          - Cualquier otro caso -> CSS selector (comportamiento previo).
+        """
+        if selector.startswith('xpath='):
+            return By.XPATH, selector[len('xpath='):]
+        if selector.startswith(('//', './/', '(')):
+            return By.XPATH, selector
+        return By.CSS_SELECTOR, selector
+
     def _find_element(self, selector: str):
         """Encuentra elemento con manejo de errores."""
+        by, value = self._resolve_by(selector)
         try:
-            return self.driver.find_element(By.CSS_SELECTOR, selector)
+            return self.driver.find_element(by, value)
         except NoSuchElementException:
             raise ValueError(f"Elemento no encontrado: {selector}")
-    
-    def _validate_selector(self, selector: str) -> bool:
-        """Valida formato básico de selector CSS."""
-        if not selector or not isinstance(selector, str):
-            return False
-        
-        # Validaciones básicas de selectores CSS
-        valid_selectors = [
-            # ID selector
-            selector.startswith('#'),
-            # Class selector
-            selector.startswith('.'),
-            # Tag selector
-            selector.isalpha(),
-            # Attribute selector
-            selector.startswith('[') and selector.endswith(']'),
-            # Complex selector (contains spaces, >, +, ~)
-            any(char in selector for char in [' ', '>', '+', '~']),
-            # Pseudo-selectors
-            ':' in selector,
-            # Universal selector
-            selector == '*'
-        ]
-        
-        return any(valid_selectors)
-    
+
     def _validate_url(self, url: str) -> bool:
         """Valida formato básico de URL."""
         if not url or not isinstance(url, str):
@@ -994,7 +1271,7 @@ class SeleniumPlugin(PluginBase):
         try:
             parsed = urlparse(url)
             return bool(parsed.scheme and parsed.netloc)
-        except:
+        except ValueError:
             return False
     
     def _validate_file_path(self, file_path: str) -> bool:
@@ -1037,7 +1314,7 @@ class SeleniumPlugin(PluginBase):
         if self.driver:
             try:
                 self.driver.quit()
-            except:
+            except Exception:
                 pass
             self.driver = None
     
