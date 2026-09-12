@@ -275,8 +275,7 @@ class SeleniumPlugin(PluginBase):
         elif browser_name == 'firefox':
             if headless:
                 options.add_argument('--headless')
-            options.add_argument('--no-sandbox')
-            
+
         elif browser_name == 'edge':
             if headless:
                 options.add_argument('--headless')
@@ -284,8 +283,27 @@ class SeleniumPlugin(PluginBase):
                 options.add_experimental_option("detach", True)
             options.add_argument('--no-sandbox')
 
-        # Aplicar opciones personalizadas
+        # Aplicar opciones personalizadas.
+        # Firefox no entiende flags estilo Chromium: '--no-sandbox' no
+        # existe para Firefox, y '--width=N'/'--height=N' (con '=') rompen
+        # el arranque de Marionette porque Firefox espera '-width N' con
+        # espacio. Esos flags corruptos producen "channel error" en
+        # geckodriver y terminan como InvalidSessionIDException más
+        # adelante. Para tamaño de ventana usamos siempre
+        # driver.set_window_size(), que funciona igual en todos los
+        # navegadores, y para Firefox se ignoran los flags no soportados.
+        window_size = None
+        FIREFOX_UNSUPPORTED_FLAGS = {'--no-sandbox', '--disable-dev-shm-usage'}
         for option in custom_options:
+            key, _, value = option.partition('=')
+            if key in ('--width', '--height') and value:
+                window_size = window_size or {}
+                window_size['width' if key == '--width' else 'height'] = int(value)
+                Output.Console(self.plugin_name, f"DEBUG: Opción '{option}' aplicada como tamaño de ventana")
+                continue
+            if browser_name == 'firefox' and key in FIREFOX_UNSUPPORTED_FLAGS:
+                Output.Console(self.plugin_name, f"DEBUG: Opción '{option}' ignorada, no soportada por Firefox")
+                continue
             options.add_argument(option)
             Output.Console(self.plugin_name, f"DEBUG: Agregada opción: {option}")
 
@@ -359,7 +377,13 @@ class SeleniumPlugin(PluginBase):
             driver_class = getattr(webdriver, browser_config['name'])
             self.driver = driver_class(service=service, options=options)
             self.driver.implicitly_wait(self.implicit_wait)
-            
+
+            if window_size:
+                self.driver.set_window_size(
+                    window_size.get('width', 1280), window_size.get('height', 720)
+                )
+                Output.Console(self.plugin_name, f"DEBUG: Tamaño de ventana aplicado: {window_size}")
+
             Output.Console(self.plugin_name, f"Driver {browser_config['name']} inicializado correctamente")
             Output.Console(self.plugin_name, f"DEBUG: Driver creado exitosamente: {self.driver}")
             
