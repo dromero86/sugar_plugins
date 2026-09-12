@@ -142,31 +142,31 @@ class RequestPlugin(PluginBase):
             "save_session"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute Request command.
+        Execute Request operator.
         
         Args:
-            command: Command to execute
-            config: Configuration for the command
+            operator: Command to execute
+            config: Configuration for the operator
             
         Returns:
-            Result of the command execution
+            Result of the operator execution
         """
-        if command == "request":
+        if operator == "request":
             return self._handle_request(config)
-        elif command in ["get", "post", "put", "delete", "patch", "head", "options"]:
-            return self._handle_method_request(command.upper(), config)
-        elif command == "session":
+        elif operator in ["get", "post", "put", "delete", "patch", "head", "options"]:
+            return self._handle_method_request(operator.upper(), config)
+        elif operator == "session":
             return self._handle_session(config)
-        elif command == "create_session":
+        elif operator == "create_session":
             return self._create_session(config)
-        elif command == "load_session":
+        elif operator == "load_session":
             return self._load_session(config)
-        elif command == "save_session":
+        elif operator == "save_session":
             return self._save_session(config)
         else:
-            raise ValueError(f"Unknown Request command: {command}")
+            raise ValueError(f"Unknown Request operator: {operator}")
     
     def _handle_request(self, config: dict) -> Dict[str, Any]:
         """Handle HTTP request with method specified in config"""

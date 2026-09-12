@@ -67,7 +67,7 @@
     {
       "ncurses": {
         "operator": "get_key",
-        "result": "user_key"
+        "id": "user_key"
       }
     },
     {

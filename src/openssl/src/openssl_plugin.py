@@ -142,8 +142,8 @@ class OpenSSLPlugin(PluginBase):
             "crt_to_pem"        # Alias de convert CRT → PEM
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
-        """Execute an OpenSSL command."""
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
+        """Execute an OpenSSL operator."""
         if not self.openssl_path:
             raise RuntimeError("OpenSSL not found. Please install OpenSSL.")
         
@@ -154,44 +154,44 @@ class OpenSSLPlugin(PluginBase):
             # Handle case where interpolate_variables is not available (e.g., in tests)
             pass
         
-        if command == "genrsa":
+        if operator == "genrsa":
             return self._genrsa(config)
-        elif command == "genpkey":
+        elif operator == "genpkey":
             return self._genpkey(config)
-        elif command == "req_new":
+        elif operator == "req_new":
             return self._req_new(config)
-        elif command == "x509_selfsign":
+        elif operator == "x509_selfsign":
             return self._x509_selfsign(config)
-        elif command == "verify_cert":
+        elif operator == "verify_cert":
             return self._verify_cert(config)
-        elif command == "convert":
+        elif operator == "convert":
             return self._convert(config)
-        elif command == "encrypt":
+        elif operator == "encrypt":
             return self._encrypt(config)
-        elif command == "decrypt":
+        elif operator == "decrypt":
             return self._decrypt(config)
-        elif command == "sign":
+        elif operator == "sign":
             return self._sign(config)
-        elif command == "verify":
+        elif operator == "verify":
             return self._verify(config)
-        elif command == "pkcs12_export":
+        elif operator == "pkcs12_export":
             return self._pkcs12_export(config)
-        elif command == "pkcs12_import":
+        elif operator == "pkcs12_import":
             return self._pkcs12_import(config)
-        elif command == "extract_pubkey":
+        elif operator == "extract_pubkey":
             return self._extract_pubkey(config)
-        elif command == "hash":
+        elif operator == "hash":
             return self._hash(config)
-        elif command == "verify_chain":
+        elif operator == "verify_chain":
             return self._verify_chain(config)
-        elif command == "csr_to_cert":
+        elif operator == "csr_to_cert":
             return self._csr_to_cert(config)
-        elif command == "pem_to_crt":
+        elif operator == "pem_to_crt":
             return self._pem_to_crt(config)
-        elif command == "crt_to_pem":
+        elif operator == "crt_to_pem":
             return self._crt_to_pem(config)
         else:
-            raise ValueError(f"Unknown OpenSSL command: {command}")
+            raise ValueError(f"Unknown OpenSSL operator: {operator}")
     
     def _run_openssl_command(self, args: List[str], input_data: Optional[str] = None) -> Dict[str, Any]:
         """Run OpenSSL command and return result."""

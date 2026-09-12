@@ -29,7 +29,7 @@
     {
       "serial": {
         "operator": "get_status",
-        "result": "all_sessions_status"
+        "id": "all_sessions_status"
       }
     },
     {
@@ -42,7 +42,7 @@
         "operator": "write",
         "session": "device_1",
         "data": "STATUS\\r\\n",
-        "result": "device1_write"
+        "id": "device1_write"
       }
     },
     {
@@ -50,14 +50,14 @@
         "operator": "write",
         "session": "device_2",
         "data": "VERSION\\r\\n",
-        "result": "device2_write"
+        "id": "device2_write"
       }
     },
     {
       "serial": {
         "operator": "connect",
         "session": "device_3",
-        "result": "device3_connect"
+        "id": "device3_connect"
       }
     },
     {
@@ -70,7 +70,7 @@
         "operator": "write",
         "session": "device_3",
         "data": "INFO\\r\\n",
-        "result": "device3_write"
+        "id": "device3_write"
       }
     },
     {
@@ -78,7 +78,7 @@
         "operator": "read_line",
         "session": "device_1",
         "timeout": 2.0,
-        "result": "device1_response"
+        "id": "device1_response"
       }
     },
     {
@@ -86,7 +86,7 @@
         "operator": "read_line",
         "session": "device_2",
         "timeout": 2.0,
-        "result": "device2_response"
+        "id": "device2_response"
       }
     },
     {
@@ -94,7 +94,7 @@
         "operator": "read_line",
         "session": "device_3",
         "timeout": 2.0,
-        "result": "device3_response"
+        "id": "device3_response"
       }
     },
     {
@@ -115,7 +115,7 @@
     {
       "serial": {
         "operator": "get_info",
-        "result": "all_sessions_info"
+        "id": "all_sessions_info"
       }
     },
     {

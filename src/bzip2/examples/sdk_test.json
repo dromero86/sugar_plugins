@@ -6,7 +6,7 @@
     {
       "bzip2": {
         "operator": "sdk_info",
-        "result": "sdk_info"
+        "id": "sdk_info"
       }
     },
     {
@@ -36,7 +36,7 @@
     {
       "bzip2": {
         "operator": "test_sdk",
-        "result": "sdk_test"
+        "id": "sdk_test"
       }
     },
     {

@@ -18,7 +18,7 @@
       "selenium": {
         "operator": "open",
         "url": "https://www.opera.com",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
@@ -26,28 +26,28 @@
         "operator": "wait",
         "type": "time",
         "seconds": 3,
-        "result": "is_waited"
+        "id": "is_waited"
       }
     },
     {
       "selenium": {
         "operator": "screenshot",
         "file": "./opera_homepage.png",
-        "result": "screenshot"
+        "id": "screenshot"
       }
     },
     {
       "selenium": {
         "operator": "find",
         "selector": ".download-button",
-        "result": "download_button"
+        "id": "download_button"
       }
     },
     {
       "selenium": {
         "operator": "click",
         "selector": ".download-button",
-        "result": "download_clicked"
+        "id": "download_clicked"
       }
     },
     {
@@ -55,7 +55,7 @@
         "operator": "wait",
         "type": "time",
         "seconds": 2,
-        "result": "download_wait"
+        "id": "download_wait"
       }
     },
     {

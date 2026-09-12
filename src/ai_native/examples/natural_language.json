@@ -23,7 +23,7 @@
             "performance_monitoring"
           ]
         },
-        "result": "server_monitoring_system"
+        "id": "server_monitoring_system"
       }
     },
     {
@@ -50,7 +50,7 @@
       "ai_native": {
         "operator": "validate_code",
         "code": "{{server_monitoring_system}}",
-        "result": "nl_validation"
+        "id": "nl_validation"
       }
     },
     {
@@ -80,7 +80,7 @@
       "ai_native": {
         "operator": "analyze_code",
         "code": "{{server_monitoring_system}}",
-        "result": "nl_analysis"
+        "id": "nl_analysis"
       }
     },
     {

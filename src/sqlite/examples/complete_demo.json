@@ -43,7 +43,7 @@
             "constraints": "DEFAULT CURRENT_TIMESTAMP"
           }
         ],
-        "result": "tabla_usuarios_creada"
+        "id": "tabla_usuarios_creada"
       }
     },
     {
@@ -73,7 +73,7 @@
             "type": "TEXT"
           }
         ],
-        "result": "tabla_productos_creada"
+        "id": "tabla_productos_creada"
       }
     },
     {
@@ -99,7 +99,7 @@
             "edad": 42
           }
         ],
-        "result": "usuarios_insertados"
+        "id": "usuarios_insertados"
       }
     },
     {
@@ -125,7 +125,7 @@
             "categoria": "Accesorios"
           }
         ],
-        "result": "productos_insertados"
+        "id": "productos_insertados"
       }
     },
     {
@@ -137,7 +137,7 @@
     {
       "sqlite.select": {
         "table": "usuarios",
-        "result": "todos_usuarios"
+        "id": "todos_usuarios"
       }
     },
     {
@@ -149,7 +149,7 @@
     {
       "sqlite.query": {
         "sql": "SELECT nombre, precio, categoria FROM productos WHERE categoria = 'Accesorios' ORDER BY precio DESC",
-        "result": "accesorios_caros"
+        "id": "accesorios_caros"
       }
     },
     {
@@ -167,7 +167,7 @@
         "where": {
           "nombre": "Mouse Inalámbrico"
         },
-        "result": "mouse_actualizado"
+        "id": "mouse_actualizado"
       }
     },
     {
@@ -178,7 +178,7 @@
     },
     {
       "sqlite.list_tables": {
-        "result": "tablas_disponibles"
+        "id": "tablas_disponibles"
       }
     },
     {
@@ -190,7 +190,7 @@
     {
       "sqlite.describe_table": {
         "table_name": "usuarios",
-        "result": "estructura_usuarios"
+        "id": "estructura_usuarios"
       }
     },
     {
@@ -202,7 +202,7 @@
     {
       "sqlite.backup": {
         "backup_path": "./backups/demo_backup.db",
-        "result": "backup_creado"
+        "id": "backup_creado"
       }
     },
     {
@@ -216,7 +216,7 @@
         "table": "usuarios",
         "file_path": "./exports/usuarios.csv",
         "format": "csv",
-        "result": "usuarios_exportados"
+        "id": "usuarios_exportados"
       }
     },
     {
@@ -227,7 +227,7 @@
     },
     {
       "sqlite.check_integrity": {
-        "result": "integridad_ok"
+        "id": "integridad_ok"
       }
     },
     {
@@ -238,7 +238,7 @@
     },
     {
       "sqlite.analyze": {
-        "result": "analisis_completado"
+        "id": "analisis_completado"
       }
     },
     {

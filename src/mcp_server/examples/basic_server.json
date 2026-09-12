@@ -13,7 +13,7 @@
                 "host": "localhost",
                 "port": 3000,
                 "protocol": "websocket",
-                "result": "server_status"
+                "id": "server_status"
             }
         },
         {
@@ -52,7 +52,7 @@
         {
             "mcp_server": {
                 "operator": "get_server_status",
-                "result": "status_info"
+                "id": "status_info"
             }
         },
         {
@@ -83,7 +83,7 @@
         {
             "mcp_server": {
                 "operator": "list_tools",
-                "result": "tools_list"
+                "id": "tools_list"
             }
         },
         {
@@ -107,7 +107,7 @@
         {
             "mcp_server": {
                 "operator": "list_resources",
-                "result": "resources_list"
+                "id": "resources_list"
             }
         },
         {

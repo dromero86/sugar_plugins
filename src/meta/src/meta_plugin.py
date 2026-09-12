@@ -79,49 +79,49 @@ class MetaPlugin(PluginBase):
             "get_hook_status"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute a meta command.
+        Execute a meta operator.
         
         Args:
-            command: Command to execute
-            config: Configuration for the command
+            operator: Command to execute
+            config: Configuration for the operator
             
         Returns:
             Command result
         """
         try:
-            if command == "configure":
+            if operator == "configure":
                 return self._configure_system(config)
-            elif command == "get_config":
+            elif operator == "get_config":
                 return self._get_config(config)
-            elif command == "set_config":
+            elif operator == "set_config":
                 return self._set_config(config)
-            elif command == "get_plugin_config":
+            elif operator == "get_plugin_config":
                 return self._get_plugin_config(config)
-            elif command == "register_hook":
+            elif operator == "register_hook":
                 return self._register_hook(config)
-            elif command == "unregister_hook":
+            elif operator == "unregister_hook":
                 return self._unregister_hook(config)
-            elif command == "list_hooks":
+            elif operator == "list_hooks":
                 return self._list_hooks(config)
-            elif command == "execute_hooks":
+            elif operator == "execute_hooks":
                 return self._execute_hooks(config)
-            elif command == "initialize_plugin":
+            elif operator == "initialize_plugin":
                 return self._initialize_plugin(config)
-            elif command == "get_initialized_plugins":
+            elif operator == "get_initialized_plugins":
                 return self._get_initialized_plugins(config)
-            elif command == "get_status":
+            elif operator == "get_status":
                 return self._get_status(config)
-            elif command == "get_hook_status":
+            elif operator == "get_hook_status":
                 return self._get_hook_status(config)
-            elif command == "jinja2":
+            elif operator == "jinja2":
                 return self._handle_jinja2(config)
             else:
-                raise ValueError(f"Unknown command: {command}")
+                raise ValueError(f"Unknown operator: {operator}")
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing {command}: {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing {operator}: {str(e)}")
             raise
     
     def _configure_system(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -368,7 +368,7 @@ class MetaPlugin(PluginBase):
         """
         try:
             template = config.get("template")
-            result_var = config.get("result")
+            result_var = config.get("id")
             
             if not template:
                 return {"success": False, "error": "Template not provided"}

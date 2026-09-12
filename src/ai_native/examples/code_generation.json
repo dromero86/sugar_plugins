@@ -18,7 +18,7 @@
           "style": "functional",
           "complexity": "medium"
         },
-        "result": "ecommerce_scraper"
+        "id": "ecommerce_scraper"
       }
     },
     {
@@ -45,7 +45,7 @@
       "ai_native": {
         "operator": "validate_code",
         "code": "{{ecommerce_scraper}}",
-        "result": "validation_result"
+        "id": "validation_result"
       }
     },
     {
@@ -75,7 +75,7 @@
       "ai_native": {
         "operator": "analyze_code",
         "code": "{{ecommerce_scraper}}",
-        "result": "code_analysis"
+        "id": "code_analysis"
       }
     },
     {

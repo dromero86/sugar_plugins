@@ -19,20 +19,20 @@ class GnuPGUtils:
         self.plugin = plugin
         self.gpg_path = plugin._find_gpg()
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
-        """Execute utility command."""
-        if command == "check_dependencies":
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
+        """Execute utility operator."""
+        if operator == "check_dependencies":
             return self._check_dependencies(config)
-        elif command == "system_info":
+        elif operator == "system_info":
             return self._system_info(config)
-        elif command == "test_functionality":
+        elif operator == "test_functionality":
             return self._test_functionality(config)
-        elif command == "configure_agent":
+        elif operator == "configure_agent":
             return self._configure_agent(config)
-        elif command == "check_agent_status":
+        elif operator == "check_agent_status":
             return self._check_agent_status(config)
         else:
-            raise ValueError(f"Unknown utility command: {command}")
+            raise ValueError(f"Unknown utility operator: {operator}")
     
     def _check_dependencies(self, config: Dict[str, Any]) -> Dict[str, Any]:
         """Check GnuPG dependencies."""

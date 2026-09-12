@@ -42,7 +42,7 @@
             "constraints": "DEFAULT CURRENT_TIMESTAMP"
           }
         ],
-        "result": "tabla_creada"
+        "id": "tabla_creada"
       }
     },
     {
@@ -74,7 +74,7 @@
             "edad": 35
           }
         ],
-        "result": "usuarios_insertados"
+        "id": "usuarios_insertados"
       }
     },
     {
@@ -86,7 +86,7 @@
         "table": "usuarios",
         "columns": "id, nombre, email, edad",
         "order_by": "nombre ASC",
-        "result": "todos_usuarios"
+        "id": "todos_usuarios"
       }
     },
     {
@@ -109,7 +109,7 @@
         "table": "usuarios",
         "where": "edad > 25",
         "order_by": "edad DESC",
-        "result": "usuarios_mayores"
+        "id": "usuarios_mayores"
       }
     },
     {
@@ -132,7 +132,7 @@
         "table": "usuarios",
         "data": { "edad": 26 },
         "where": "nombre = 'Ana García'",
-        "result": "ana_actualizada"
+        "id": "ana_actualizada"
       }
     },
     {
@@ -141,7 +141,7 @@
     {
       "sqlite": {
         "operator": "list_tables",
-        "result": "tablas_disponibles"
+        "id": "tablas_disponibles"
       }
     },
     {

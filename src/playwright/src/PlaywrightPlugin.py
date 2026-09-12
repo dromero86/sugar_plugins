@@ -217,55 +217,55 @@ class PlaywrightPlugin(PluginBase):
             "set_permissions"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute a Playwright command.
+        Execute a Playwright operator.
         
         Args:
-            command: Command to execute
+            operator: Command to execute
             config: Command configuration
             
         Returns:
             Command execution result
         """
-        Output.Console(self.plugin_name, f"Executing command: {command}")
+        Output.Console(self.plugin_name, f"Executing operator: {operator}")
         
         # Verificar dependencias antes de comandos críticos
-        if command in ["launch_browser", "new_context", "new_page"] and not self.dependency_status['all_satisfied']:
+        if operator in ["launch_browser", "new_context", "new_page"] and not self.dependency_status['all_satisfied']:
             raise RuntimeError("Dependencias no satisfechas para comandos de navegador")
         
         # Interpolate variables in config
         interpolated_config = self.interpolate_variables(config)
         
         try:
-            # Route command to appropriate component
-            if command in ["launch_browser", "close_browser", "new_context", "close_context"]:
-                return self.browser.execute(command, interpolated_config)
-            elif command in ["new_page", "close_page", "goto", "go_back", "go_forward", "reload", 
+            # Route operator to appropriate component
+            if operator in ["launch_browser", "close_browser", "new_context", "close_context"]:
+                return self.browser.execute(operator, interpolated_config)
+            elif operator in ["new_page", "close_page", "goto", "go_back", "go_forward", "reload", 
                            "wait_for_load_state", "wait_for_url", "get_content", "get_title", "get_url"]:
-                return self.page.execute(command, interpolated_config)
-            elif command in ["click", "type", "fill", "clear", "select_option", "check", "uncheck", "press",
+                return self.page.execute(operator, interpolated_config)
+            elif operator in ["click", "type", "fill", "clear", "select_option", "check", "uncheck", "press",
                            "locator", "get_by_text", "get_by_role", "get_by_label", "get_by_placeholder", 
                            "get_by_test_id", "wait_for_selector", "wait_for_element", "scroll_to", "hover",
                            "drag_and_drop", "upload_file", "download_file"]:
-                return self.page.execute(command, interpolated_config)
-            elif command in ["evaluate", "evaluate_handle", "screenshot", "screenshot_element"]:
-                return self.page.execute(command, interpolated_config)
-            elif command in ["route", "unroute", "set_extra_http_headers"]:
-                return self.page.execute(command, interpolated_config)
-            elif command in ["get_cookies", "add_cookies", "clear_cookies", "get_local_storage", 
+                return self.page.execute(operator, interpolated_config)
+            elif operator in ["evaluate", "evaluate_handle", "screenshot", "screenshot_element"]:
+                return self.page.execute(operator, interpolated_config)
+            elif operator in ["route", "unroute", "set_extra_http_headers"]:
+                return self.page.execute(operator, interpolated_config)
+            elif operator in ["get_cookies", "add_cookies", "clear_cookies", "get_local_storage", 
                            "set_local_storage", "clear_local_storage"]:
-                return self.page.execute(command, interpolated_config)
-            elif command in ["emulate_device", "set_viewport_size", "set_geolocation", "set_permissions"]:
-                return self.page.execute(command, interpolated_config)
-            elif command in ["start_video", "stop_video"]:
-                return self.browser.execute(command, interpolated_config)
+                return self.page.execute(operator, interpolated_config)
+            elif operator in ["emulate_device", "set_viewport_size", "set_geolocation", "set_permissions"]:
+                return self.page.execute(operator, interpolated_config)
+            elif operator in ["start_video", "stop_video"]:
+                return self.browser.execute(operator, interpolated_config)
             else:
-                Output.Console(self.plugin_name, f"Unknown command: {command}")
+                Output.Console(self.plugin_name, f"Unknown operator: {operator}")
                 return None
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing command '{command}': {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing operator '{operator}': {str(e)}")
             raise
     
     def cleanup(self):

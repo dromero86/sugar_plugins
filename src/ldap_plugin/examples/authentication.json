@@ -14,7 +14,7 @@
         "connection_name": "auth_server",
         "username": "cn=john.doe,ou=users,dc=example,dc=com",
         "password": "user_password",
-        "result": "auth_result"
+        "id": "auth_result"
       }
     },
     {

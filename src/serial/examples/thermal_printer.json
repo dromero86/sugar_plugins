@@ -12,7 +12,7 @@
         "baudrate": 9600,
         "session": "thermal_printer",
         "timeout": 2.0,
-        "result": "printer_connection"
+        "id": "printer_connection"
       }
     },
     {
@@ -26,7 +26,7 @@
         "session": "thermal_printer",
         "data": "\\x1B\\x40",
         "encoding": "binary",
-        "result": "init_cmd"
+        "id": "init_cmd"
       }
     },
     {
@@ -40,7 +40,7 @@
         "session": "thermal_printer",
         "data": "\\x1B\\x61\\x01",
         "encoding": "binary",
-        "result": "center_cmd"
+        "id": "center_cmd"
       }
     },
     {
@@ -53,7 +53,7 @@
         "operator": "write",
         "session": "thermal_printer",
         "data": "TICKET DE VENTA\\r\\n",
-        "result": "text_cmd"
+        "id": "text_cmd"
       }
     },
     {
@@ -67,7 +67,7 @@
         "session": "thermal_printer",
         "data": "\\x1D\\x56\\x00",
         "encoding": "binary",
-        "result": "cut_cmd"
+        "id": "cut_cmd"
       }
     },
     {

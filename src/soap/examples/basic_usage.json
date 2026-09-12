@@ -21,7 +21,7 @@
             "User-Agent": "Sugar-SOAP-Client/3.0.0"
           }
         },
-        "result": "cliente_soap"
+        "id": "cliente_soap"
       }
     },
     {
@@ -43,7 +43,7 @@
           "userId": 123,
           "includeDetails": true
         },
-        "result": "respuesta_usuario"
+        "id": "respuesta_usuario"
       }
     },
     {

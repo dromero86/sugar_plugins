@@ -20,7 +20,7 @@
           "username": "admin",
           "password": "adminpass",
           "session_name": "server1",
-          "result": "connection_status"
+          "id": "connection_status"
         }
       }
     },
@@ -34,7 +34,7 @@
         "ssh": {
           "operator": "disconnect",
           "session_name": "server1",
-          "result": "disconnect_status"
+          "id": "disconnect_status"
         }
       }
     },
@@ -47,7 +47,7 @@
       "example": {
         "ssh": {
           "operator": "list_sessions",
-          "result": "active_sessions"
+          "id": "active_sessions"
         }
       }
     },
@@ -61,7 +61,7 @@
         "ssh": {
           "operator": "close_session",
           "session_name": "server1",
-          "result": "close_status"
+          "id": "close_status"
         }
       }
     },
@@ -74,7 +74,7 @@
       "example": {
         "ssh": {
           "operator": "close_all_sessions",
-          "result": "close_all_status"
+          "id": "close_all_status"
         }
       }
     },
@@ -96,7 +96,7 @@
           "session": "server1",
           "command": "ls -la /var/www",
           "timeout": 60,
-          "result": "command_result"
+          "id": "command_result"
         }
       }
     },
@@ -116,7 +116,7 @@
           "session": "server1",
           "commands": ["cd /var/www", "ls -la", "pwd"],
           "timeout": 120,
-          "result": "interactive_result"
+          "id": "interactive_result"
         }
       }
     },
@@ -132,7 +132,7 @@
           "session": "server1",
           "local_path": "/local/file.txt",
           "remote_path": "/remote/file.txt",
-          "result": "upload_status"
+          "id": "upload_status"
         }
       }
     },
@@ -148,7 +148,7 @@
           "session": "server1",
           "remote_path": "/remote/file.txt",
           "local_path": "/local/file.txt",
-          "result": "download_status"
+          "id": "download_status"
         }
       }
     },
@@ -165,7 +165,7 @@
           "local_dir": "/local/directory",
           "remote_dir": "/remote/directory",
           "exclude": ["*.log", "*.tmp"],
-          "result": "upload_dir_status"
+          "id": "upload_dir_status"
         }
       }
     },
@@ -182,7 +182,7 @@
           "remote_dir": "/remote/directory",
           "local_dir": "/local/directory",
           "exclude": ["*.log", "*.tmp"],
-          "result": "download_dir_status"
+          "id": "download_dir_status"
         }
       }
     },
@@ -198,7 +198,7 @@
           "session": "server1",
           "path": "/var/www/newdir",
           "permissions": "755",
-          "result": "mkdir_status"
+          "id": "mkdir_status"
         }
       }
     },
@@ -215,7 +215,7 @@
           "path": "/var/www/oldfile.txt",
           "recursive": false,
           "force": true,
-          "result": "rm_status"
+          "id": "rm_status"
         }
       }
     },
@@ -242,7 +242,7 @@
           "session": "server1",
           "path": "/var/www",
           "detailed": true,
-          "result": "file_list"
+          "id": "file_list"
         }
       }
     },
@@ -259,7 +259,7 @@
           "path": "/var/www/file.txt",
           "permissions": "644",
           "recursive": false,
-          "result": "chmod_status"
+          "id": "chmod_status"
         }
       }
     },
@@ -277,7 +277,7 @@
           "user": "www-data",
           "group": "www-data",
           "recursive": false,
-          "result": "chown_status"
+          "id": "chown_status"
         }
       }
     },
@@ -295,7 +295,7 @@
           "local_port": 8080,
           "remote_host": "localhost",
           "remote_port": 80,
-          "result": "tunnel_status"
+          "id": "tunnel_status"
         }
       }
     },
@@ -313,7 +313,7 @@
           "remote_port": 8080,
           "local_host": "localhost",
           "local_port": 80,
-          "result": "reverse_tunnel_status"
+          "id": "reverse_tunnel_status"
         }
       }
     },
@@ -327,7 +327,7 @@
         "ssh": {
           "operator": "close_tunnel",
           "tunnel_name": "web_tunnel",
-          "result": "close_tunnel_status"
+          "id": "close_tunnel_status"
         }
       }
     },
@@ -340,7 +340,7 @@
       "example": {
         "ssh": {
           "operator": "list_tunnels",
-          "result": "active_tunnels"
+          "id": "active_tunnels"
         }
       }
     },
@@ -364,7 +364,7 @@
         "ssh": {
           "operator": "system_info",
           "session": "server1",
-          "result": "system_info"
+          "id": "system_info"
         }
       }
     },
@@ -394,7 +394,7 @@
           "operator": "list_processes",
           "session": "server1",
           "user": "www-data",
-          "result": "process_list"
+          "id": "process_list"
         }
       }
     },
@@ -410,7 +410,7 @@
           "session": "server1",
           "pid": 1234,
           "signal": "SIGTERM",
-          "result": "kill_status"
+          "id": "kill_status"
         }
       }
     },
@@ -427,7 +427,7 @@
           "session": "server1",
           "service": "nginx",
           "action": "restart",
-          "result": "service_status"
+          "id": "service_status"
         }
       }
     },
@@ -443,7 +443,7 @@
           "host": "192.168.1.100",
           "username": "admin",
           "password": "adminpass",
-          "result": "test_result"
+          "id": "test_result"
         }
       }
     }
@@ -673,7 +673,7 @@
               "username": "admin",
               "password": "adminpass",
               "session_name": "server1",
-              "result": "connect_status"
+              "id": "connect_status"
             }
           },
           {
@@ -686,7 +686,7 @@
                       "operator": "execute",
                       "session": "server1",
                       "command": "whoami",
-                      "result": "user_info"
+                      "id": "user_info"
                     }
                   },
                   {
@@ -714,7 +714,7 @@
               "username": "admin",
               "password": "adminpass",
               "session_name": "backup",
-              "result": "connect_status"
+              "id": "connect_status"
             }
           },
           {
@@ -727,7 +727,7 @@
                       "operator": "execute",
                       "session": "backup",
                       "command": "tar -czf /tmp/backup_$(date +%Y%m%d).tar.gz /var/www",
-                      "result": "backup_result"
+                      "id": "backup_result"
                     }
                   },
                   {
@@ -736,7 +736,7 @@
                       "session": "backup",
                       "remote_path": "/tmp/backup_$(date +%Y%m%d).tar.gz",
                       "local_path": "./backups/",
-                      "result": "download_status"
+                      "id": "download_status"
                     }
                   }
                 ]
@@ -773,7 +773,7 @@
                     "username": "{{server.username}}",
                     "password": "{{server.password}}",
                     "session_name": "{{server.name}}",
-                    "result": "connect_status"
+                    "id": "connect_status"
                   }
                 },
                 {
@@ -785,7 +785,7 @@
                           "ssh": {
                             "operator": "system_info",
                             "session": "{{server.name}}",
-                            "result": "server_info"
+                            "id": "server_info"
                           }
                         },
                         {

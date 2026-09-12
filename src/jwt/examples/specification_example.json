@@ -10,7 +10,7 @@
       },
       "key": "{{ secret_key }}",
       "algorithm": "HS256",
-      "result": "encoded_jwt"
+      "id": "encoded_jwt"
     }
   },
   {
@@ -20,7 +20,7 @@
       "key": "{{ secret_key }}",
       "algorithms": ["HS256"],
       "verify": true,
-      "result": "decoded_payload"
+      "id": "decoded_payload"
     }
   },
   {
@@ -29,7 +29,7 @@
       "token": "{{ token_input }}",
       "key": "{{ public_key }}",
       "algorithms": ["RS256"],
-      "result": "is_valid"
+      "id": "is_valid"
     }
   },
   {
@@ -39,7 +39,7 @@
       "options": {
         "verify_signature": false
       },
-      "result": "payload_unverified"
+      "id": "payload_unverified"
     }
   }
 ]

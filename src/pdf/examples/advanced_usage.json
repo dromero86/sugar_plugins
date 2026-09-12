@@ -9,7 +9,7 @@
     {
       "pdf": {
         "operator": "check_dependencies",
-        "result": "dependency_status"
+        "id": "dependency_status"
       }
     },
     {
@@ -91,7 +91,7 @@
                     "font_size": 12
                   }
                 ],
-                "result": "reporte_creado"
+                "id": "reporte_creado"
               }
             },
             {
@@ -103,7 +103,7 @@
               "pdf": {
                 "operator": "analyze_pdf",
                 "file_path": "reporte_avanzado.pdf",
-                "result": "analisis_avanzado"
+                "id": "analisis_avanzado"
               }
             },
             {

@@ -9,7 +9,7 @@
         "source": "datos.txt",
         "destination": "datos.txt.bz2",
         "compression_level": 6,
-        "result": "compression_result"
+        "id": "compression_result"
       }
     },
     {

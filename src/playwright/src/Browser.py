@@ -42,36 +42,36 @@ class Browser:
         self.browser_type = config.get("browser_type", "chromium")
         Output.Console(self.plugin.plugin_name, f"Browser configured: {self.browser_type}")
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
         Execute browser-related commands.
         
         Args:
-            command: Command to execute
+            operator: Command to execute
             config: Command configuration
             
         Returns:
             Command execution result
         """
         try:
-            if command == "launch_browser":
+            if operator == "launch_browser":
                 return self._launch_browser(config)
-            elif command == "close_browser":
+            elif operator == "close_browser":
                 return self._close_browser(config)
-            elif command == "new_context":
+            elif operator == "new_context":
                 return self._new_context(config)
-            elif command == "close_context":
+            elif operator == "close_context":
                 return self._close_context(config)
-            elif command == "start_video":
+            elif operator == "start_video":
                 return self._start_video(config)
-            elif command == "stop_video":
+            elif operator == "stop_video":
                 return self._stop_video(config)
             else:
-                Output.Console(self.plugin.plugin_name, f"Unknown browser command: {command}")
+                Output.Console(self.plugin.plugin_name, f"Unknown browser operator: {operator}")
                 return None
                 
         except Exception as e:
-            Output.Console(self.plugin.plugin_name, f"Error in browser command '{command}': {str(e)}")
+            Output.Console(self.plugin.plugin_name, f"Error in browser operator '{operator}': {str(e)}")
             raise
     
     def _launch_browser(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -126,7 +126,7 @@ class Browser:
             
             # Store result in variable if specified
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             
@@ -158,7 +158,7 @@ class Browser:
             result = {"success": True, "message": "Browser closed successfully"}
             
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             
@@ -215,7 +215,7 @@ class Browser:
             }
             
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             
@@ -242,7 +242,7 @@ class Browser:
             result = {"success": True, "message": "Context closed successfully"}
             
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             
@@ -286,7 +286,7 @@ class Browser:
             }
             
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             
@@ -319,7 +319,7 @@ class Browser:
             }
             
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             

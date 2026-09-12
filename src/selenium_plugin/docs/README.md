@@ -2,11 +2,11 @@
 
 ## 📋 Descripción General
 
-El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automatización web usando la sintaxis unificada `@selenium/`. Esta versión ha sido completamente rediseñada para ofrecer una experiencia más consistente, robusta y escalable.
+El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automatización web usando la sintaxis unificada `{"selenium": {"operator": ...}}`. Esta versión ha sido completamente rediseñada para ofrecer una experiencia más consistente, robusta y escalable.
 
 ### 🎯 Características Principales
 
-- **Sintaxis unificada** `@selenium/` con operadores específicos
+- **Sintaxis unificada** `{"selenium": {"operator": ...}}` con operadores específicos
 - **Soporte completo** para todos los navegadores de Selenium
 - **Sistema avanzado de cookies** con arrays y propiedades completas
 - **19 operadores disponibles** para automatización completa
@@ -54,7 +54,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
   "selenium": {
     "operator": "click",
     "selector": "#btn",
-    "result": "is_clicked"
+    "id": "is_clicked"
   }
 }
 ```
@@ -65,7 +65,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
   "selenium": {
     "operator": "open",
     "url": "https://example.com",
-    "result": "is_open"
+    "id": "is_open"
   }
 }
 ```
@@ -76,7 +76,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
   "selenium": {
     "operator": "javascript",
     "from_file": "./script.js",
-    "result": "js_result"
+    "id": "js_result"
   }
 }
 ```
@@ -89,7 +89,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
     "selector": "input[name='q']",
     "value": "Sugar",
     "enter": true,
-    "result": "is_typed"
+    "id": "is_typed"
   }
 }
 ```
@@ -101,7 +101,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
     "operator": "wait",
     "type": "element",
     "selector": "#content",
-    "result": "element_found"
+    "id": "element_found"
   }
 }
 ```
@@ -112,7 +112,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
   "selenium": {
     "operator": "screenshot",
     "file": "./result.png",
-    "result": "screenshot"
+    "id": "screenshot"
   }
 }
 ```
@@ -123,7 +123,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
   "selenium": {
     "operator": "navigate",
     "action": "refresh",
-    "result": "navigated"
+    "id": "navigated"
   }
 }
 ```
@@ -135,7 +135,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
     "operator": "find",
     "selector": ".item",
     "multiple": true,
-    "result": "found"
+    "id": "found"
   }
 }
 ```
@@ -146,7 +146,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
   "selenium": {
     "operator": "submit",
     "selector": "form",
-    "result": "submitted"
+    "id": "submitted"
   }
 }
 ```
@@ -157,7 +157,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
   "selenium": {
     "operator": "clear",
     "selector": "input[name='q']",
-    "result": "cleared"
+    "id": "cleared"
   }
 }
 ```
@@ -169,7 +169,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
     "operator": "select",
     "selector": "select[name='country']",
     "value": "ES",
-    "result": "selected"
+    "id": "selected"
   }
 }
 ```
@@ -180,7 +180,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
   "selenium": {
     "operator": "hover",
     "selector": ".menu-item",
-    "result": "hovered"
+    "id": "hovered"
   }
 }
 ```
@@ -192,7 +192,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
     "operator": "scroll",
     "type": "to_element",
     "selector": "#footer",
-    "result": "scrolled"
+    "id": "scrolled"
   }
 }
 ```
@@ -204,7 +204,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
     "operator": "upload",
     "selector": "input[type='file']",
     "file": "./document.pdf",
-    "result": "uploaded"
+    "id": "uploaded"
   }
 }
 ```
@@ -216,7 +216,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
     "operator": "download",
     "url": "https://example.com/file.pdf",
     "file": "./downloads/file.pdf",
-    "result": "downloaded"
+    "id": "downloaded"
   }
 }
 ```
@@ -235,7 +235,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
         "secure": true
       }
     ],
-    "result": "cookies_added"
+    "id": "cookies_added"
   }
 }
 ```
@@ -246,7 +246,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
   "selenium": {
     "operator": "window",
     "action": "maximize",
-    "result": "window_action"
+    "id": "window_action"
   }
 }
 ```
@@ -258,7 +258,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
     "operator": "frame",
     "action": "switch",
     "name": "content-frame",
-    "result": "frame_action"
+    "id": "frame_action"
   }
 }
 ```
@@ -269,7 +269,7 @@ El plugin Selenium v2.0 para Sugar proporciona capacidades avanzadas de automati
   "selenium": {
     "operator": "alert",
     "action": "accept",
-    "result": "alert_action"
+    "id": "alert_action"
   }
 }
 ```
@@ -300,7 +300,7 @@ Cada cookie soporta todos los elementos clave:
   "selenium": {
     "operator": "cookies",
     "action": "get",
-    "result": "cookies"
+    "id": "cookies"
   }
 }
 ```
@@ -318,7 +318,7 @@ Cada cookie soporta todos los elementos clave:
     "secure": true,
     "httpOnly": false,
     "expiry": "2024-12-31T23:59:59Z",
-    "result": "cookie_added"
+    "id": "cookie_added"
   }
 }
 ```
@@ -344,7 +344,7 @@ Cada cookie soporta todos los elementos clave:
         "path": "/settings"
       }
     ],
-    "result": "cookies_added"
+    "id": "cookies_added"
   }
 }
 ```
@@ -356,7 +356,7 @@ Cada cookie soporta todos los elementos clave:
     "operator": "cookies",
     "action": "delete",
     "name": "session_id",
-    "result": "cookie_deleted"
+    "id": "cookie_deleted"
   }
 }
 ```
@@ -367,7 +367,7 @@ Cada cookie soporta todos los elementos clave:
   "selenium": {
     "operator": "cookies",
     "action": "clear",
-    "result": "cookies_cleared"
+    "id": "cookies_cleared"
   }
 }
 ```
@@ -379,7 +379,7 @@ Cada cookie soporta todos los elementos clave:
     "operator": "cookies",
     "action": "get_by_name",
     "name": "session_id",
-    "result": "cookie_by_name"
+    "id": "cookie_by_name"
   }
 }
 ```
@@ -391,7 +391,7 @@ Cada cookie soporta todos los elementos clave:
     "operator": "cookies",
     "action": "get_by_domain",
     "domain": ".example.com",
-    "result": "cookies_by_domain"
+    "id": "cookies_by_domain"
   }
 }
 ```
@@ -414,7 +414,7 @@ Cada cookie soporta todos los elementos clave:
       "selenium": {
         "operator": "open",
         "url": "https://www.google.com",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
@@ -422,21 +422,21 @@ Cada cookie soporta todos los elementos clave:
         "operator": "type",
         "selector": "input[name='q']",
         "value": "Sugar automation",
-        "result": "is_typed"
+        "id": "is_typed"
       }
     },
     {
       "selenium": {
         "operator": "click",
         "selector": "input[name='btnK']",
-        "result": "is_clicked"
+        "id": "is_clicked"
       }
     },
     {
       "selenium": {
         "operator": "screenshot",
         "file": "./google_result.png",
-        "result": "screenshot"
+        "id": "screenshot"
       }
     }
   ]
@@ -456,7 +456,7 @@ Cada cookie soporta todos los elementos clave:
       "selenium": {
         "operator": "open",
         "url": "https://example.com",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
@@ -478,14 +478,14 @@ Cada cookie soporta todos los elementos clave:
             "path": "/settings"
           }
         ],
-        "result": "cookies_added"
+        "id": "cookies_added"
       }
     },
     {
       "selenium": {
         "operator": "navigate",
         "action": "refresh",
-        "result": "refreshed"
+        "id": "refreshed"
       }
     }
   ]
@@ -505,7 +505,7 @@ Cada cookie soporta todos los elementos clave:
       "selenium": {
         "operator": "open",
         "url": "https://example.com/contact",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
@@ -513,7 +513,7 @@ Cada cookie soporta todos los elementos clave:
         "operator": "wait",
         "type": "element",
         "selector": "form",
-        "result": "form_loaded"
+        "id": "form_loaded"
       }
     },
     {
@@ -521,7 +521,7 @@ Cada cookie soporta todos los elementos clave:
         "operator": "type",
         "selector": "input[name='name']",
         "value": "Juan Pérez",
-        "result": "name_typed"
+        "id": "name_typed"
       }
     },
     {
@@ -529,7 +529,7 @@ Cada cookie soporta todos los elementos clave:
         "operator": "type",
         "selector": "input[name='email']",
         "value": "juan@example.com",
-        "result": "email_typed"
+        "id": "email_typed"
       }
     },
     {
@@ -537,7 +537,7 @@ Cada cookie soporta todos los elementos clave:
         "operator": "select",
         "selector": "select[name='country']",
         "value": "ES",
-        "result": "country_selected"
+        "id": "country_selected"
       }
     },
     {
@@ -545,14 +545,14 @@ Cada cookie soporta todos los elementos clave:
         "operator": "type",
         "selector": "textarea[name='message']",
         "value": "Mensaje de prueba",
-        "result": "message_typed"
+        "id": "message_typed"
       }
     },
     {
       "selenium": {
         "operator": "submit",
         "selector": "form",
-        "result": "form_submitted"
+        "id": "form_submitted"
       }
     },
     {
@@ -560,7 +560,7 @@ Cada cookie soporta todos los elementos clave:
         "operator": "wait",
         "type": "element",
         "selector": ".success-message",
-        "result": "success_shown"
+        "id": "success_shown"
       }
     }
   ]
@@ -721,7 +721,7 @@ sugar script.json
       "selenium": {
         "operator": "open",
         "url": "https://www.google.com",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
@@ -729,7 +729,7 @@ sugar script.json
         "operator": "wait",
         "type": "time",
         "seconds": 2,
-        "result": "is_waited"
+        "id": "is_waited"
       }
     },
     {
@@ -737,21 +737,21 @@ sugar script.json
         "operator": "type",
         "selector": "input[name='q']",
         "value": "Sugar",
-        "result": "is_typed"
+        "id": "is_typed"
       }
     },
     {
       "selenium": {
         "operator": "click",
         "selector": "input[name='btnK']",
-        "result": "is_clicked"
+        "id": "is_clicked"
       }
     },
     {
       "selenium": {
         "operator": "screenshot",
         "file": "./result.png",
-        "result": "screenshot"
+        "id": "screenshot"
       }
     }
   ]

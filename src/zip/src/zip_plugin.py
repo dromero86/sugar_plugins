@@ -336,32 +336,32 @@ class ZipPlugin(PluginBase):
             "test_sdk"               # Probar funcionalidades del SDK
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """Ejecutar un comando del plugin"""
-        if command == "zip_compress":
+        if operator == "zip_compress":
             return self._compress_command(config)
-        elif command == "zip_extract":
+        elif operator == "zip_extract":
             return self._extract_command(config)
-        elif command == "zip_info":
+        elif operator == "zip_info":
             return self._info_command(config)
-        elif command == "zip_list":
+        elif operator == "zip_list":
             return self._list_command(config)
-        elif command == "zip_test":
+        elif operator == "zip_test":
             return self._test_command(config)
-        elif command == "zip_convert":
+        elif operator == "zip_convert":
             return self._convert_command(config)
-        elif command == "zip_merge":
+        elif operator == "zip_merge":
             return self._merge_command(config)
-        elif command == "zip_split":
+        elif operator == "zip_split":
             return self._split_command(config)
-        elif command == "sdk_info":
+        elif operator == "sdk_info":
             return self._sdk_info_command(config)
-        elif command == "list_formats":
+        elif operator == "list_formats":
             return self._list_formats_command(config)
-        elif command == "test_sdk":
+        elif operator == "test_sdk":
             return self._test_sdk_command(config)
         else:
-            raise ValueError(f"Comando desconocido: {command}")
+            raise ValueError(f"Comando desconocido: {operator}")
     
     def _compress_command(self, config: Dict[str, Any]) -> Dict[str, Any]:
         """Comprimir archivos o directorios"""

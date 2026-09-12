@@ -189,65 +189,65 @@ class SSHPlugin(PluginBase):
             "test_connection"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute an SSH command.
+        Execute an SSH operator.
         
         Args:
-            command: Command to execute
+            operator: Command to execute
             config: Command configuration
             
         Returns:
             Command execution result
         """
-        Output.Console(self.plugin_name, f"Executing SSH command: {command}")
+        Output.Console(self.plugin_name, f"Executing SSH operator: {operator}")
         
         # Interpolate variables in config
         interpolated_config = self.interpolate_variables(config)
         
         try:
-            if command == "connect":
+            if operator == "connect":
                 return self._connect(interpolated_config)
-            elif command == "disconnect":
+            elif operator == "disconnect":
                 return self._disconnect(interpolated_config)
-            elif command == "list_sessions":
+            elif operator == "list_sessions":
                 return self._list_sessions(interpolated_config)
-            elif command == "close_session":
+            elif operator == "close_session":
                 return self._close_session(interpolated_config)
-            elif command == "close_all_sessions":
+            elif operator == "close_all_sessions":
                 return self._close_all_sessions(interpolated_config)
-            elif command == "execute":
+            elif operator == "execute":
                 return self._execute_command(interpolated_config)
-            elif command == "execute_interactive":
+            elif operator == "execute_interactive":
                 return self._execute_interactive(interpolated_config)
-            elif command in ["upload", "download"]:
-                return self.file_transfer.transfer_file(command, interpolated_config)
-            elif command in ["upload_dir", "download_dir"]:
-                return self.file_transfer.transfer_directory(command, interpolated_config)
-            elif command in ["mkdir", "rm", "ls", "chmod", "chown"]:
-                return self._file_operations(command, interpolated_config)
-            elif command in ["create_tunnel", "create_reverse_tunnel"]:
-                return self._create_tunnel(command, interpolated_config)
-            elif command == "close_tunnel":
+            elif operator in ["upload", "download"]:
+                return self.file_transfer.transfer_file(operator, interpolated_config)
+            elif operator in ["upload_dir", "download_dir"]:
+                return self.file_transfer.transfer_directory(operator, interpolated_config)
+            elif operator in ["mkdir", "rm", "ls", "chmod", "chown"]:
+                return self._file_operations(operator, interpolated_config)
+            elif operator in ["create_tunnel", "create_reverse_tunnel"]:
+                return self._create_tunnel(operator, interpolated_config)
+            elif operator == "close_tunnel":
                 return self._close_tunnel(interpolated_config)
-            elif command == "list_tunnels":
+            elif operator == "list_tunnels":
                 return self._list_tunnels(interpolated_config)
-            elif command == "system_info":
+            elif operator == "system_info":
                 return self._get_system_info(interpolated_config)
-            elif command == "list_processes":
+            elif operator == "list_processes":
                 return self._list_processes(interpolated_config)
-            elif command == "kill_process":
+            elif operator == "kill_process":
                 return self._kill_process(interpolated_config)
-            elif command == "service_control":
+            elif operator == "service_control":
                 return self._service_control(interpolated_config)
-            elif command == "test_connection":
+            elif operator == "test_connection":
                 return self._test_connection(interpolated_config)
             else:
-                Output.Console(self.plugin_name, f"Unknown SSH command: {command}")
+                Output.Console(self.plugin_name, f"Unknown SSH operator: {operator}")
                 return None
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing SSH command '{command}': {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing SSH operator '{operator}': {str(e)}")
             raise
     
     def _connect(self, config: Dict[str, Any]) -> bool:

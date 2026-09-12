@@ -139,7 +139,7 @@ class IndependentJwtPlugin:
             encoded_token = jwt.encode(processed_payload, key, algorithm=algorithm)
             
             # Store result if specified
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, encoded_token)
             
@@ -187,7 +187,7 @@ class IndependentJwtPlugin:
                 print(f"JWT decoded successfully with verification using {algorithms}")
             
             # Store result if specified
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, decoded_payload)
             
@@ -227,7 +227,7 @@ class IndependentJwtPlugin:
             jwt.decode(token, key, algorithms=algorithms)
             
             # Store result if specified
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, True)
             
@@ -236,13 +236,13 @@ class IndependentJwtPlugin:
             
         except jwt.ExpiredSignatureError:
             print("JWT verification failed: Token has expired")
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, False)
             return False
         except jwt.InvalidTokenError as e:
             print(f"JWT verification failed: {str(e)}")
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, False)
             return False

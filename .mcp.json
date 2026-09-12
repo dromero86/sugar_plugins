@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "plane": {
+      "type": "http",
+      "url": "http://localhost:9937/http/api-key/mcp",
+      "headers": {
+        "Authorization": "Bearer plane_api_a06da6fc190a4f11b33e8043a31ff1ba",
+        "X-Workspace-slug": "local"
+      }
+    }
+  }
+}

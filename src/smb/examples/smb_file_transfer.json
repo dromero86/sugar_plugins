@@ -62,7 +62,7 @@
         "username": "{{smb_user}}",
         "password": "{{smb_pass}}",
         "session_name": "transfer_session",
-        "result": "connection_status"
+        "id": "connection_status"
       }
     },
     {
@@ -150,7 +150,7 @@
                 "local_path": "{{test_file1}}",
                 "remote_path": "uploaded_file1.txt",
                 "overwrite": true,
-                "result": "upload_result"
+                "id": "upload_result"
               }
             },
             {
@@ -218,7 +218,7 @@
                 ],
                 "parallel": true,
                 "max_workers": 2,
-                "result": "upload_multiple_result"
+                "id": "upload_multiple_result"
               }
             },
             {
@@ -275,7 +275,7 @@
                 "operator": "list_directory",
                 "session": "transfer_session",
                 "path": "/",
-                "result": "directory_listing"
+                "id": "directory_listing"
               }
             },
             {
@@ -315,7 +315,7 @@
                 "remote_path": "uploaded_file1.txt",
                 "local_path": "/tmp/downloaded_file1.txt",
                 "overwrite": true,
-                "result": "download_result"
+                "id": "download_result"
               }
             },
             {
@@ -383,7 +383,7 @@
                 ],
                 "parallel": true,
                 "max_workers": 2,
-                "result": "download_multiple_result"
+                "id": "download_multiple_result"
               }
             },
             {
@@ -438,7 +438,7 @@
             {
               "shell": {
                 "command": "ls -la /tmp/downloaded_file*.txt",
-                "result": "downloaded_files_list"
+                "id": "downloaded_files_list"
               }
             },
             {
@@ -464,7 +464,7 @@
             {
               "smb": {
                 "operator": "get_transfer_stats",
-                "result": "final_stats"
+                "id": "final_stats"
               }
             },
             {
@@ -512,7 +512,7 @@
                 "operator": "delete_file",
                 "session": "transfer_session",
                 "path": "uploaded_file1.txt",
-                "result": "delete_file1_result"
+                "id": "delete_file1_result"
               }
             },
             {
@@ -520,7 +520,7 @@
                 "operator": "delete_file",
                 "session": "transfer_session",
                 "path": "uploaded_file2.txt",
-                "result": "delete_file2_result"
+                "id": "delete_file2_result"
               }
             },
             {
@@ -528,7 +528,7 @@
                 "operator": "delete_file",
                 "session": "transfer_session",
                 "path": "uploaded_file3.txt",
-                "result": "delete_file3_result"
+                "id": "delete_file3_result"
               }
             },
             {
@@ -560,7 +560,7 @@
               "smb": {
                 "operator": "disconnect",
                 "session": "transfer_session",
-                "result": "disconnect_status"
+                "id": "disconnect_status"
               }
             },
             {

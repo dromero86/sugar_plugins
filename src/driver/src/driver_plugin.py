@@ -164,79 +164,79 @@ class DriverPlugin(PluginBase):
             "delete_all_cookies"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute a driver command.
+        Execute a driver operator.
         
         Args:
-            command: Command to execute
-            config: Configuration for the command
+            operator: Command to execute
+            config: Configuration for the operator
             
         Returns:
             Command result
         """
         try:
-            if command == "initialize":
+            if operator == "initialize":
                 return self._initialize_driver(config)
-            elif command == "close":
+            elif operator == "close":
                 return self._close_browser(config)
-            elif command == "quit":
+            elif operator == "quit":
                 return self._quit_browser(config)
-            elif command == "disable":
+            elif operator == "disable":
                 return self._disable_driver(config)
-            elif command == "enable":
+            elif operator == "enable":
                 return self._enable_driver(config)
-            elif command == "get":
+            elif operator == "get":
                 return self._navigate_to(config)
-            elif command == "back":
+            elif operator == "back":
                 return self._go_back(config)
-            elif command == "forward":
+            elif operator == "forward":
                 return self._go_forward(config)
-            elif command == "refresh":
+            elif operator == "refresh":
                 return self._refresh_page(config)
-            elif command == "click":
+            elif operator == "click":
                 return self._click_element(config)
-            elif command == "type":
+            elif operator == "type":
                 return self._type_text(config)
-            elif command == "clear":
+            elif operator == "clear":
                 return self._clear_element(config)
-            elif command == "submit":
+            elif operator == "submit":
                 return self._submit_form(config)
-            elif command == "select":
+            elif operator == "select":
                 return self._select_option(config)
-            elif command == "find_element":
+            elif operator == "find_element":
                 return self._find_element(config)
-            elif command == "find_elements":
+            elif operator == "find_elements":
                 return self._find_elements(config)
-            elif command == "wait_for_element":
+            elif operator == "wait_for_element":
                 return self._wait_for_element(config)
-            elif command == "wait_for_clickable":
+            elif operator == "wait_for_clickable":
                 return self._wait_for_clickable(config)
-            elif command == "execute_script":
+            elif operator == "execute_script":
                 return self._execute_script(config)
-            elif command == "get_page_source":
+            elif operator == "get_page_source":
                 return self._get_page_source(config)
-            elif command == "get_title":
+            elif operator == "get_title":
                 return self._get_title(config)
-            elif command == "get_url":
+            elif operator == "get_url":
                 return self._get_url(config)
-            elif command == "take_screenshot":
+            elif operator == "take_screenshot":
                 return self._take_screenshot(config)
-            elif command == "save_screenshot":
+            elif operator == "save_screenshot":
                 return self._save_screenshot(config)
-            elif command == "get_cookies":
+            elif operator == "get_cookies":
                 return self._get_cookies(config)
-            elif command == "add_cookie":
+            elif operator == "add_cookie":
                 return self._add_cookie(config)
-            elif command == "delete_cookie":
+            elif operator == "delete_cookie":
                 return self._delete_cookie(config)
-            elif command == "delete_all_cookies":
+            elif operator == "delete_all_cookies":
                 return self._delete_all_cookies(config)
             else:
-                raise ValueError(f"Unknown command: {command}")
+                raise ValueError(f"Unknown operator: {operator}")
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing {command}: {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing {operator}: {str(e)}")
             raise
     
     def _initialize_driver(self, config: Dict[str, Any]) -> bool:

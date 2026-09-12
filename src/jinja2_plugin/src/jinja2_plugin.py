@@ -147,32 +147,32 @@ class Jinja2Plugin(PluginBase):
             "clear_cache"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute a Jinja2 command.
+        Execute a Jinja2 operator.
         
         Args:
-            command: Command to execute
-            config: Configuration for the command
+            operator: Command to execute
+            config: Configuration for the operator
             
         Returns:
             Command result
         """
         try:
-            if command == "parser":
+            if operator == "parser":
                 return self._parse_template(config)
-            elif command == "validate":
+            elif operator == "validate":
                 return self._validate_template(config)
-            elif command == "info":
+            elif operator == "info":
                 return self._get_template_info(config)
-            elif command == "clear_cache":
+            elif operator == "clear_cache":
                 return self._clear_cache(config)
             else:
-                Output.Console(self.plugin_name, f"Unknown Jinja2 command: {command}")
-                return {"success": False, "error": f"Unknown command: {command}"}
+                Output.Console(self.plugin_name, f"Unknown Jinja2 operator: {operator}")
+                return {"success": False, "error": f"Unknown operator: {operator}"}
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing {command}: {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing {operator}: {str(e)}")
             return {"success": False, "error": str(e)}
     
     def _parse_template(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -187,7 +187,7 @@ class Jinja2Plugin(PluginBase):
         """
         try:
             template = config.get("template")
-            result_var = config.get("result")
+            result_var = config.get("id")
             
             if not template:
                 return {"success": False, "error": "Template not provided"}

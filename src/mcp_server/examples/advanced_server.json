@@ -13,7 +13,7 @@
                 "host": "0.0.0.0",
                 "port": 3000,
                 "protocol": "tcp",
-                "result": "server_status"
+                "id": "server_status"
             }
         },
         {
@@ -69,7 +69,7 @@
                     "required": ["a", "b"]
                 },
                 "handler": "suma_handler",
-                "result": "tool1_status"
+                "id": "tool1_status"
             }
         },
         {
@@ -88,7 +88,7 @@
                     "required": ["email"]
                 },
                 "handler": "email_handler",
-                "result": "tool2_status"
+                "id": "tool2_status"
             }
         },
         {
@@ -108,7 +108,7 @@
                     }
                 },
                 "handler": "uuid_handler",
-                "result": "tool3_status"
+                "id": "tool3_status"
             }
         },
         {
@@ -124,7 +124,7 @@
                 "description": "Archivo de configuración del sistema Sugar",
                 "mime_type": "application/json",
                 "handler": "config_handler",
-                "result": "resource1_status"
+                "id": "resource1_status"
             }
         },
         {
@@ -135,7 +135,7 @@
                 "description": "Archivo de logs de la aplicación",
                 "mime_type": "text/plain",
                 "handler": "logs_handler",
-                "result": "resource2_status"
+                "id": "resource2_status"
             }
         },
         {
@@ -146,7 +146,7 @@
                 "description": "Documentación de endpoints de la API",
                 "mime_type": "text/markdown",
                 "handler": "api_docs_handler",
-                "result": "resource3_status"
+                "id": "resource3_status"
             }
         },
         {
@@ -157,7 +157,7 @@
         {
             "mcp_server": {
                 "operator": "get_server_status",
-                "result": "status_info"
+                "id": "status_info"
             }
         },
         {
@@ -188,7 +188,7 @@
         {
             "mcp_server": {
                 "operator": "list_tools",
-                "result": "tools_list"
+                "id": "tools_list"
             }
         },
         {
@@ -212,7 +212,7 @@
         {
             "mcp_server": {
                 "operator": "list_resources",
-                "result": "resources_list"
+                "id": "resources_list"
             }
         },
         {
@@ -241,7 +241,7 @@
         {
             "mcp_server": {
                 "operator": "test_connection",
-                "result": "connection_test"
+                "id": "connection_test"
             }
         },
         {

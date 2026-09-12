@@ -68,18 +68,18 @@ class OpenSSLBinaryPlugin(PluginBase):
         """Execute a plugin command."""
         return self.execute_command(command_name, config)
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute a plugin command (required by PluginBase).
+        Execute a plugin operator (required by PluginBase).
         
         Args:
-            command: The command to execute
-            config: Configuration dictionary for the command
+            operator: The operator to execute
+            config: Configuration dictionary for the operator
             
         Returns:
-            The result of the command execution
+            The result of the operator execution
         """
-        return self.execute_command(command, config)
+        return self.execute_command(operator, config)
     
     def get_available_commands(self) -> List[str]:
         """Get list of available commands."""

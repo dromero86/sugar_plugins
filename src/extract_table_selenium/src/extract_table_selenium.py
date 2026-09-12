@@ -155,29 +155,29 @@ class ExtractTableSeleniumPlugin(PluginBase):
             "close_browser"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
-        """Execute a plugin command."""
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
+        """Execute a plugin operator."""
         try:
-            if command == "extract_table":
+            if operator == "extract_table":
                 return self._extract_table(config)
-            elif command == "navigate_to":
+            elif operator == "navigate_to":
                 return self._navigate_to(config)
-            elif command == "wait_for_element":
+            elif operator == "wait_for_element":
                 return self._wait_for_element(config)
-            elif command == "scroll_to_element":
+            elif operator == "scroll_to_element":
                 return self._scroll_to_element(config)
-            elif command == "click_element":
+            elif operator == "click_element":
                 return self._click_element(config)
-            elif command == "get_page_source":
+            elif operator == "get_page_source":
                 return self._get_page_source(config)
-            elif command == "take_screenshot":
+            elif operator == "take_screenshot":
                 return self._take_screenshot(config)
-            elif command == "close_browser":
+            elif operator == "close_browser":
                 return self._close_browser(config)
             else:
-                raise ValueError(f"Unknown command: {command}")
+                raise ValueError(f"Unknown operator: {operator}")
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing command '{command}': {e}")
+            Output.Console(self.plugin_name, f"Error executing operator '{operator}': {e}")
             raise
     
     def _initialize_driver(self) -> bool:
@@ -272,7 +272,7 @@ class ExtractTableSeleniumPlugin(PluginBase):
             
             # Extract configuration parameters
             selector = self.interpolate_variables(config.get("selector", "table"))
-            result_var = config.get("result", "table_data")
+            result_var = config.get("id", "table_data")
             
             # Get table configuration
             table_config = config.get("config", {})
@@ -916,7 +916,7 @@ class ExtractTableSeleniumPlugin(PluginBase):
                 raise Exception("Failed to initialize WebDriver")
             
             page_source = self.driver.page_source
-            result_var = config.get("result", "page_source")
+            result_var = config.get("id", "page_source")
             
             if self.context and hasattr(self.context, 'memory_handler'):
                 self.context.memory_handler.set_variable(result_var, page_source)

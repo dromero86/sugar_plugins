@@ -32,7 +32,7 @@
         "operator": "add",
         "left": 10,
         "right": 20,
-        "result": "suma"
+        "id": "suma"
       }
     },
     {

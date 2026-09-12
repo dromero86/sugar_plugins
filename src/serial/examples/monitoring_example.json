@@ -22,7 +22,7 @@
         "operator": "write",
         "session": "sensor_node",
         "data": "START_LOGGING\\r\\n",
-        "result": "start_cmd"
+        "id": "start_cmd"
       }
     },
     {
@@ -37,7 +37,7 @@
         "duration": 30.0,
         "log_file": "sensor_monitor.log",
         "filter": "sensor_data",
-        "result": "monitor_status"
+        "id": "monitor_status"
       }
     },
     {
@@ -54,7 +54,7 @@
               "operator": "read_line",
               "session": "sensor_node",
               "timeout": 5.0,
-              "result": "logged_data"
+              "id": "logged_data"
             }
           },
           {
@@ -74,7 +74,7 @@
       "serial": {
         "operator": "log_activity",
         "session": "sensor_node",
-        "result": "activity_log"
+        "id": "activity_log"
       }
     },
     {
@@ -87,7 +87,7 @@
         "operator": "write",
         "session": "sensor_node",
         "data": "STOP_LOGGING\\r\\n",
-        "result": "stop_cmd"
+        "id": "stop_cmd"
       }
     },
     {

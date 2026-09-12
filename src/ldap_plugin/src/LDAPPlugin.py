@@ -180,95 +180,95 @@ class LDAPPlugin(PluginBase):
         else:
             return ["check_dependencies", "get_plugin_info"]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute a plugin command.
+        Execute a plugin operator.
         
         Args:
-            command: The command to execute
-            config: Configuration dictionary for the command
+            operator: The operator to execute
+            config: Configuration dictionary for the operator
             
         Returns:
-            The result of the command execution
+            The result of the operator execution
         """
         try:
             # Check dependencies for critical commands
-            if command in ["connect", "authenticate", "search"] and not self.ldap_available:
+            if operator in ["connect", "authenticate", "search"] and not self.ldap_available:
                 raise RuntimeError("LDAP library not available. Install python-ldap")
             
-            if command == "connect":
+            if operator == "connect":
                 return self._connect(config)
-            elif command == "disconnect":
+            elif operator == "disconnect":
                 return self._disconnect(config)
-            elif command == "search":
+            elif operator == "search":
                 return self._search(config)
-            elif command == "search_users":
+            elif operator == "search_users":
                 return self._search_users(config)
-            elif command == "search_groups":
+            elif operator == "search_groups":
                 return self._search_groups(config)
-            elif command == "search_computers":
+            elif operator == "search_computers":
                 return self._search_computers(config)
-            elif command == "authenticate":
+            elif operator == "authenticate":
                 return self._authenticate(config)
-            elif command == "bind":
+            elif operator == "bind":
                 return self._bind(config)
-            elif command == "unbind":
+            elif operator == "unbind":
                 return self._unbind(config)
-            elif command == "verify_credentials":
+            elif operator == "verify_credentials":
                 return self._verify_credentials(config)
-            elif command == "create_user":
+            elif operator == "create_user":
                 return self._create_user(config)
-            elif command == "modify_user":
+            elif operator == "modify_user":
                 return self._modify_user(config)
-            elif command == "delete_user":
+            elif operator == "delete_user":
                 return self._delete_user(config)
-            elif command == "enable_user":
+            elif operator == "enable_user":
                 return self._enable_user(config)
-            elif command == "disable_user":
+            elif operator == "disable_user":
                 return self._disable_user(config)
-            elif command == "reset_password":
+            elif operator == "reset_password":
                 return self._reset_password(config)
-            elif command == "unlock_user":
+            elif operator == "unlock_user":
                 return self._unlock_user(config)
-            elif command == "get_user_info":
+            elif operator == "get_user_info":
                 return self._get_user_info(config)
-            elif command == "list_users":
+            elif operator == "list_users":
                 return self._list_users(config)
-            elif command == "create_group":
+            elif operator == "create_group":
                 return self._create_group(config)
-            elif command == "modify_group":
+            elif operator == "modify_group":
                 return self._modify_group(config)
-            elif command == "delete_group":
+            elif operator == "delete_group":
                 return self._delete_group(config)
-            elif command == "add_user_to_group":
+            elif operator == "add_user_to_group":
                 return self._add_user_to_group(config)
-            elif command == "remove_user_from_group":
+            elif operator == "remove_user_from_group":
                 return self._remove_user_from_group(config)
-            elif command == "get_group_info":
+            elif operator == "get_group_info":
                 return self._get_group_info(config)
-            elif command == "list_groups":
+            elif operator == "list_groups":
                 return self._list_groups(config)
-            elif command == "get_schema":
+            elif operator == "get_schema":
                 return self._get_schema(config)
-            elif command == "get_dn_info":
+            elif operator == "get_dn_info":
                 return self._get_dn_info(config)
-            elif command == "list_attributes":
+            elif operator == "list_attributes":
                 return self._list_attributes(config)
-            elif command == "get_base_dn":
+            elif operator == "get_base_dn":
                 return self._get_base_dn(config)
-            elif command == "check_dependencies":
+            elif operator == "check_dependencies":
                 return self.check_dependencies()
-            elif command == "get_plugin_info":
+            elif operator == "get_plugin_info":
                 return self.get_plugin_info()
             else:
-                raise ValueError(f"Unknown command: {command}")
+                raise ValueError(f"Unknown operator: {operator}")
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing command '{command}': {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing operator '{operator}': {str(e)}")
             return {
                 "status": "error",
                 "message": str(e),
-                "command": command
+                "operator": operator
             }
     
     def meta_hook(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -356,7 +356,7 @@ class LDAPPlugin(PluginBase):
             result = {"status": "error", "message": f"Connection '{connection_name}' not found"}
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -370,7 +370,7 @@ class LDAPPlugin(PluginBase):
             result = {"status": "error", "message": f"Connection '{connection_name}' not found"}
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -391,7 +391,7 @@ class LDAPPlugin(PluginBase):
         }
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -420,7 +420,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -446,7 +446,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -472,7 +472,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -498,7 +498,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -524,7 +524,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -544,7 +544,7 @@ class LDAPPlugin(PluginBase):
         result = self.connections[connection_name].bind(username, password)
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -562,7 +562,7 @@ class LDAPPlugin(PluginBase):
         result = self.connections[connection_name].unbind()
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -587,7 +587,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -609,7 +609,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -630,7 +630,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -651,7 +651,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -672,7 +672,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -693,7 +693,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -714,7 +714,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -735,7 +735,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -756,7 +756,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -777,7 +777,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -799,7 +799,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -820,7 +820,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -841,7 +841,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -862,7 +862,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -883,7 +883,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -904,7 +904,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -925,7 +925,7 @@ class LDAPPlugin(PluginBase):
         )
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -944,7 +944,7 @@ class LDAPPlugin(PluginBase):
         result = self.connections[connection_name].get_schema()
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -966,7 +966,7 @@ class LDAPPlugin(PluginBase):
         result = self.connections[connection_name].get_dn_info(dn)
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -984,7 +984,7 @@ class LDAPPlugin(PluginBase):
         result = self.connections[connection_name].list_attributes()
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -1002,7 +1002,7 @@ class LDAPPlugin(PluginBase):
         result = self.connections[connection_name].get_base_dn()
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -1037,7 +1037,7 @@ class LDAPPlugin(PluginBase):
         }
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -1053,7 +1053,7 @@ class LDAPPlugin(PluginBase):
         }
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     

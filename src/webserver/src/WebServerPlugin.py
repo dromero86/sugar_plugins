@@ -229,20 +229,20 @@ class WebServerPlugin(PluginBase):
         """Get available commands."""
         return ["start", "stop", "send", "set_cookies", "redirect"]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
-        """Execute a plugin command."""
-        if command == "start":
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
+        """Execute a plugin operator."""
+        if operator == "start":
             return self._start_server(config)
-        elif command == "stop":
+        elif operator == "stop":
             return self._stop_server()
-        elif command == "send":
+        elif operator == "send":
             return self._send_response(config)
-        elif command == "set_cookies":
+        elif operator == "set_cookies":
             return self._set_cookies(config)
-        elif command == "redirect":
+        elif operator == "redirect":
             return self._redirect(config)
         else:
-            raise ValueError(f"Unknown command: {command}")
+            raise ValueError(f"Unknown operator: {operator}")
     
     def _start_server(self, config: Dict[str, Any]) -> bool:
         """Start the web server."""

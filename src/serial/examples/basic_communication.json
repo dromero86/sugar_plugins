@@ -27,7 +27,7 @@
         "data": "STATUS\\r\\n",
         "encoding": "ascii",
         "add_newline": false,
-        "result": "write_result"
+        "id": "write_result"
       }
     },
     {
@@ -42,7 +42,7 @@
         "eol": "\\n",
         "timeout": 3.0,
         "encoding": "utf-8",
-        "result": "device_response"
+        "id": "device_response"
       }
     },
     {
@@ -54,7 +54,7 @@
       "serial": {
         "operator": "disconnect",
         "session": "device_1",
-        "result": "disconnect_result"
+        "id": "disconnect_result"
       }
     },
     {

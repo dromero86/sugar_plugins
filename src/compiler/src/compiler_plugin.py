@@ -52,29 +52,29 @@ class CompilerPlugin(PluginBase):
             "get_info"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute compiler command.
+        Execute compiler operator.
         
         Args:
-            command: Command to execute
-            config: Configuration for the command
+            operator: Command to execute
+            config: Configuration for the operator
             
         Returns:
-            Result of the command execution
+            Result of the operator execution
         """
-        if command == "transpile":
+        if operator == "transpile":
             return self._transpile_ast(config)
-        elif command == "compile":
+        elif operator == "compile":
             return self._compile_script(config)
-        elif command == "generate_bytecode":
+        elif operator == "generate_bytecode":
             return self._generate_bytecode(config)
-        elif command == "check_availability":
+        elif operator == "check_availability":
             return self._check_availability()
-        elif command == "get_info":
+        elif operator == "get_info":
             return self._get_compiler_info()
         else:
-            raise ValueError(f"Unknown compiler command: {command}")
+            raise ValueError(f"Unknown compiler operator: {operator}")
     
     def _transpile_ast(self, config: dict) -> Dict[str, Any]:
         """Transpile AST to LLVM IR or bytecode"""
@@ -445,7 +445,7 @@ class LLVMTranspiler:
         operation = config.get("operation", "add")
         a = config.get("a", 0)
         b = config.get("b", 0)
-        result_var = config.get("result", "result")
+        result_var = config.get("id", "result")
         
         if operation == "add":
             return [f"%{result_var}{task_id} = add i32 {a}, {b}"]

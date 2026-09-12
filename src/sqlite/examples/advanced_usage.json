@@ -32,7 +32,7 @@
             "type": "TEXT"
           }
         ],
-        "result": "categorias_creada"
+        "id": "categorias_creada"
       }
     },
     {
@@ -75,7 +75,7 @@
             "constraints": "DEFAULT CURRENT_TIMESTAMP"
           }
         ],
-        "result": "productos_creada"
+        "id": "productos_creada"
       }
     },
     {
@@ -107,14 +107,14 @@
             "descripcion": "Artículos para el hogar"
           }
         ],
-        "result": "categorias_insertadas"
+        "id": "categorias_insertadas"
       }
     },
     {
       "sqlite": {
         "operator": "select",
         "table": "categorias",
-        "result": "categorias_data"
+        "id": "categorias_data"
       }
     },
     {
@@ -158,7 +158,7 @@
             "categoria_id": 1
           }
         ],
-        "result": "productos_insertados"
+        "id": "productos_insertados"
       }
     },
     {
@@ -174,7 +174,7 @@
       "sqlite": {
         "operator": "query",
         "sql": "SELECT p.nombre, p.precio, p.stock, c.nombre as categoria FROM productos p JOIN categorias c ON p.categoria_id = c.id ORDER BY p.precio DESC",
-        "result": "productos_con_categorias"
+        "id": "productos_con_categorias"
       }
     },
     {
@@ -197,7 +197,7 @@
         "table": "productos",
         "data": { "precio": "precio * 0.9" },
         "where": "stock > 10",
-        "result": "descuento_aplicado"
+        "id": "descuento_aplicado"
       }
     },
     {
@@ -207,7 +207,7 @@
       "sqlite": {
         "operator": "query",
         "sql": "SELECT c.nombre as categoria, COUNT(p.id) as total_productos, AVG(p.precio) as precio_promedio FROM categorias c LEFT JOIN productos p ON c.id = p.categoria_id GROUP BY c.id, c.nombre",
-        "result": "resumen_categorias"
+        "id": "resumen_categorias"
       }
     },
     {
@@ -236,7 +236,7 @@
       "sqlite": {
         "operator": "backup",
         "backup_path": "./backups/tienda_avanzada_backup.db",
-        "result": "backup_result"
+        "id": "backup_result"
       }
     },
     {
@@ -248,7 +248,7 @@
         "table": "productos",
         "file_path": "./exports/productos.csv",
         "format": "csv",
-        "result": "export_result"
+        "id": "export_result"
       }
     },
     {
@@ -257,7 +257,7 @@
     {
       "sqlite": {
         "operator": "check_integrity",
-        "result": "integrity_check"
+        "id": "integrity_check"
       }
     },
     {
@@ -266,7 +266,7 @@
     {
       "sqlite": {
         "operator": "analyze",
-        "result": "analyze_result"
+        "id": "analyze_result"
       }
     },
     {
@@ -276,7 +276,7 @@
       "sqlite": {
         "operator": "get_table_info",
         "table": "productos",
-        "result": "info_productos"
+        "id": "info_productos"
       }
     },
     {

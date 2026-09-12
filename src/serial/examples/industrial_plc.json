@@ -26,7 +26,7 @@
         "session": "plc_controller",
         "data": "01 03 00 00 00 01 84 0A",
         "encoding": "hex",
-        "result": "write_result"
+        "id": "write_result"
       }
     },
     {
@@ -41,7 +41,7 @@
         "size": 7,
         "timeout": 3.0,
         "encoding": "hex",
-        "result": "plc_response"
+        "id": "plc_response"
       }
     },
     {
@@ -54,7 +54,7 @@
         "operator": "set_dtr",
         "session": "plc_controller",
         "state": true,
-        "result": "dtr_result"
+        "id": "dtr_result"
       }
     },
     {
@@ -66,7 +66,7 @@
       "serial": {
         "operator": "get_cts",
         "session": "plc_controller",
-        "result": "cts_status"
+        "id": "cts_status"
       }
     },
     {

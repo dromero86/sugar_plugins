@@ -149,10 +149,10 @@ class PDFPlugin(PluginBase):
             "check_dependencies", "system_info", "test_functionality"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """Ejecuta un comando del plugin."""
         # Verificar dependencias antes de comandos críticos
-        if command not in ["check_dependencies", "system_info", "test_functionality"]:
+        if operator not in ["check_dependencies", "system_info", "test_functionality"]:
             if not self.dependency_status['all_satisfied']:
                 raise RuntimeError("Dependencias no satisfechas. Ejecuta 'check_dependencies' para más información.")
         
@@ -160,78 +160,78 @@ class PDFPlugin(PluginBase):
         config = self._interpolate_config(config)
         
         # Ejecutar comando correspondiente
-        if command == "read_pdf":
+        if operator == "read_pdf":
             return self._read_pdf(config)
-        elif command == "get_pdf_info":
+        elif operator == "get_pdf_info":
             return self._get_pdf_info(config)
-        elif command == "extract_text":
+        elif operator == "extract_text":
             return self._extract_text(config)
-        elif command == "extract_images":
+        elif operator == "extract_images":
             return self._extract_images(config)
-        elif command == "create_pdf":
+        elif operator == "create_pdf":
             return self._create_pdf(config)
-        elif command == "write_pdf":
+        elif operator == "write_pdf":
             return self._write_pdf(config)
-        elif command == "merge_pdfs":
+        elif operator == "merge_pdfs":
             return self._merge_pdfs(config)
-        elif command == "split_pdf":
+        elif operator == "split_pdf":
             return self._split_pdf(config)
-        elif command == "add_text":
+        elif operator == "add_text":
             return self._add_text(config)
-        elif command == "add_image":
+        elif operator == "add_image":
             return self._add_image(config)
-        elif command == "add_page":
+        elif operator == "add_page":
             return self._add_page(config)
-        elif command == "remove_page":
+        elif operator == "remove_page":
             return self._remove_page(config)
-        elif command == "rotate_page":
+        elif operator == "rotate_page":
             return self._rotate_page(config)
-        elif command == "scale_page":
+        elif operator == "scale_page":
             return self._scale_page(config)
-        elif command == "crop_page":
+        elif operator == "crop_page":
             return self._crop_page(config)
-        elif command == "add_line":
+        elif operator == "add_line":
             return self._add_line(config)
-        elif command == "add_rectangle":
+        elif operator == "add_rectangle":
             return self._add_rectangle(config)
-        elif command == "add_circle":
+        elif operator == "add_circle":
             return self._add_circle(config)
-        elif command == "add_ellipse":
+        elif operator == "add_ellipse":
             return self._add_ellipse(config)
-        elif command == "set_font":
+        elif operator == "set_font":
             return self._set_font(config)
-        elif command == "set_text_color":
+        elif operator == "set_text_color":
             return self._set_text_color(config)
-        elif command == "set_fill_color":
+        elif operator == "set_fill_color":
             return self._set_fill_color(config)
-        elif command == "set_draw_color":
+        elif operator == "set_draw_color":
             return self._set_draw_color(config)
-        elif command == "get_metadata":
+        elif operator == "get_metadata":
             return self._get_metadata(config)
-        elif command == "set_metadata":
+        elif operator == "set_metadata":
             return self._set_metadata(config)
-        elif command == "update_metadata":
+        elif operator == "update_metadata":
             return self._update_metadata(config)
-        elif command == "analyze_pdf":
+        elif operator == "analyze_pdf":
             return self._analyze_pdf(config)
-        elif command == "search_text":
+        elif operator == "search_text":
             return self._search_text(config)
-        elif command == "count_pages":
+        elif operator == "count_pages":
             return self._count_pages(config)
-        elif command == "get_page_info":
+        elif operator == "get_page_info":
             return self._get_page_info(config)
-        elif command == "convert_to_images":
+        elif operator == "convert_to_images":
             return self._convert_to_images(config)
-        elif command == "extract_pages_as_images":
+        elif operator == "extract_pages_as_images":
             return self._extract_pages_as_images(config)
-        elif command == "check_dependencies":
+        elif operator == "check_dependencies":
             return self._check_dependencies(config)
-        elif command == "system_info":
+        elif operator == "system_info":
             return self._system_info(config)
-        elif command == "test_functionality":
+        elif operator == "test_functionality":
             return self._test_functionality(config)
         else:
-            raise ValueError(f"Comando desconocido: {command}")
+            raise ValueError(f"Comando desconocido: {operator}")
     
     def _check_all_dependencies(self) -> Dict[str, Any]:
         """Verifica todas las dependencias del plugin."""
@@ -375,7 +375,7 @@ class PDFPlugin(PluginBase):
                 }
                 
                 if 'result' in config:
-                    self.set_variable(config['result'], info)
+                    self.set_variable(config['id'], info)
                 
                 return info
                 
@@ -386,7 +386,7 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise
     
     def _get_pdf_info(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -444,7 +444,7 @@ class PDFPlugin(PluginBase):
                     result['output_file'] = output_file
                 
                 if 'result' in config:
-                    self.set_variable(config['result'], result)
+                    self.set_variable(config['id'], result)
                 
                 return result
                 
@@ -455,7 +455,7 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise
     
     def _create_pdf(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -577,7 +577,7 @@ class PDFPlugin(PluginBase):
             }
             
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             return result
             
@@ -588,7 +588,7 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise
     
     def _merge_pdfs(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -633,7 +633,7 @@ class PDFPlugin(PluginBase):
             }
             
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             return result
             
@@ -645,7 +645,7 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise
     
     def _analyze_pdf(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -707,7 +707,7 @@ class PDFPlugin(PluginBase):
                             analysis['has_forms'] = True
             
             if 'result' in config:
-                self.set_variable(config['result'], analysis)
+                self.set_variable(config['id'], analysis)
             
             return analysis
             
@@ -718,7 +718,7 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise
     
     def _check_dependencies(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -731,7 +731,7 @@ class PDFPlugin(PluginBase):
         }
         
         if 'result' in config:
-            self.set_variable(config['result'], result)
+            self.set_variable(config['id'], result)
         
         return result
     
@@ -768,7 +768,7 @@ class PDFPlugin(PluginBase):
             }
             
             if 'result' in config:
-                self.set_variable(config['result'], test_results)
+                self.set_variable(config['id'], test_results)
             
             return test_results
             
@@ -778,7 +778,7 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise
     
     # Métodos adicionales para completar la funcionalidad
@@ -847,7 +847,7 @@ class PDFPlugin(PluginBase):
             }
             
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             return result
             
@@ -859,7 +859,7 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise
     
     def _add_image(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -965,7 +965,7 @@ class PDFPlugin(PluginBase):
             }
             
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             return result
             
@@ -976,7 +976,7 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise
     
     def _add_rectangle(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -1007,7 +1007,7 @@ class PDFPlugin(PluginBase):
             }
             
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             return result
             
@@ -1018,7 +1018,7 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise
     
     def _add_circle(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -1048,7 +1048,7 @@ class PDFPlugin(PluginBase):
             }
             
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             return result
             
@@ -1059,7 +1059,7 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise
     
     def _add_ellipse(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -1090,7 +1090,7 @@ class PDFPlugin(PluginBase):
             }
             
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             return result
             
@@ -1101,7 +1101,7 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise
     
     def _set_font(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -1131,7 +1131,7 @@ class PDFPlugin(PluginBase):
             }
             
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             return result
             
@@ -1142,7 +1142,7 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise
     
     def _set_text_color(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -1172,7 +1172,7 @@ class PDFPlugin(PluginBase):
             }
             
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             return result
             
@@ -1183,7 +1183,7 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise
     
     def _set_fill_color(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -1213,7 +1213,7 @@ class PDFPlugin(PluginBase):
             }
             
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             return result
             
@@ -1224,7 +1224,7 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise
     
     def _set_draw_color(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -1254,7 +1254,7 @@ class PDFPlugin(PluginBase):
             }
             
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             return result
             
@@ -1265,5 +1265,5 @@ class PDFPlugin(PluginBase):
                 'status': 'error'
             }
             if 'result' in config:
-                self.set_variable(config['result'], error_info)
+                self.set_variable(config['id'], error_info)
             raise

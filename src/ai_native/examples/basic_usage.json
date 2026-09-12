@@ -4,7 +4,7 @@
     {
       "ai_native": {
         "operator": "get_ai_info",
-        "result": "plugin_info"
+        "id": "plugin_info"
       }
     },
     {

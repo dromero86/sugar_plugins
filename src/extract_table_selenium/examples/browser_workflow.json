@@ -79,7 +79,7 @@
                             "Date": "parse_date(%Y-%m-%d)"
                         }
                     },
-                    "result": "dashboard_data"
+                    "id": "dashboard_data"
                 }
             }
         },

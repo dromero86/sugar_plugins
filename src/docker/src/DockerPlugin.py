@@ -166,23 +166,23 @@ class DockerPlugin(PluginBase):
             "export_compose", "import_compose", "validate_composition"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute a Docker plugin command.
+        Execute a Docker plugin operator.
         
         Args:
-            command: The command to execute
-            config: Configuration dictionary for the command
+            operator: The operator to execute
+            config: Configuration dictionary for the operator
             
         Returns:
-            The result of the command execution
+            The result of the operator execution
         """
         try:
             # Interpolate variables in config
             config = self._interpolate_config(config)
             
-            # Handle main docker command
-            if command == "docker":
+            # Handle main docker operator
+            if operator == "docker":
                 operator = config.get("operator")
                 if not operator:
                     raise ValueError("Docker operator is required")
@@ -194,62 +194,62 @@ class DockerPlugin(PluginBase):
                 return self.execute(operator, params)
             
             # Handle specific commands
-            elif command == "run_container":
+            elif operator == "run_container":
                 if self.docker_available:
                     return self._run_container_real(config)
                 else:
                     return self._run_container_simulated(config)
-            elif command == "stop_container":
+            elif operator == "stop_container":
                 if self.docker_available:
                     return self._stop_container_real(config)
                 else:
                     return self._stop_container_simulated(config)
-            elif command == "remove_container":
+            elif operator == "remove_container":
                 if self.docker_available:
                     return self._remove_container_real(config)
                 else:
                     return self._remove_container_simulated(config)
-            elif command == "inspect_container":
+            elif operator == "inspect_container":
                 if self.docker_available:
                     return self._inspect_container_real(config)
                 else:
                     return self._inspect_container_simulated(config)
-            elif command == "logs_container":
+            elif operator == "logs_container":
                 if self.docker_available:
                     return self._logs_container_real(config)
                 else:
                     return self._logs_container_simulated(config)
-            elif command == "exec_container":
+            elif operator == "exec_container":
                 if self.docker_available:
                     return self._exec_container_real(config)
                 else:
                     return self._exec_container_simulated(config)
-            elif command == "stats_container":
+            elif operator == "stats_container":
                 if self.docker_available:
                     return self._stats_container_real(config)
                 else:
                     return self._stats_container_simulated(config)
-            elif command == "create_composition":
+            elif operator == "create_composition":
                 return self._create_composition(config)
-            elif command == "start_composition":
+            elif operator == "start_composition":
                 return self._start_composition_simulated(config)
-            elif command == "stop_composition":
+            elif operator == "stop_composition":
                 return self._stop_composition_simulated(config)
-            elif command == "status_composition":
+            elif operator == "status_composition":
                 return self._status_composition_simulated(config)
-            elif command == "list_services":
+            elif operator == "list_services":
                 return self._list_services()
-            elif command == "list_compositions":
+            elif operator == "list_compositions":
                 return self._list_compositions()
-            elif command == "health_check":
+            elif operator == "health_check":
                 return self._health_check_simulated(config)
-            elif command == "cleanup":
+            elif operator == "cleanup":
                 return self._cleanup_simulated(config)
             else:
-                raise ValueError(f"Unknown command: {command}")
+                raise ValueError(f"Unknown operator: {operator}")
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing command '{command}': {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing operator '{operator}': {str(e)}")
             raise
     
     def _interpolate_config(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -1005,7 +1005,7 @@ CONTAINER ID   NAME                CPU %     MEM USAGE / LIMIT     MEM %     NET
         }
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         Output.Console(self.plugin_name, f"Composition '{composition_name}' created with {len(services)} services")
         return result
@@ -1070,7 +1070,7 @@ CONTAINER ID   NAME                CPU %     MEM USAGE / LIMIT     MEM %     NET
         }
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -1112,7 +1112,7 @@ CONTAINER ID   NAME                CPU %     MEM USAGE / LIMIT     MEM %     NET
         }
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -1152,7 +1152,7 @@ CONTAINER ID   NAME                CPU %     MEM USAGE / LIMIT     MEM %     NET
         }
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -1273,6 +1273,6 @@ CONTAINER ID   NAME                CPU %     MEM USAGE / LIMIT     MEM %     NET
         }
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result

@@ -25,7 +25,7 @@
         "operator": "write",
         "session": "gps_receiver",
         "data": "$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*28\\r\\n",
-        "result": "gps_config"
+        "id": "gps_config"
       }
     },
     {
@@ -43,7 +43,7 @@
               "session": "gps_receiver",
               "terminator": "\\r\\n",
               "timeout": 2.0,
-              "result": "nmea_sentence"
+              "id": "nmea_sentence"
             }
           },
           {

@@ -75,7 +75,7 @@ Obtiene todas las cookies del dominio actual.
   "selenium": {
     "operator": "cookies",
     "action": "get",
-    "result": "cookies"
+    "id": "cookies"
   }
 }
 ```
@@ -119,7 +119,7 @@ Agrega una cookie individual con propiedades completas.
     "secure": true,
     "httpOnly": false,
     "expiry": "2024-12-31T23:59:59Z",
-    "result": "cookie_added"
+    "id": "cookie_added"
   }
 }
 ```
@@ -154,7 +154,7 @@ Agrega múltiples cookies en una sola operación.
         "expiry": "30d"
       }
     ],
-    "result": "cookies_added"
+    "id": "cookies_added"
   }
 }
 ```
@@ -169,7 +169,7 @@ Elimina una cookie por nombre.
     "operator": "cookies",
     "action": "delete",
     "name": "session_id",
-    "result": "cookie_deleted"
+    "id": "cookie_deleted"
   }
 }
 ```
@@ -183,7 +183,7 @@ Elimina todas las cookies del dominio actual.
   "selenium": {
     "operator": "cookies",
     "action": "clear",
-    "result": "cookies_cleared"
+    "id": "cookies_cleared"
   }
 }
 ```
@@ -198,7 +198,7 @@ Obtiene una cookie específica por nombre.
     "operator": "cookies",
     "action": "get_by_name",
     "name": "session_id",
-    "result": "cookie_by_name"
+    "id": "cookie_by_name"
   }
 }
 ```
@@ -228,7 +228,7 @@ Obtiene todas las cookies de un dominio específico.
     "operator": "cookies",
     "action": "get_by_domain",
     "domain": ".example.com",
-    "result": "cookies_by_domain"
+    "id": "cookies_by_domain"
   }
 }
 ```
@@ -271,7 +271,7 @@ Obtiene todas las cookies de un dominio específico.
       "selenium": {
         "operator": "open",
         "url": "https://example.com",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
@@ -300,14 +300,14 @@ Obtiene todas las cookies de un dominio específico.
             "path": "/settings"
           }
         ],
-        "result": "session_cookies_added"
+        "id": "session_cookies_added"
       }
     },
     {
       "selenium": {
         "operator": "navigate",
         "action": "refresh",
-        "result": "page_refreshed"
+        "id": "page_refreshed"
       }
     }
   ]
@@ -327,7 +327,7 @@ Obtiene todas las cookies de un dominio específico.
       "selenium": {
         "operator": "open",
         "url": "https://app.example.com/login",
-        "result": "login_page_open"
+        "id": "login_page_open"
       }
     },
     {
@@ -335,7 +335,7 @@ Obtiene todas las cookies de un dominio específico.
         "operator": "type",
         "selector": "input[name='username']",
         "value": "user@example.com",
-        "result": "username_typed"
+        "id": "username_typed"
       }
     },
     {
@@ -343,14 +343,14 @@ Obtiene todas las cookies de un dominio específico.
         "operator": "type",
         "selector": "input[name='password']",
         "value": "password123",
-        "result": "password_typed"
+        "id": "password_typed"
       }
     },
     {
       "selenium": {
         "operator": "submit",
         "selector": "form",
-        "result": "form_submitted"
+        "id": "form_submitted"
       }
     },
     {
@@ -358,14 +358,14 @@ Obtiene todas las cookies de un dominio específico.
         "operator": "wait",
         "type": "element",
         "selector": ".dashboard",
-        "result": "dashboard_loaded"
+        "id": "dashboard_loaded"
       }
     },
     {
       "selenium": {
         "operator": "cookies",
         "action": "get",
-        "result": "auth_cookies"
+        "id": "auth_cookies"
       }
     }
   ]
@@ -385,14 +385,14 @@ Obtiene todas las cookies de un dominio específico.
       "selenium": {
         "operator": "open",
         "url": "https://example.com",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
       "selenium": {
         "operator": "cookies",
         "action": "get",
-        "result": "cookies_before"
+        "id": "cookies_before"
       }
     },
     {
@@ -400,21 +400,21 @@ Obtiene todas las cookies de un dominio específico.
         "operator": "cookies",
         "action": "delete",
         "name": "tracking_cookie",
-        "result": "tracking_deleted"
+        "id": "tracking_deleted"
       }
     },
     {
       "selenium": {
         "operator": "cookies",
         "action": "clear",
-        "result": "all_cleared"
+        "id": "all_cleared"
       }
     },
     {
       "selenium": {
         "operator": "cookies",
         "action": "get",
-        "result": "cookies_after"
+        "id": "cookies_after"
       }
     }
   ]
@@ -434,7 +434,7 @@ Obtiene todas las cookies de un dominio específico.
       "selenium": {
         "operator": "open",
         "url": "https://example.com",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
@@ -464,7 +464,7 @@ Obtiene todas las cookies de un dominio específico.
             "expiry": "30d"
           }
         ],
-        "result": "preferences_set"
+        "id": "preferences_set"
       }
     }
   ]
@@ -489,7 +489,7 @@ Obtiene todas las cookies de un dominio específico.
     "secure": true,
     "httpOnly": true,
     "expiry": "2024-12-31T23:59:59Z",
-    "result": "secure_cookie_added"
+    "id": "secure_cookie_added"
   }
 }
 ```
@@ -507,7 +507,7 @@ Obtiene todas las cookies de un dominio específico.
     "path": "/",
     "secure": true,
     "httpOnly": true,
-    "result": "session_cookie_added"
+    "id": "session_cookie_added"
   }
 }
 ```
@@ -524,7 +524,7 @@ Obtiene todas las cookies de un dominio específico.
     "domain": ".example.com",
     "path": "/",
     "expiry": "730d",
-    "result": "analytics_cookie_added"
+    "id": "analytics_cookie_added"
   }
 }
 ```
@@ -573,7 +573,7 @@ Obtiene todas las cookies de un dominio específico.
     "name": "test_cookie",
     "value": "test_value",
     "domain": ".example.com",
-    "result": "cookie_added"
+    "id": "cookie_added"
   }
 }
 ```
@@ -604,14 +604,14 @@ Obtiene todas las cookies de un dominio específico.
   "selenium": {
     "operator": "cookies",
     "action": "get",
-    "result": "old_cookies"
+    "id": "old_cookies"
   }
 },
 {
   "selenium": {
     "operator": "open",
     "url": "https://new.example.com",
-    "result": "new_site_open"
+    "id": "new_site_open"
   }
 },
 {
@@ -619,7 +619,7 @@ Obtiene todas las cookies de un dominio específico.
     "operator": "cookies",
     "action": "add",
     "cookies": "{{old_cookies}}",
-    "result": "cookies_migrated"
+    "id": "cookies_migrated"
   }
 }
 ```
@@ -631,14 +631,14 @@ Obtiene todas las cookies de un dominio específico.
   "selenium": {
     "operator": "cookies",
     "action": "get",
-    "result": "cookies_backup"
+    "id": "cookies_backup"
   }
 },
 {
   "selenium": {
     "operator": "javascript",
     "from_string": "localStorage.setItem('cookies_backup', JSON.stringify({{cookies_backup}}))",
-    "result": "backup_saved"
+    "id": "backup_saved"
   }
 }
 ```
@@ -650,7 +650,7 @@ Obtiene todas las cookies de un dominio específico.
   "selenium": {
     "operator": "javascript",
     "from_string": "return JSON.parse(localStorage.getItem('cookies_backup'))",
-    "result": "cookies_restore"
+    "id": "cookies_restore"
   }
 },
 {
@@ -658,7 +658,7 @@ Obtiene todas las cookies de un dominio específico.
     "operator": "cookies",
     "action": "add",
     "cookies": "{{cookies_restore}}",
-    "result": "cookies_restored"
+    "id": "cookies_restored"
   }
 }
 ```
@@ -674,14 +674,14 @@ Obtiene todas las cookies de un dominio específico.
   "selenium": {
     "operator": "cookies",
     "action": "get",
-    "result": "current_cookies"
+    "id": "current_cookies"
   }
 },
 {
   "selenium": {
     "operator": "javascript",
     "from_string": "console.log('Cookies actuales:', {{current_cookies}})",
-    "result": "cookies_logged"
+    "id": "cookies_logged"
   }
 }
 ```
@@ -693,14 +693,14 @@ Obtiene todas las cookies de un dominio específico.
   "selenium": {
     "operator": "cookies",
     "action": "get",
-    "result": "all_cookies"
+    "id": "all_cookies"
   }
 },
 {
   "selenium": {
     "operator": "javascript",
     "from_string": "return {{all_cookies}}.length",
-    "result": "cookie_count"
+    "id": "cookie_count"
   }
 }
 ```

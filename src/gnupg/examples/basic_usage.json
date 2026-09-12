@@ -13,7 +13,7 @@
     {
       "gnupg": {
         "operator": "check_dependencies",
-        "result": "dependency_status"
+        "id": "dependency_status"
       }
     },
     {
@@ -29,7 +29,7 @@
             {
               "gnupg": {
                 "operator": "system_info",
-                "result": "system_info"
+                "id": "system_info"
               }
             },
             {
@@ -40,7 +40,7 @@
             {
               "gnupg": {
                 "operator": "test_functionality",
-                "result": "test_results"
+                "id": "test_results"
               }
             },
             {

@@ -9,7 +9,7 @@
     {
       "ai_native": {
         "operator": "get_ai_info",
-        "result": "plugin_info"
+        "id": "plugin_info"
       }
     },
     {
@@ -60,7 +60,7 @@
     {
       "ai_native": {
         "operator": "install_dependencies",
-        "result": "install_result"
+        "id": "install_result"
       }
     },
     {
@@ -87,7 +87,7 @@
               "ai_native": {
                 "operator": "test_model",
                 "prompt": "Crear una función que procese datos JSON de una API REST con manejo de errores",
-                "result": "test_result"
+                "id": "test_result"
               }
             },
             {
@@ -154,7 +154,7 @@
     {
       "ai_native": {
         "operator": "get_model_info",
-        "result": "model_info"
+        "id": "model_info"
       }
     },
     {

@@ -21,7 +21,7 @@
         "destination": "./original_{{fecha}}.zip",
         "format": "zip",
         "compression_level": 9,
-        "result": "zip_original"
+        "id": "zip_original"
       }
     },
     {
@@ -30,7 +30,7 @@
         "source": "{{zip_original.destination}}",
         "destination": "./convertido_{{fecha}}.tar.gz",
         "target_format": "tar.gz",
-        "result": "conversion_targz"
+        "id": "conversion_targz"
       }
     },
     {
@@ -39,7 +39,7 @@
         "source": "{{zip_original.destination}}",
         "destination": "./convertido_{{fecha}}.tar.bz2",
         "target_format": "tar.bz2",
-        "result": "conversion_tarbz2"
+        "id": "conversion_tarbz2"
       }
     },
     {
@@ -48,7 +48,7 @@
         "source": "{{zip_original.destination}}",
         "destination": "./convertido_{{fecha}}.tar.xz",
         "target_format": "tar.xz",
-        "result": "conversion_tarxz"
+        "id": "conversion_tarxz"
       }
     },
     {

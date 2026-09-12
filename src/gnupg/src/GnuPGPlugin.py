@@ -224,37 +224,37 @@ class GnuPGPlugin(PluginBase):
             "configure_agent", "check_agent_status"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
-        """Execute a GnuPG command."""
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
+        """Execute a GnuPG operator."""
         # Verificar dependencias antes de comandos críticos
-        if command in ["generate_key", "encrypt_file", "decrypt_file", "sign_file"]:
+        if operator in ["generate_key", "encrypt_file", "decrypt_file", "sign_file"]:
             if not self.dependency_status['all_satisfied']:
                 raise RuntimeError("Dependencies not satisfied. Please install GnuPG and required packages.")
         
         try:
             # Key management commands
-            if command in ["generate_key", "list_keys", "import_key", "export_key", 
+            if operator in ["generate_key", "list_keys", "import_key", "export_key", 
                           "delete_key", "edit_key", "sign_key", "revoke_key", "trust_key"]:
-                return self.key_manager.execute(command, config)
+                return self.key_manager.execute(operator, config)
             
             # Encryption/Decryption commands
-            elif command in ["encrypt_file", "decrypt_file", "encrypt_text", "decrypt_text",
+            elif operator in ["encrypt_file", "decrypt_file", "encrypt_text", "decrypt_text",
                            "symmetric_encrypt", "symmetric_decrypt"]:
-                return self.encryption.execute(command, config)
+                return self.encryption.execute(operator, config)
             
             # Signing/Verification commands
-            elif command in ["sign_file", "verify_signature", "clearsign", "detached_sign",
+            elif operator in ["sign_file", "verify_signature", "clearsign", "detached_sign",
                            "sign_text", "verify_text"]:
-                return self.signing.execute(command, config)
+                return self.signing.execute(operator, config)
             
             # Utility commands
-            elif command in ["check_dependencies", "system_info", "test_functionality",
+            elif operator in ["check_dependencies", "system_info", "test_functionality",
                            "configure_agent", "check_agent_status"]:
-                return self.utils.execute(command, config)
+                return self.utils.execute(operator, config)
             
             else:
-                raise ValueError(f"Unknown command: {command}")
+                raise ValueError(f"Unknown operator: {operator}")
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing command '{command}': {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing operator '{operator}': {str(e)}")
             raise

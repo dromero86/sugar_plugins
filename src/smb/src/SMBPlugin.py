@@ -129,63 +129,63 @@ class SMBPlugin(PluginBase):
             Output.Console(self.plugin_name, f"Auto-connect error for {connection_name}: {str(e)}")
             return False
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute SMB plugin command.
+        Execute SMB plugin operator.
         
         Args:
-            command: The command to execute
-            config: Configuration dictionary for the command
+            operator: The operator to execute
+            config: Configuration dictionary for the operator
             
         Returns:
-            The result of the command execution
+            The result of the operator execution
         """
         try:
             # Interpolate variables in config
             config = self.interpolate_variables(config)
             
-            Output.Console(self.plugin_name, f"Executing command: {command}")
+            Output.Console(self.plugin_name, f"Executing operator: {operator}")
             
-            # Route to appropriate method based on command
-            if command == "connect":
+            # Route to appropriate method based on operator
+            if operator == "connect":
                 return self._handle_connect(config)
-            elif command == "test_connection":
+            elif operator == "test_connection":
                 return self._handle_test_connection(config)
-            elif command == "disconnect":
+            elif operator == "disconnect":
                 return self._handle_disconnect(config)
-            elif command == "upload":
+            elif operator == "upload":
                 return self._handle_upload(config)
-            elif command == "upload_multiple":
+            elif operator == "upload_multiple":
                 return self._handle_upload_multiple(config)
-            elif command == "download":
+            elif operator == "download":
                 return self._handle_download(config)
-            elif command == "download_multiple":
+            elif operator == "download_multiple":
                 return self._handle_download_multiple(config)
-            elif command == "list_directory":
+            elif operator == "list_directory":
                 return self._handle_list_directory(config)
-            elif command == "create_directory":
+            elif operator == "create_directory":
                 return self._handle_create_directory(config)
-            elif command == "delete_directory":
+            elif operator == "delete_directory":
                 return self._handle_delete_directory(config)
-            elif command == "delete_file":
+            elif operator == "delete_file":
                 return self._handle_delete_file(config)
-            elif command == "get_file_info":
+            elif operator == "get_file_info":
                 return self._handle_get_file_info(config)
-            elif command == "get_session_info":
+            elif operator == "get_session_info":
                 return self._handle_get_session_info(config)
-            elif command == "get_transfer_stats":
+            elif operator == "get_transfer_stats":
                 return self._handle_get_transfer_stats(config)
-            elif command == "search_files":
+            elif operator == "search_files":
                 return self._handle_search_files(config)
-            elif command == "sync_directory":
+            elif operator == "sync_directory":
                 return self._handle_sync_directory(config)
-            elif command == "create_backup":
+            elif operator == "create_backup":
                 return self._handle_create_backup(config)
             else:
                 return {
                     "status": "error",
-                    "error": "Unknown command",
-                    "details": f"Command '{command}' is not supported"
+                    "error": "Unknown operator",
+                    "details": f"Command '{operator}' is not supported"
                 }
                 
         except Exception as e:

@@ -10,7 +10,7 @@
     {
       "playwright": {
         "operator": "launch_browser",
-        "result": "browser"
+        "id": "browser"
       }
     },
     {
@@ -42,7 +42,7 @@
     {
       "playwright": {
         "operator": "get_title",
-        "result": "page_title"
+        "id": "page_title"
       }
     },
     {
@@ -131,7 +131,7 @@
       "playwright": {
         "operator": "screenshot",
         "path": "./screenshots/form_filled.png",
-        "result": "form_screenshot"
+        "id": "form_screenshot"
       }
     },
     {
@@ -159,7 +159,7 @@
     {
       "playwright": {
         "operator": "get_url",
-        "result": "final_url"
+        "id": "final_url"
       }
     },
     {
@@ -171,7 +171,7 @@
       "playwright": {
         "operator": "screenshot",
         "path": "./screenshots/form_submitted.png",
-        "result": "submitted_screenshot"
+        "id": "submitted_screenshot"
       }
     },
     {

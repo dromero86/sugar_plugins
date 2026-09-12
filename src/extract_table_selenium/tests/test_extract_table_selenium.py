@@ -172,7 +172,7 @@ class TestExtractTableSeleniumPlugin(unittest.TestCase):
                 "format": "objects",
                 "scope": "tbody"
             },
-            "result": "table_data"
+            "id": "table_data"
         }
         
         result = self.plugin._extract_table(config)
@@ -197,7 +197,7 @@ class TestExtractTableSeleniumPlugin(unittest.TestCase):
                 "format": "objects",
                 "scope": "tbody"
             },
-            "result": "table_data"
+            "id": "table_data"
         }
         
         with patch.object(self.plugin, '_extract_table_data', return_value=[]):
@@ -212,7 +212,7 @@ class TestExtractTableSeleniumPlugin(unittest.TestCase):
         
         config = {
             "selector": "table",
-            "result": "table_data"
+            "id": "table_data"
         }
         
         result = self.plugin._extract_table(config)
@@ -493,7 +493,7 @@ class TestExtractTableSeleniumPlugin(unittest.TestCase):
         self.plugin.driver = MockWebDriver()
         
         config = {
-            "result": "page_source"
+            "id": "page_source"
         }
         
         result = self.plugin._get_page_source(config)

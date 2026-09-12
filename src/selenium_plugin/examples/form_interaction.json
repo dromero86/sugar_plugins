@@ -16,7 +16,7 @@
       "selenium": {
         "operator": "open",
         "url": "https://httpbin.org/forms/post",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
@@ -24,7 +24,7 @@
         "operator": "wait",
         "type": "element",
         "selector": "form",
-        "result": "form_ready"
+        "id": "form_ready"
       }
     },
     {
@@ -32,7 +32,7 @@
         "operator": "type",
         "selector": "input[name='custname']",
         "value": "Juan Pérez",
-        "result": "name_typed"
+        "id": "name_typed"
       }
     },
     {
@@ -40,7 +40,7 @@
         "operator": "type",
         "selector": "input[name='custtel']",
         "value": "123-456-7890",
-        "result": "phone_typed"
+        "id": "phone_typed"
       }
     },
     {
@@ -48,7 +48,7 @@
         "operator": "type",
         "selector": "input[name='custemail']",
         "value": "juan@example.com",
-        "result": "email_typed"
+        "id": "email_typed"
       }
     },
     {
@@ -56,14 +56,14 @@
         "operator": "select",
         "selector": "select[name='size']",
         "value": "large",
-        "result": "size_selected"
+        "id": "size_selected"
       }
     },
     {
       "selenium": {
         "operator": "click",
         "selector": "input[name='topping'][value='bacon']",
-        "result": "topping_selected"
+        "id": "topping_selected"
       }
     },
     {
@@ -71,21 +71,21 @@
         "operator": "type",
         "selector": "textarea[name='comments']",
         "value": "Sin cebolla, por favor",
-        "result": "comments_typed"
+        "id": "comments_typed"
       }
     },
     {
       "selenium": {
         "operator": "screenshot",
         "file": "./form_filled.png",
-        "result": "form_screenshot"
+        "id": "form_screenshot"
       }
     },
     {
       "selenium": {
         "operator": "submit",
         "selector": "form",
-        "result": "form_submitted"
+        "id": "form_submitted"
       }
     },
     {
@@ -93,21 +93,21 @@
         "operator": "wait",
         "type": "time",
         "seconds": 3,
-        "result": "submission_wait"
+        "id": "submission_wait"
       }
     },
     {
       "selenium": {
         "operator": "screenshot",
         "file": "./form_result.png",
-        "result": "result_screenshot"
+        "id": "result_screenshot"
       }
     },
     {
       "selenium": {
         "operator": "find",
         "selector": "body",
-        "result": "response_content"
+        "id": "response_content"
       }
     }
   ]

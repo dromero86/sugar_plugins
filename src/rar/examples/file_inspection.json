@@ -10,7 +10,7 @@
       "rar": {
         "operator": "rar_info",
         "source": "./archivo.rar",
-        "result": "file_info"
+        "id": "file_info"
       }
     },
     {
@@ -117,7 +117,7 @@
       "rar": {
         "operator": "rar_test",
         "source": "./archivo.rar",
-        "result": "test_result"
+        "id": "test_result"
       }
     },
     {

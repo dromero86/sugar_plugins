@@ -98,7 +98,7 @@
         "share": "shared_folder",
         "username": "user",
         "password": "password123",
-        "result": "main_server_test"
+        "id": "main_server_test"
       }
     },
     {
@@ -123,7 +123,7 @@
         "share": "backup_share",
         "username": "backup_user",
         "password": "backup_pass",
-        "result": "backup_server_test"
+        "id": "backup_server_test"
       }
     },
     {
@@ -149,7 +149,7 @@
         "username": "user",
         "password": "password123",
         "session_name": "main_session",
-        "result": "main_connection"
+        "id": "main_connection"
       }
     },
     {
@@ -182,7 +182,7 @@
                 "operator": "list_directory",
                 "session": "main_session",
                 "path": "/",
-                "result": "main_directory"
+                "id": "main_directory"
               }
             },
             {
@@ -213,7 +213,7 @@
                 "username": "backup_user",
                 "password": "backup_pass",
                 "session_name": "backup_session",
-                "result": "backup_connection"
+                "id": "backup_connection"
               }
             },
             {
@@ -251,7 +251,7 @@
                         "operator": "list_directory",
                         "session": "main_session",
                         "path": "/",
-                        "result": "main_files"
+                        "id": "main_files"
                       }
                     },
                     {
@@ -264,7 +264,7 @@
                         "operator": "list_directory",
                         "session": "backup_session",
                         "path": "/",
-                        "result": "backup_files"
+                        "id": "backup_files"
                       }
                     },
                     {
@@ -296,14 +296,14 @@
                       "smb": {
                         "operator": "get_session_info",
                         "session": "main_session",
-                        "result": "main_session_info"
+                        "id": "main_session_info"
                       }
                     },
                     {
                       "smb": {
                         "operator": "get_session_info",
                         "session": "backup_session",
-                        "result": "backup_session_info"
+                        "id": "backup_session_info"
                       }
                     },
                     {
@@ -335,14 +335,14 @@
                       "smb": {
                         "operator": "disconnect",
                         "session": "main_session",
-                        "result": "main_disconnect"
+                        "id": "main_disconnect"
                       }
                     },
                     {
                       "smb": {
                         "operator": "disconnect",
                         "session": "backup_session",
-                        "result": "backup_disconnect"
+                        "id": "backup_disconnect"
                       }
                     },
                     {
@@ -378,7 +378,7 @@
                       "smb": {
                         "operator": "disconnect",
                         "session": "main_session",
-                        "result": "main_disconnect"
+                        "id": "main_disconnect"
                       }
                     },
                     {

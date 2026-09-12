@@ -6,7 +6,7 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
 
 ### 🔄 Cambios Principales
 
-1. **Sintaxis unificada** `@selenium/` con operadores específicos
+1. **Sintaxis unificada** `{"selenium": {"operator": ...}}` con operadores específicos
 2. **Configuración simplificada** en la sección `meta`
 3. **Sistema avanzado de cookies** con arrays y propiedades completas
 4. **Soporte completo** para todos los navegadores
@@ -61,7 +61,7 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
   "selenium": {
     "operator": "click",
     "selector": "#btn",
-    "result": "is_clicked"
+    "id": "is_clicked"
   }
 },
 {
@@ -69,14 +69,14 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
     "operator": "type",
     "selector": "input[name='q']",
     "value": "Sugar",
-    "result": "is_typed"
+    "id": "is_typed"
   }
 },
 {
   "selenium": {
     "operator": "screenshot",
     "file": "./result.png",
-    "result": "screenshot"
+    "id": "screenshot"
   }
 }
 ```
@@ -96,7 +96,7 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
   "selenium": {
     "operator": "open",
     "url": "https://www.google.com",
-    "result": "is_open"
+    "id": "is_open"
   }
 }
 ```
@@ -116,7 +116,7 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
   "selenium": {
     "operator": "find",
     "selector": ".item",
-    "result": "found"
+    "id": "found"
   }
 }
 ```
@@ -146,7 +146,7 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
     "domain": ".example.com",
     "secure": true,
     "httpOnly": false,
-    "result": "cookie_added"
+    "id": "cookie_added"
   }
 }
 ```
@@ -185,7 +185,7 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
         "path": "/user"
       }
     ],
-    "result": "cookies_added"
+    "id": "cookies_added"
   }
 }
 ```
@@ -274,7 +274,7 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
       "selenium": {
         "operator": "open",
         "url": "https://www.google.com",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
@@ -282,7 +282,7 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
         "operator": "wait",
         "type": "time",
         "seconds": 2,
-        "result": "is_waited"
+        "id": "is_waited"
       }
     },
     {
@@ -290,14 +290,14 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
         "operator": "type",
         "selector": "input[name='q']",
         "value": "Sugar automation",
-        "result": "is_typed"
+        "id": "is_typed"
       }
     },
     {
       "selenium": {
         "operator": "click",
         "selector": "input[name='btnK']",
-        "result": "is_clicked"
+        "id": "is_clicked"
       }
     },
     {
@@ -305,28 +305,28 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
         "operator": "wait",
         "type": "element",
         "selector": "#search",
-        "result": "search_loaded"
+        "id": "search_loaded"
       }
     },
     {
       "selenium": {
         "operator": "find",
         "selector": ".g",
-        "result": "results_found"
+        "id": "results_found"
       }
     },
     {
       "selenium": {
         "operator": "screenshot",
         "file": "./google_result.png",
-        "result": "screenshot"
+        "id": "screenshot"
       }
     },
     {
       "selenium": {
         "operator": "cookies",
         "action": "get",
-        "result": "cookies"
+        "id": "cookies"
       }
     }
   ]
@@ -344,7 +344,7 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
     "operator": "download",
     "url": "https://example.com/file.pdf",
     "file": "./downloads/file.pdf",
-    "result": "downloaded"
+    "id": "downloaded"
   }
 }
 ```
@@ -366,7 +366,7 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
         "expiry": "2024-12-31T23:59:59Z"
       }
     ],
-    "result": "cookies_added"
+    "id": "cookies_added"
   }
 }
 ```
@@ -378,7 +378,7 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
     "operator": "cookies",
     "action": "get_by_name",
     "name": "session_id",
-    "result": "cookie_by_name"
+    "id": "cookie_by_name"
   }
 }
 ```
@@ -389,7 +389,7 @@ El plugin Selenium v2.0 introduce cambios significativos en la sintaxis y funcio
 
 ### 1. **Sintaxis Obligatoria**
 - Todos los comandos deben usar la sintaxis `selenium` con `operator`
-- El parámetro `result` es recomendado para capturar resultados
+- El parámetro `id` es recomendado para capturar resultados en una variable Sugar
 
 ### 2. **Manejo de Errores**
 - Mejor gestión de errores con mensajes descriptivos
@@ -480,7 +480,7 @@ migrate_selenium_v1_to_v2('script_v1.json', 'script_v2.json')
 ### Durante la Migración
 - [ ] Migrar configuración `meta` (sin cambios)
 - [ ] Convertir comandos directos a sintaxis `selenium`
-- [ ] Agregar parámetros `result` donde sea necesario
+- [ ] Agregar parámetros `id` donde sea necesario
 - [ ] Actualizar comandos `open_browser` → `open`
 - [ ] Actualizar comandos `find_element` → `find`
 - [ ] Migrar sistema de cookies si se usa

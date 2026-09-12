@@ -81,12 +81,12 @@ class SerialPlugin(PluginBase):
             "get_status", "get_info", "monitor", "log_activity"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
         Ejecuta un comando del plugin.
         
         Args:
-            command: Comando a ejecutar
+            operator: Comando a ejecutar
             config: Configuración del comando
             
         Returns:
@@ -94,74 +94,74 @@ class SerialPlugin(PluginBase):
         """
         try:
             # Comandos de conexión
-            if command == "connect":
+            if operator == "connect":
                 return self._connect(config)
-            elif command == "disconnect":
+            elif operator == "disconnect":
                 return self._disconnect(config)
-            elif command == "list_ports":
+            elif operator == "list_ports":
                 return self._list_ports(config)
-            elif command == "test_connection":
+            elif operator == "test_connection":
                 return self._test_connection(config)
             
             # Comandos de comunicación
-            elif command == "write":
+            elif operator == "write":
                 return self._write(config)
-            elif command == "read":
+            elif operator == "read":
                 return self._read(config)
-            elif command == "read_line":
+            elif operator == "read_line":
                 return self._read_line(config)
-            elif command == "read_until":
+            elif operator == "read_until":
                 return self._read_until(config)
-            elif command == "read_bytes":
+            elif operator == "read_bytes":
                 return self._read_bytes(config)
-            elif command == "flush":
+            elif operator == "flush":
                 return self._flush(config)
             
             # Comandos de configuración
-            elif command == "configure":
+            elif operator == "configure":
                 return self._configure(config)
-            elif command == "get_config":
+            elif operator == "get_config":
                 return self._get_config(config)
-            elif command == "set_timeout":
+            elif operator == "set_timeout":
                 return self._set_timeout(config)
-            elif command == "set_baudrate":
+            elif operator == "set_baudrate":
                 return self._set_baudrate(config)
-            elif command == "set_parity":
+            elif operator == "set_parity":
                 return self._set_parity(config)
-            elif command == "set_stopbits":
+            elif operator == "set_stopbits":
                 return self._set_stopbits(config)
-            elif command == "set_bytesize":
+            elif operator == "set_bytesize":
                 return self._set_bytesize(config)
             
             # Comandos de control de líneas
-            elif command == "set_dtr":
+            elif operator == "set_dtr":
                 return self._set_dtr(config)
-            elif command == "set_rts":
+            elif operator == "set_rts":
                 return self._set_rts(config)
-            elif command == "get_cts":
+            elif operator == "get_cts":
                 return self._get_cts(config)
-            elif command == "get_dsr":
+            elif operator == "get_dsr":
                 return self._get_dsr(config)
-            elif command == "get_ri":
+            elif operator == "get_ri":
                 return self._get_ri(config)
-            elif command == "get_cd":
+            elif operator == "get_cd":
                 return self._get_cd(config)
             
             # Comandos de monitoreo
-            elif command == "get_status":
+            elif operator == "get_status":
                 return self._get_status(config)
-            elif command == "get_info":
+            elif operator == "get_info":
                 return self._get_info(config)
-            elif command == "monitor":
+            elif operator == "monitor":
                 return self._monitor(config)
-            elif command == "log_activity":
+            elif operator == "log_activity":
                 return self._log_activity(config)
             
             else:
-                raise ValueError(f"Comando desconocido: {command}")
+                raise ValueError(f"Comando desconocido: {operator}")
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error ejecutando comando '{command}': {str(e)}")
+            Output.Console(self.plugin_name, f"Error ejecutando comando '{operator}': {str(e)}")
             raise
     
     def meta_hook(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -250,7 +250,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -279,7 +279,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -305,7 +305,7 @@ class SerialPlugin(PluginBase):
         
         # Guardar resultado en variable si se especifica
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -336,7 +336,7 @@ class SerialPlugin(PluginBase):
         
         # Guardar resultado en variable si se especifica
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -371,7 +371,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -406,7 +406,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -437,7 +437,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -471,7 +471,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -506,7 +506,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -531,7 +531,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -577,7 +577,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -612,7 +612,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -661,7 +661,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -689,7 +689,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -715,7 +715,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -741,7 +741,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -767,7 +767,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -793,7 +793,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -825,7 +825,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -856,7 +856,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -896,7 +896,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     
@@ -925,7 +925,7 @@ class SerialPlugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
     

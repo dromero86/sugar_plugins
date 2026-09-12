@@ -154,45 +154,45 @@ class DatabasePlugin(PluginBase):
             "describe_table"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute a database command.
+        Execute a database operator.
         
         Args:
-            command: Command to execute
-            config: Configuration for the command
+            operator: Command to execute
+            config: Configuration for the operator
             
         Returns:
             Command result
         """
         try:
-            if command == "connect":
+            if operator == "connect":
                 return self._connect(config)
-            elif command == "disconnect":
+            elif operator == "disconnect":
                 return self._disconnect(config)
-            elif command == "execute":
+            elif operator == "execute":
                 return self._execute_sql(config)
-            elif command == "query":
+            elif operator == "query":
                 return self._query_data(config)
-            elif command == "begin_transaction":
+            elif operator == "begin_transaction":
                 return self._begin_transaction(config)
-            elif command == "commit":
+            elif operator == "commit":
                 return self._commit_transaction(config)
-            elif command == "rollback":
+            elif operator == "rollback":
                 return self._rollback_transaction(config)
-            elif command == "test_connection":
+            elif operator == "test_connection":
                 return self._test_connection(config)
-            elif command == "get_connection_info":
+            elif operator == "get_connection_info":
                 return self._get_connection_info(config)
-            elif command == "list_tables":
+            elif operator == "list_tables":
                 return self._list_tables(config)
-            elif command == "describe_table":
+            elif operator == "describe_table":
                 return self._describe_table(config)
             else:
-                raise ValueError(f"Unknown command: {command}")
+                raise ValueError(f"Unknown operator: {operator}")
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing {command}: {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing {operator}: {str(e)}")
             raise
     
     def _connect(self, config: Dict[str, Any]) -> bool:

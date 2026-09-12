@@ -2,7 +2,7 @@
 
 ## Resumen Ejecutivo
 
-Esta propuesta presenta una reestructuración completa del plugin de Selenium para Sugar, implementando la sintaxis `@selenium/` solicitada. El plugin ha sido rediseñado desde cero para proporcionar una experiencia de automatización web más consistente, robusta y fácil de usar.
+Esta propuesta presenta una reestructuración completa del plugin de Selenium para Sugar, implementando la sintaxis unificada `{"selenium": {"operator": ...}}` solicitada. El plugin ha sido rediseñado desde cero para proporcionar una experiencia de automatización web más consistente, robusta y fácil de usar.
 
 ## Características Principales
 

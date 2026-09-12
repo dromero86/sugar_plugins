@@ -11,7 +11,7 @@
       "selenium": {
         "operator": "open",
         "url": "https://www.google.com",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
@@ -19,7 +19,7 @@
         "operator": "wait",
         "type": "time",
         "seconds": 2,
-        "result": "is_waited"
+        "id": "is_waited"
       }
     },
     {
@@ -27,14 +27,14 @@
         "operator": "type",
         "selector": "input[name='q']",
         "value": "Sugar automation",
-        "result": "is_typed"
+        "id": "is_typed"
       }
     },
     {
       "selenium": {
         "operator": "click",
         "selector": "input[name='btnK']",
-        "result": "is_clicked"
+        "id": "is_clicked"
       }
     },
     {
@@ -42,14 +42,14 @@
         "operator": "wait",
         "type": "element",
         "selector": "#search",
-        "result": "search_loaded"
+        "id": "search_loaded"
       }
     },
     {
       "selenium": {
         "operator": "screenshot",
         "file": "./google_result.png",
-        "result": "screenshot"
+        "id": "screenshot"
       }
     }
   ]

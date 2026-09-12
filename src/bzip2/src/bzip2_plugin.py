@@ -303,28 +303,28 @@ class Bzip2Plugin(PluginBase):
             "test_sdk"               # Probar funcionalidades del SDK
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """Ejecutar un comando del plugin"""
-        if command == "bzip2_compress":
+        if operator == "bzip2_compress":
             return self._compress_command(config)
-        elif command == "bzip2_decompress":
+        elif operator == "bzip2_decompress":
             return self._decompress_command(config)
-        elif command == "bzip2_info":
+        elif operator == "bzip2_info":
             return self._info_command(config)
-        elif command == "bzip2_test":
+        elif operator == "bzip2_test":
             return self._test_command(config)
-        elif command == "bzip2_convert":
+        elif operator == "bzip2_convert":
             return self._convert_command(config)
-        elif command == "bzip2_merge":
+        elif operator == "bzip2_merge":
             return self._merge_command(config)
-        elif command == "bzip2_split":
+        elif operator == "bzip2_split":
             return self._split_command(config)
-        elif command == "sdk_info":
+        elif operator == "sdk_info":
             return self._sdk_info_command(config)
-        elif command == "test_sdk":
+        elif operator == "test_sdk":
             return self._test_sdk_command(config)
         else:
-            raise ValueError(f"Comando desconocido: {command}")
+            raise ValueError(f"Comando desconocido: {operator}")
     
     def _compress_command(self, config: Dict[str, Any]) -> Dict[str, Any]:
         """Comprimir archivos usando bzip2"""
@@ -362,7 +362,7 @@ class Bzip2Plugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             Output.Console(self.plugin_name, f"Compression completed: {result['compression_ratio']}% reduction")
             return result
@@ -406,7 +406,7 @@ class Bzip2Plugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             Output.Console(self.plugin_name, f"Decompression completed")
             return result
@@ -441,7 +441,7 @@ class Bzip2Plugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             return result
             
@@ -476,7 +476,7 @@ class Bzip2Plugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             Output.Console(self.plugin_name, f"Integrity test passed")
             return result
@@ -491,7 +491,7 @@ class Bzip2Plugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             Output.Console(self.plugin_name, f"Integrity test failed: {str(e)}")
             return result
@@ -543,7 +543,7 @@ class Bzip2Plugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             Output.Console(self.plugin_name, f"Conversion completed")
             return result
@@ -610,7 +610,7 @@ class Bzip2Plugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             Output.Console(self.plugin_name, f"Merge completed: {result['compression_ratio']}% reduction")
             return result
@@ -675,7 +675,7 @@ class Bzip2Plugin(PluginBase):
             
             # Guardar resultado en variable si se especifica
             if 'result' in config:
-                self.set_variable(config['result'], result)
+                self.set_variable(config['id'], result)
             
             Output.Console(self.plugin_name, f"Split completed: {len(chunk_files)} chunks created")
             return result
@@ -702,7 +702,7 @@ class Bzip2Plugin(PluginBase):
         
         # Guardar resultado en variable si se especifica
         if 'result' in config:
-            self.set_variable(config['result'], sdk_info)
+            self.set_variable(config['id'], sdk_info)
         
         return sdk_info
     
@@ -756,7 +756,7 @@ class Bzip2Plugin(PluginBase):
         
         # Guardar resultado en variable si se especifica
         if 'result' in config:
-            self.set_variable(config['result'], test_results)
+            self.set_variable(config['id'], test_results)
         
         Output.Console(self.plugin_name, f"SDK tests completed: {test_results['tests']}")
         return test_results

@@ -29,12 +29,12 @@ class Page:
         
         Output.Console(self.plugin.plugin_name, "Page component initialized")
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
         Execute page-related commands.
         
         Args:
-            command: Command to execute
+            operator: Command to execute
             config: Command configuration
             
         Returns:
@@ -42,129 +42,129 @@ class Page:
         """
         try:
             # Page management
-            if command == "new_page":
+            if operator == "new_page":
                 return self._new_page(config)
-            elif command == "close_page":
+            elif operator == "close_page":
                 return self._close_page(config)
             
             # Navigation
-            elif command == "goto":
+            elif operator == "goto":
                 return self._goto(config)
-            elif command == "go_back":
+            elif operator == "go_back":
                 return self._go_back(config)
-            elif command == "go_forward":
+            elif operator == "go_forward":
                 return self._go_forward(config)
-            elif command == "reload":
+            elif operator == "reload":
                 return self._reload(config)
             
             # Element interaction
-            elif command == "click":
+            elif operator == "click":
                 return self._click(config)
-            elif command == "type":
+            elif operator == "type":
                 return self._type(config)
-            elif command == "fill":
+            elif operator == "fill":
                 return self._fill(config)
-            elif command == "clear":
+            elif operator == "clear":
                 return self._clear(config)
-            elif command == "select_option":
+            elif operator == "select_option":
                 return self._select_option(config)
-            elif command == "check":
+            elif operator == "check":
                 return self._check(config)
-            elif command == "uncheck":
+            elif operator == "uncheck":
                 return self._uncheck(config)
-            elif command == "press":
+            elif operator == "press":
                 return self._press(config)
             
             # Element finding
-            elif command == "locator":
+            elif operator == "locator":
                 return self._locator(config)
-            elif command == "get_by_text":
+            elif operator == "get_by_text":
                 return self._get_by_text(config)
-            elif command == "get_by_role":
+            elif operator == "get_by_role":
                 return self._get_by_role(config)
-            elif command == "get_by_label":
+            elif operator == "get_by_label":
                 return self._get_by_label(config)
-            elif command == "get_by_placeholder":
+            elif operator == "get_by_placeholder":
                 return self._get_by_placeholder(config)
-            elif command == "get_by_test_id":
+            elif operator == "get_by_test_id":
                 return self._get_by_test_id(config)
             
             # Waiting
-            elif command == "wait_for_load_state":
+            elif operator == "wait_for_load_state":
                 return self._wait_for_load_state(config)
-            elif command == "wait_for_url":
+            elif operator == "wait_for_url":
                 return self._wait_for_url(config)
-            elif command == "wait_for_selector":
+            elif operator == "wait_for_selector":
                 return self._wait_for_selector(config)
-            elif command == "wait_for_element":
+            elif operator == "wait_for_element":
                 return self._wait_for_element(config)
             
             # JavaScript
-            elif command == "evaluate":
+            elif operator == "evaluate":
                 return self._evaluate(config)
-            elif command == "evaluate_handle":
+            elif operator == "evaluate_handle":
                 return self._evaluate_handle(config)
-            elif command == "get_content":
+            elif operator == "get_content":
                 return self._get_content(config)
-            elif command == "get_title":
+            elif operator == "get_title":
                 return self._get_title(config)
-            elif command == "get_url":
+            elif operator == "get_url":
                 return self._get_url(config)
             
             # Screenshots
-            elif command == "screenshot":
+            elif operator == "screenshot":
                 return self._screenshot(config)
-            elif command == "screenshot_element":
+            elif operator == "screenshot_element":
                 return self._screenshot_element(config)
             
             # Network
-            elif command == "route":
+            elif operator == "route":
                 return self._route(config)
-            elif command == "unroute":
+            elif operator == "unroute":
                 return self._unroute(config)
-            elif command == "set_extra_http_headers":
+            elif operator == "set_extra_http_headers":
                 return self._set_extra_http_headers(config)
             
             # Cookies and storage
-            elif command == "get_cookies":
+            elif operator == "get_cookies":
                 return self._get_cookies(config)
-            elif command == "add_cookies":
+            elif operator == "add_cookies":
                 return self._add_cookies(config)
-            elif command == "clear_cookies":
+            elif operator == "clear_cookies":
                 return self._clear_cookies(config)
-            elif command == "get_local_storage":
+            elif operator == "get_local_storage":
                 return self._get_local_storage(config)
-            elif command == "set_local_storage":
+            elif operator == "set_local_storage":
                 return self._set_local_storage(config)
-            elif command == "clear_local_storage":
+            elif operator == "clear_local_storage":
                 return self._clear_local_storage(config)
             
             # Advanced
-            elif command == "scroll_to":
+            elif operator == "scroll_to":
                 return self._scroll_to(config)
-            elif command == "hover":
+            elif operator == "hover":
                 return self._hover(config)
-            elif command == "drag_and_drop":
+            elif operator == "drag_and_drop":
                 return self._drag_and_drop(config)
-            elif command == "upload_file":
+            elif operator == "upload_file":
                 return self._upload_file(config)
-            elif command == "download_file":
+            elif operator == "download_file":
                 return self._download_file(config)
-            elif command == "emulate_device":
+            elif operator == "emulate_device":
                 return self._emulate_device(config)
-            elif command == "set_viewport_size":
+            elif operator == "set_viewport_size":
                 return self._set_viewport_size(config)
-            elif command == "set_geolocation":
+            elif operator == "set_geolocation":
                 return self._set_geolocation(config)
-            elif command == "set_permissions":
+            elif operator == "set_permissions":
                 return self._set_permissions(config)
             
             else:
-                Output.Console(self.plugin.plugin_name, f"Unknown page command: {command}")
+                Output.Console(self.plugin.plugin_name, f"Unknown page operator: {operator}")
                 return None
                 
         except Exception as e:
-            Output.Console(self.plugin.plugin_name, f"Error in page command '{command}': {str(e)}")
+            Output.Console(self.plugin.plugin_name, f"Error in page operator '{operator}': {str(e)}")
             raise
     
     def _new_page(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -178,7 +178,7 @@ class Page:
             
             result = {"success": True, "message": "Page created successfully"}
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             
@@ -196,7 +196,7 @@ class Page:
             
             result = {"success": True, "message": "Page closed successfully"}
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             
@@ -228,7 +228,7 @@ class Page:
             }
             
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             
@@ -261,7 +261,7 @@ class Page:
             }
             
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             
@@ -293,7 +293,7 @@ class Page:
             }
             
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             
@@ -322,7 +322,7 @@ class Page:
             }
             
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             
@@ -353,7 +353,7 @@ class Page:
             }
             
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             
@@ -376,7 +376,7 @@ class Page:
             }
             
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             
@@ -399,7 +399,7 @@ class Page:
             }
             
             if "result" in config:
-                self.plugin.set_variable(config["result"], result)
+                self.plugin.set_variable(config["id"], result)
             
             return result
             
@@ -433,7 +433,7 @@ class Page:
             }
             
             if "result" in config:
-                self.plugin.set_variable(config["result"], result_data)
+                self.plugin.set_variable(config["id"], result_data)
             
             return result_data
             

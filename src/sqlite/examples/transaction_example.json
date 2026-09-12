@@ -35,7 +35,7 @@
             "constraints": "DEFAULT 0.0"
           }
         ],
-        "result": "tabla_cuentas"
+        "id": "tabla_cuentas"
       }
     },
     {
@@ -72,7 +72,7 @@
             "constraints": "DEFAULT CURRENT_TIMESTAMP"
           }
         ],
-        "result": "tabla_transacciones"
+        "id": "tabla_transacciones"
       }
     },
     {
@@ -99,7 +99,7 @@
             "saldo": 2500.00
           }
         ],
-        "result": "cuentas_creadas"
+        "id": "cuentas_creadas"
       }
     },
     {
@@ -109,7 +109,7 @@
       "sqlite": {
         "operator": "select",
         "table": "cuentas",
-        "result": "cuentas_iniciales"
+        "id": "cuentas_iniciales"
       }
     },
     {
@@ -155,7 +155,7 @@
         "table": "cuentas",
         "data": { "saldo": "saldo - 200" },
         "where": "numero_cuenta = '001-123456'",
-        "result": "debito_juan"
+        "id": "debito_juan"
       }
     },
     {
@@ -164,7 +164,7 @@
         "table": "cuentas",
         "data": { "saldo": "saldo + 200" },
         "where": "numero_cuenta = '001-789012'",
-        "result": "credito_maria"
+        "id": "credito_maria"
       }
     },
     {
@@ -177,7 +177,7 @@
           "monto": 200.00,
           "tipo": "transferencia"
         },
-        "result": "registro_transaccion"
+        "id": "registro_transaccion"
       }
     },
     {
@@ -187,7 +187,7 @@
       "sqlite": {
         "operator": "select",
         "table": "cuentas",
-        "result": "cuentas_despues_transferencia"
+        "id": "cuentas_despues_transferencia"
       }
     },
     {
@@ -241,7 +241,7 @@
         "table": "cuentas",
         "data": { "saldo": "saldo - 5000" },
         "where": "numero_cuenta = '001-345678'",
-        "result": "retiro_carlos"
+        "id": "retiro_carlos"
       }
     },
     {
@@ -249,7 +249,7 @@
         "operator": "select",
         "table": "cuentas",
         "where": "numero_cuenta = '001-345678'",
-        "result": "cuenta_carlos_negativa"
+        "id": "cuenta_carlos_negativa"
       }
     },
     {
@@ -272,7 +272,7 @@
         "operator": "select",
         "table": "cuentas",
         "where": "numero_cuenta = '001-345678'",
-        "result": "cuenta_carlos_revertida"
+        "id": "cuenta_carlos_revertida"
       }
     },
     {
@@ -290,7 +290,7 @@
       "sqlite": {
         "operator": "select",
         "table": "cuentas",
-        "result": "cuentas_finales"
+        "id": "cuentas_finales"
       }
     },
     {
@@ -311,7 +311,7 @@
       "sqlite": {
         "operator": "query",
         "sql": "SELECT t.tipo, t.monto, t.fecha, c1.titular as origen, c2.titular as destino FROM transacciones t LEFT JOIN cuentas c1 ON t.cuenta_origen = c1.numero_cuenta LEFT JOIN cuentas c2 ON t.cuenta_destino = c2.numero_cuenta ORDER BY t.fecha DESC",
-        "result": "historial_transacciones"
+        "id": "historial_transacciones"
       }
     },
     {

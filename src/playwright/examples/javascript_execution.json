@@ -10,7 +10,7 @@
     {
       "playwright": {
         "operator": "launch_browser",
-        "result": "browser"
+        "id": "browser"
       }
     },
     {
@@ -39,7 +39,7 @@
       "playwright": {
         "operator": "evaluate",
         "script": "document.title = 'Título Modificado por Playwright'; return document.title;",
-        "result": "title_change"
+        "id": "title_change"
       }
     },
     {
@@ -51,7 +51,7 @@
       "playwright": {
         "operator": "evaluate",
         "script": "return window.innerWidth + 'x' + window.innerHeight;",
-        "result": "viewport_size"
+        "id": "viewport_size"
       }
     },
     {
@@ -63,7 +63,7 @@
       "playwright": {
         "operator": "evaluate",
         "script": "return navigator.userAgent;",
-        "result": "user_agent"
+        "id": "user_agent"
       }
     },
     {
@@ -75,7 +75,7 @@
       "playwright": {
         "operator": "evaluate",
         "script": "return document.cookie;",
-        "result": "cookies"
+        "id": "cookies"
       }
     },
     {
@@ -87,7 +87,7 @@
       "playwright": {
         "operator": "evaluate",
         "script": "return Array.from(document.querySelectorAll('*')).length;",
-        "result": "element_count"
+        "id": "element_count"
       }
     },
     {
@@ -99,7 +99,7 @@
       "playwright": {
         "operator": "evaluate",
         "script": "return document.querySelectorAll('a').length;",
-        "result": "link_count"
+        "id": "link_count"
       }
     },
     {
@@ -111,7 +111,7 @@
       "playwright": {
         "operator": "evaluate",
         "script": "return Array.from(document.querySelectorAll('a')).map(a => a.href);",
-        "result": "all_links"
+        "id": "all_links"
       }
     },
     {
@@ -136,7 +136,7 @@
       "playwright": {
         "operator": "evaluate",
         "script": "window.scrollTo(0, document.body.scrollHeight); return document.body.scrollHeight;",
-        "result": "scroll_height"
+        "id": "scroll_height"
       }
     },
     {
@@ -148,7 +148,7 @@
       "playwright": {
         "operator": "evaluate",
         "script": "return new Date().toLocaleString();",
-        "result": "current_time"
+        "id": "current_time"
       }
     },
     {
@@ -160,7 +160,7 @@
       "playwright": {
         "operator": "evaluate",
         "script": "localStorage.setItem('playwright_test', 'valor_de_prueba'); return localStorage.getItem('playwright_test');",
-        "result": "local_storage_test"
+        "id": "local_storage_test"
       }
     },
     {
@@ -172,7 +172,7 @@
       "playwright": {
         "operator": "screenshot",
         "path": "./screenshots/js_execution_result.png",
-        "result": "final_screenshot"
+        "id": "final_screenshot"
       }
     },
     {

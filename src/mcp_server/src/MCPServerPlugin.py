@@ -108,29 +108,29 @@ class MCPServerPlugin(PluginBase):
             "test_connection"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
-        """Execute MCP server command"""
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
+        """Execute MCP server operator"""
         if not self.dependency_status['all_satisfied']:
             raise RuntimeError("Dependencias no satisfechas para MCP Server")
         
-        if command == "start_server":
+        if operator == "start_server":
             return self._start_server(config)
-        elif command == "stop_server":
+        elif operator == "stop_server":
             return self._stop_server(config)
-        elif command == "register_tool":
+        elif operator == "register_tool":
             return self._register_tool(config)
-        elif command == "register_resource":
+        elif operator == "register_resource":
             return self._register_resource(config)
-        elif command == "list_tools":
+        elif operator == "list_tools":
             return self._list_tools(config)
-        elif command == "list_resources":
+        elif operator == "list_resources":
             return self._list_resources(config)
-        elif command == "get_server_status":
+        elif operator == "get_server_status":
             return self._get_server_status(config)
-        elif command == "test_connection":
+        elif operator == "test_connection":
             return self._test_connection(config)
         else:
-            raise ValueError(f"Comando MCP desconocido: {command}")
+            raise ValueError(f"Comando MCP desconocido: {operator}")
     
     def _initialize_mcp_components(self):
         """Initialize MCP server components"""

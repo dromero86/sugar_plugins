@@ -710,33 +710,33 @@ class SOAPPlugin(PluginBase):
         """Get available commands for this plugin."""
         return ["soap_client", "soap_server", "soap_wsdl", "soap_schema", "soap_middleware"]
     
-    def execute(self, command: str, parameters: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, parameters: Dict[str, Any]) -> Any:
         """
         Execute SOAP plugin commands.
         
         Args:
-            command: Command to execute
+            operator: Command to execute
             parameters: Command parameters
             
         Returns:
             Command result
         """
         try:
-            if command == "soap_client":
+            if operator == "soap_client":
                 return self._handle_soap_client(parameters)
-            elif command == "soap_server":
+            elif operator == "soap_server":
                 return self._handle_soap_server(parameters)
-            elif command == "soap_wsdl":
+            elif operator == "soap_wsdl":
                 return self._handle_soap_wsdl(parameters)
-            elif command == "soap_schema":
+            elif operator == "soap_schema":
                 return self._handle_soap_schema(parameters)
-            elif command == "soap_middleware":
+            elif operator == "soap_middleware":
                 return self._handle_soap_middleware(parameters)
             else:
-                raise ValueError(f"Unknown SOAP command: {command}")
+                raise ValueError(f"Unknown SOAP operator: {operator}")
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing command {command}: {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing operator {operator}: {str(e)}")
             return {"success": False, "error": str(e)}
     
     def _handle_soap_client(self, parameters: Dict[str, Any]) -> Any:

@@ -12,7 +12,7 @@
         "operator": "launch_browser",
         "browser_type": "chromium",
         "headless": false,
-        "result": "browser_status"
+        "id": "browser_status"
       }
     },
     {
@@ -27,13 +27,13 @@
           "width": 1280,
           "height": 720
         },
-        "result": "context_status"
+        "id": "context_status"
       }
     },
     {
       "playwright": {
         "operator": "new_page",
-        "result": "page_status"
+        "id": "page_status"
       }
     },
     {
@@ -42,13 +42,13 @@
         "url": "https://example.com",
         "wait_until": "load",
         "timeout": 30000,
-        "result": "navigation_result"
+        "id": "navigation_result"
       }
     },
     {
       "playwright": {
         "operator": "get_title",
-        "result": "page_title"
+        "id": "page_title"
       }
     },
     {
@@ -59,7 +59,7 @@
     {
       "playwright": {
         "operator": "get_url",
-        "result": "current_url"
+        "id": "current_url"
       }
     },
     {
@@ -72,7 +72,7 @@
         "operator": "screenshot",
         "path": "./screenshots/example_page.png",
         "full_page": true,
-        "result": "screenshot_result"
+        "id": "screenshot_result"
       }
     },
     {

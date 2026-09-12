@@ -12,7 +12,7 @@
                         "format": "objects",
                         "scope": "tbody"
                     },
-                    "result": "table_data"
+                    "id": "table_data"
                 }
             }
         },

@@ -2,11 +2,11 @@
 Selenium Plugin Implementation v2.0
 ==================================
 
-Plugin principal para automatización web con Selenium usando sintaxis @selenium/.
+Plugin principal para automatización web con Selenium usando la sintaxis {"selenium": {"operator": ...}}.
 Proporciona capacidades de automatización web a través del sistema de plugins de Sugar.
 
 Características principales:
-- Sintaxis unificada @selenium/
+- Sintaxis unificada {"selenium": {"operator": ...}}
 - Soporte completo de navegadores (Chrome, Firefox, Edge, Safari, Opera, IE)
 - Sistema avanzado de cookies con arrays y propiedades completas
 - 19 operadores disponibles
@@ -116,7 +116,7 @@ class SeleniumPlugin(PluginBase):
     """
     
     VERSION = "2.1.0"
-    DESCRIPTION = "Plugin Selenium para Sugar con sintaxis @selenium/"
+    DESCRIPTION = "Plugin Selenium para Sugar con sintaxis {\"selenium\": {\"operator\": ...}}"
     AUTHOR = "Sugar Team"
     LICENSE = "MIT"
     DEPENDENCIES = ["selenium>=4.0.0", "webdriver-manager>=3.8.0"]
@@ -517,7 +517,7 @@ class SeleniumPlugin(PluginBase):
         element = self._find_element(selector)
         element.click()
         
-        result_key = config.get('result', 'clicked')
+        result_key = config.get('id', 'clicked')
         return {result_key: True, "success": True}
     
     def _execute_open(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -547,7 +547,7 @@ class SeleniumPlugin(PluginBase):
             Output.Console(self.plugin_name, f"ERROR: Error navegando a URL {url}: {str(e)}")
             raise
         
-        result_key = config.get('result', 'opened')
+        result_key = config.get('id', 'opened')
         Output.Console(self.plugin_name, f"DEBUG: Result key: {result_key}")
         
         return {result_key: True, "success": True, "url": url}
@@ -587,7 +587,7 @@ class SeleniumPlugin(PluginBase):
             Output.Console(self.plugin_name, f"ERROR: Error ejecutando JavaScript: {str(e)}")
             raise
         
-        result_key = config.get('result', 'js_result')
+        result_key = config.get('id', 'js_result')
         return {result_key: result, "success": True}
     
     def _execute_type(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -609,7 +609,7 @@ class SeleniumPlugin(PluginBase):
         if enter:
             element.send_keys(Keys.RETURN)
         
-        result_key = config.get('result', 'typed')
+        result_key = config.get('id', 'typed')
         return {result_key: True, "success": True, "value": value}
     
     def _execute_wait(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -619,7 +619,7 @@ class SeleniumPlugin(PluginBase):
         if wait_type == 'time':
             seconds = config.get('seconds', 1)
             time.sleep(seconds)
-            result_key = config.get('result', 'waited')
+            result_key = config.get('id', 'waited')
             return {result_key: True, "success": True, "seconds": seconds}
             
         elif wait_type == 'element':
@@ -630,7 +630,7 @@ class SeleniumPlugin(PluginBase):
             wait = WebDriverWait(self.driver, self.wait_timeout)
             element = wait.until(EC.presence_of_element_located(self._resolve_by(selector)))
 
-            result_key = config.get('result', 'element_found')
+            result_key = config.get('id', 'element_found')
             return {result_key: True, "success": True}
             
         elif wait_type == 'clickable':
@@ -641,7 +641,7 @@ class SeleniumPlugin(PluginBase):
             wait = WebDriverWait(self.driver, self.wait_timeout)
             element = wait.until(EC.element_to_be_clickable(self._resolve_by(selector)))
 
-            result_key = config.get('result', 'clickable')
+            result_key = config.get('id', 'clickable')
             return {result_key: True, "success": True}
 
         elif wait_type == 'invisible':
@@ -652,7 +652,7 @@ class SeleniumPlugin(PluginBase):
             wait = WebDriverWait(self.driver, self.wait_timeout)
             wait.until(EC.invisibility_of_element_located(self._resolve_by(selector)))
 
-            result_key = config.get('result', 'invisible')
+            result_key = config.get('id', 'invisible')
             return {result_key: True, "success": True}
 
         elif wait_type == 'url_changes':
@@ -664,7 +664,7 @@ class SeleniumPlugin(PluginBase):
             wait = WebDriverWait(self.driver, self.wait_timeout)
             wait.until(EC.url_changes(from_url))
 
-            result_key = config.get('result', 'url_changed')
+            result_key = config.get('id', 'url_changed')
             return {result_key: True, "success": True, "url": self.driver.current_url}
 
         elif wait_type == 'title_contains':
@@ -675,7 +675,7 @@ class SeleniumPlugin(PluginBase):
             wait = WebDriverWait(self.driver, self.wait_timeout)
             wait.until(EC.title_contains(title))
 
-            result_key = config.get('result', 'title_matched')
+            result_key = config.get('id', 'title_matched')
             return {result_key: True, "success": True, "title": self.driver.title}
 
         else:
@@ -695,7 +695,7 @@ class SeleniumPlugin(PluginBase):
         else:
             self.driver.save_screenshot(file_path)
 
-        result_key = config.get('result', 'screenshot')
+        result_key = config.get('id', 'screenshot')
         return {result_key: file_path, "success": True}
     
     def _execute_navigate(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -711,7 +711,7 @@ class SeleniumPlugin(PluginBase):
         else:
             raise ValueError(f"Acción de navegación no soportada: {action}")
         
-        result_key = config.get('result', 'navigated')
+        result_key = config.get('id', 'navigated')
         return {result_key: True, "success": True, "action": action}
 
     def _execute_page(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -722,7 +722,7 @@ class SeleniumPlugin(PluginBase):
             "source": self.driver.page_source,
         }
 
-        result_key = config.get('result', 'page')
+        result_key = config.get('id', 'page')
         return {result_key: info, "success": True}
 
     def _execute_state(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -736,7 +736,7 @@ class SeleniumPlugin(PluginBase):
         except ValueError:
             # Elemento no encontrado: no está visible/habilitado/seleccionado.
             info = {"exists": False, "displayed": False, "enabled": False, "selected": False}
-            result_key = config.get('result', 'state')
+            result_key = config.get('id', 'state')
             return {result_key: info, "success": True}
 
         info = {
@@ -746,7 +746,7 @@ class SeleniumPlugin(PluginBase):
             "selected": element.is_selected(),
         }
 
-        result_key = config.get('result', 'state')
+        result_key = config.get('id', 'state')
         return {result_key: info, "success": True}
 
     def _execute_find(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -772,7 +772,7 @@ class SeleniumPlugin(PluginBase):
             element = self._find_element(selector)
             result = describe(element)
 
-        result_key = config.get('result', 'found')
+        result_key = config.get('id', 'found')
         return {result_key: result, "success": True}
     
     def _execute_submit(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -786,7 +786,7 @@ class SeleniumPlugin(PluginBase):
             # Enviar formulario activo
             self.driver.find_element(By.TAG_NAME, "body").submit()
         
-        result_key = config.get('result', 'submitted')
+        result_key = config.get('id', 'submitted')
         return {result_key: True, "success": True}
     
     def _execute_clear(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -798,7 +798,7 @@ class SeleniumPlugin(PluginBase):
         element = self._find_element(selector)
         element.clear()
         
-        result_key = config.get('result', 'cleared')
+        result_key = config.get('id', 'cleared')
         return {result_key: True, "success": True}
     
     def _execute_select(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -823,7 +823,7 @@ class SeleniumPlugin(PluginBase):
         else:
             raise ValueError("Se requiere value, text o index para operación select")
         
-        result_key = config.get('result', 'selected')
+        result_key = config.get('id', 'selected')
         return {result_key: True, "success": True}
     
     def _execute_hover(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -835,7 +835,7 @@ class SeleniumPlugin(PluginBase):
         element = self._find_element(selector)
         ActionChains(self.driver).move_to_element(element).perform()
         
-        result_key = config.get('result', 'hovered')
+        result_key = config.get('id', 'hovered')
         return {result_key: True, "success": True}
 
     def _execute_drag_and_drop(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -858,7 +858,7 @@ class SeleniumPlugin(PluginBase):
         target = self._find_element(target_selector)
         ActionChains(self.driver).drag_and_drop(source, target).perform()
 
-        result_key = config.get('result', 'dragged')
+        result_key = config.get('id', 'dragged')
         return {result_key: True, "success": True}
 
     def _execute_pdf(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -870,7 +870,7 @@ class SeleniumPlugin(PluginBase):
         with open(file_path, 'wb') as f:
             f.write(base64.b64decode(pdf_base64))
 
-        result_key = config.get('result', 'pdf')
+        result_key = config.get('id', 'pdf')
         return {result_key: file_path, "success": True}
 
     def _execute_dblclick(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -882,7 +882,7 @@ class SeleniumPlugin(PluginBase):
         element = self._find_element(selector)
         ActionChains(self.driver).double_click(element).perform()
 
-        result_key = config.get('result', 'dblclicked')
+        result_key = config.get('id', 'dblclicked')
         return {result_key: True, "success": True}
 
     def _execute_rightclick(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -894,7 +894,7 @@ class SeleniumPlugin(PluginBase):
         element = self._find_element(selector)
         ActionChains(self.driver).context_click(element).perform()
 
-        result_key = config.get('result', 'rightclicked')
+        result_key = config.get('id', 'rightclicked')
         return {result_key: True, "success": True}
 
     def _execute_keys(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -926,7 +926,7 @@ class SeleniumPlugin(PluginBase):
         else:
             ActionChains(self.driver).send_keys(*resolved_keys).perform()
 
-        result_key = config.get('result', 'keys_sent')
+        result_key = config.get('id', 'keys_sent')
         return {result_key: True, "success": True}
 
     def _execute_scroll(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -954,7 +954,7 @@ class SeleniumPlugin(PluginBase):
         else:
             raise ValueError(f"Tipo de scroll no soportado: {scroll_type}")
         
-        result_key = config.get('result', 'scrolled')
+        result_key = config.get('id', 'scrolled')
         return {result_key: True, "success": True}
     
     def _execute_upload(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -973,7 +973,7 @@ class SeleniumPlugin(PluginBase):
         element = self._find_element(selector)
         element.send_keys(os.path.abspath(file_path))
         
-        result_key = config.get('result', 'uploaded')
+        result_key = config.get('id', 'uploaded')
         return {result_key: True, "success": True, "file": file_path}
     
     def _execute_download(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -1007,7 +1007,7 @@ class SeleniumPlugin(PluginBase):
 
         self.driver.execute_script(script)
 
-        result_key = config.get('result', 'downloaded')
+        result_key = config.get('id', 'downloaded')
         deadline = time.time() + timeout
         while time.time() < deadline:
             if os.path.isfile(file_path) and os.path.getsize(file_path) > 0:
@@ -1031,7 +1031,7 @@ class SeleniumPlugin(PluginBase):
         
         if action == 'get':
             cookies = self.driver.get_cookies()
-            result_key = config.get('result', 'cookies')
+            result_key = config.get('id', 'cookies')
             return {result_key: cookies, "success": True}
             
         elif action == 'add':
@@ -1039,7 +1039,7 @@ class SeleniumPlugin(PluginBase):
             if 'name' in config and 'value' in config:
                 cookie = self._build_cookie_dict(config)
                 self.driver.add_cookie(cookie)
-                result_key = config.get('result', 'cookie_added')
+                result_key = config.get('id', 'cookie_added')
                 return {result_key: True, "success": True}
             
             # Array de cookies
@@ -1054,7 +1054,7 @@ class SeleniumPlugin(PluginBase):
                     self.driver.add_cookie(cookie)
                     added_count += 1
                 
-                result_key = config.get('result', 'cookies_added')
+                result_key = config.get('id', 'cookies_added')
                 return {result_key: added_count, "success": True}
             
             else:
@@ -1066,12 +1066,12 @@ class SeleniumPlugin(PluginBase):
                 raise ValueError("Nombre de cookie requerido para delete")
             
             self.driver.delete_cookie(name)
-            result_key = config.get('result', 'cookie_deleted')
+            result_key = config.get('id', 'cookie_deleted')
             return {result_key: True, "success": True}
             
         elif action == 'clear':
             self.driver.delete_all_cookies()
-            result_key = config.get('result', 'cookies_cleared')
+            result_key = config.get('id', 'cookies_cleared')
             return {result_key: True, "success": True}
             
         elif action == 'get_by_name':
@@ -1080,7 +1080,7 @@ class SeleniumPlugin(PluginBase):
                 raise ValueError("Nombre de cookie requerido para get_by_name")
             
             cookie = self.driver.get_cookie(name)
-            result_key = config.get('result', 'cookie_by_name')
+            result_key = config.get('id', 'cookie_by_name')
             return {result_key: cookie, "success": True}
             
         elif action == 'get_by_domain':
@@ -1090,7 +1090,7 @@ class SeleniumPlugin(PluginBase):
             
             all_cookies = self.driver.get_cookies()
             domain_cookies = [cookie for cookie in all_cookies if cookie.get("domain") == domain]
-            result_key = config.get('result', 'cookies_by_domain')
+            result_key = config.get('id', 'cookies_by_domain')
             return {result_key: domain_cookies, "success": True}
         
         else:
@@ -1151,7 +1151,7 @@ class SeleniumPlugin(PluginBase):
         else:
             raise ValueError(f"Acción de ventana no soportada: {action}")
         
-        result_key = config.get('result', 'window_action')
+        result_key = config.get('id', 'window_action')
         return {result_key: True, "success": True, "action": action}
     
     def _execute_frame(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -1176,7 +1176,7 @@ class SeleniumPlugin(PluginBase):
         else:
             raise ValueError(f"Acción de frame no soportada: {action}")
         
-        result_key = config.get('result', 'frame_action')
+        result_key = config.get('id', 'frame_action')
         return {result_key: True, "success": True, "action": action}
     
     def _execute_alert(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -1200,7 +1200,7 @@ class SeleniumPlugin(PluginBase):
             # No hay alerta activa
             pass
         
-        result_key = config.get('result', 'alert_action')
+        result_key = config.get('id', 'alert_action')
         return {result_key: True, "success": True, "action": action}
 
     def _execute_quit(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -1213,7 +1213,7 @@ class SeleniumPlugin(PluginBase):
                 pass
             self.driver = None
 
-        result_key = config.get('result', 'quit')
+        result_key = config.get('id', 'quit')
         return {result_key: True, "success": True}
 
     def _execute_storage(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -1232,7 +1232,7 @@ class SeleniumPlugin(PluginBase):
             value = self.driver.execute_script(
                 f"return window.{js_storage}.getItem(arguments[0]);", key
             )
-            result_key = config.get('result', 'storage_value')
+            result_key = config.get('id', 'storage_value')
             return {result_key: value, "success": True}
 
         elif action == 'get_all':
@@ -1246,7 +1246,7 @@ class SeleniumPlugin(PluginBase):
             return out;
             """
             value = self.driver.execute_script(script)
-            result_key = config.get('result', 'storage')
+            result_key = config.get('id', 'storage')
             return {result_key: value, "success": True}
 
         elif action == 'set':
@@ -1257,7 +1257,7 @@ class SeleniumPlugin(PluginBase):
             self.driver.execute_script(
                 f"window.{js_storage}.setItem(arguments[0], arguments[1]);", key, value
             )
-            result_key = config.get('result', 'storage_set')
+            result_key = config.get('id', 'storage_set')
             return {result_key: True, "success": True}
 
         elif action == 'remove':
@@ -1267,12 +1267,12 @@ class SeleniumPlugin(PluginBase):
             self.driver.execute_script(
                 f"window.{js_storage}.removeItem(arguments[0]);", key
             )
-            result_key = config.get('result', 'storage_removed')
+            result_key = config.get('id', 'storage_removed')
             return {result_key: True, "success": True}
 
         elif action == 'clear':
             self.driver.execute_script(f"window.{js_storage}.clear();")
-            result_key = config.get('result', 'storage_cleared')
+            result_key = config.get('id', 'storage_cleared')
             return {result_key: True, "success": True}
 
         else:

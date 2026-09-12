@@ -172,7 +172,7 @@
             }
           }
         },
-        "result": "composition_result"
+        "id": "composition_result"
       }
     },
     {
@@ -184,7 +184,7 @@
       "docker": {
         "operator": "validate_composition",
         "name": "microservices_app",
-        "result": "validation_result"
+        "id": "validation_result"
       }
     },
     {
@@ -201,7 +201,7 @@
               "docker": {
                 "operator": "start_composition",
                 "name": "microservices_app",
-                "result": "start_result"
+                "id": "start_result"
               }
             },
             {
@@ -213,7 +213,7 @@
               "docker": {
                 "operator": "health_check",
                 "composition_name": "microservices_app",
-                "result": "health_result"
+                "id": "health_result"
               }
             },
             {

@@ -19,22 +19,22 @@ class GnuPGEncryption:
         self.plugin = plugin
         self.gpg_path = plugin._find_gpg()
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
-        """Execute encryption/decryption command."""
-        if command == "encrypt_file":
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
+        """Execute encryption/decryption operator."""
+        if operator == "encrypt_file":
             return self._encrypt_file(config)
-        elif command == "decrypt_file":
+        elif operator == "decrypt_file":
             return self._decrypt_file(config)
-        elif command == "encrypt_text":
+        elif operator == "encrypt_text":
             return self._encrypt_text(config)
-        elif command == "decrypt_text":
+        elif operator == "decrypt_text":
             return self._decrypt_text(config)
-        elif command == "symmetric_encrypt":
+        elif operator == "symmetric_encrypt":
             return self._symmetric_encrypt(config)
-        elif command == "symmetric_decrypt":
+        elif operator == "symmetric_decrypt":
             return self._symmetric_decrypt(config)
         else:
-            raise ValueError(f"Unknown encryption command: {command}")
+            raise ValueError(f"Unknown encryption operator: {operator}")
     
     def _encrypt_file(self, config: Dict[str, Any]) -> Dict[str, Any]:
         """Encrypt a file using asymmetric encryption."""

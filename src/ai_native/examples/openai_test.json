@@ -20,7 +20,7 @@
     {
       "ai_native": {
         "operator": "get_ai_info",
-        "result": "initial_info"
+        "id": "initial_info"
       }
     },
     {
@@ -50,7 +50,7 @@
           "style": "functional",
           "complexity": "medium"
         },
-        "result": "factorial_function"
+        "id": "factorial_function"
       }
     },
     {
@@ -77,7 +77,7 @@
       "ai_native": {
         "operator": "validate_code",
         "code": "{{factorial_function}}",
-        "result": "validation_result"
+        "id": "validation_result"
       }
     },
     {
@@ -117,7 +117,7 @@
           "maintain_api": true,
           "preserve_behavior": true
         },
-        "result": "optimized_sort"
+        "id": "optimized_sort"
       }
     },
     {
@@ -148,7 +148,7 @@
           "domain": "data_processing",
           "requirements": ["file_io", "data_analysis", "error_handling"]
         },
-        "result": "csv_processor"
+        "id": "csv_processor"
       }
     },
     {
@@ -174,7 +174,7 @@
     {
       "ai_native": {
         "operator": "get_model_info",
-        "result": "final_model_info"
+        "id": "final_model_info"
       }
     },
     {

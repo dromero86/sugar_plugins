@@ -61,7 +61,7 @@
         "share": "{{smb_share}}",
         "username": "{{smb_user}}",
         "password": "{{smb_pass}}",
-        "result": "connection_test"
+        "id": "connection_test"
       }
     },
     {
@@ -97,7 +97,7 @@
                 "username": "{{smb_user}}",
                 "password": "{{smb_pass}}",
                 "session_name": "demo_session",
-                "result": "connection_status"
+                "id": "connection_status"
               }
             },
             {
@@ -130,7 +130,7 @@
                         "operator": "list_directory",
                         "session": "demo_session",
                         "path": "/",
-                        "result": "directory_listing"
+                        "id": "directory_listing"
                       }
                     },
                     {
@@ -168,7 +168,7 @@
                         "operator": "create_directory",
                         "session": "demo_session",
                         "path": "test_folder",
-                        "result": "create_dir_result"
+                        "id": "create_dir_result"
                       }
                     },
                     {
@@ -190,7 +190,7 @@
                       "smb": {
                         "operator": "get_session_info",
                         "session": "demo_session",
-                        "result": "session_info"
+                        "id": "session_info"
                       }
                     },
                     {
@@ -231,7 +231,7 @@
             {
               "smb": {
                 "operator": "get_transfer_stats",
-                "result": "transfer_stats"
+                "id": "transfer_stats"
               }
             },
             {
@@ -273,7 +273,7 @@
               "smb": {
                 "operator": "disconnect",
                 "session": "demo_session",
-                "result": "disconnect_status"
+                "id": "disconnect_status"
               }
             },
             {

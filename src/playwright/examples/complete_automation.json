@@ -17,7 +17,7 @@
         "operator": "launch_browser",
         "browser_type": "chromium",
         "headless": false,
-        "result": "browser_status"
+        "id": "browser_status"
       }
     },
     {
@@ -33,7 +33,7 @@
           "height": 720
         },
         "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-        "result": "context_status"
+        "id": "context_status"
       }
     },
     {
@@ -44,7 +44,7 @@
     {
       "playwright": {
         "operator": "new_page",
-        "result": "page_status"
+        "id": "page_status"
       }
     },
     {
@@ -58,7 +58,7 @@
         "url": "https://httpbin.org/forms/post",
         "wait_until": "load",
         "timeout": 30000,
-        "result": "navigation_result"
+        "id": "navigation_result"
       }
     },
     {
@@ -69,7 +69,7 @@
     {
       "playwright": {
         "operator": "get_title",
-        "result": "page_title"
+        "id": "page_title"
       }
     },
     {
@@ -82,7 +82,7 @@
         "operator": "screenshot",
         "path": "./screenshots/initial_page.png",
         "full_page": true,
-        "result": "initial_screenshot"
+        "id": "initial_screenshot"
       }
     },
     {
@@ -177,7 +177,7 @@
       "playwright": {
         "operator": "screenshot",
         "path": "./screenshots/form_completed.png",
-        "result": "form_screenshot"
+        "id": "form_screenshot"
       }
     },
     {
@@ -189,7 +189,7 @@
       "playwright": {
         "operator": "evaluate",
         "script": "return document.querySelector('input[type=\"submit\"]').value;",
-        "result": "submit_button_text"
+        "id": "submit_button_text"
       }
     },
     {
@@ -224,7 +224,7 @@
     {
       "playwright": {
         "operator": "get_url",
-        "result": "final_url"
+        "id": "final_url"
       }
     },
     {
@@ -235,7 +235,7 @@
     {
       "playwright": {
         "operator": "get_title",
-        "result": "final_title"
+        "id": "final_title"
       }
     },
     {
@@ -247,7 +247,7 @@
       "playwright": {
         "operator": "evaluate",
         "script": "return document.body.innerText;",
-        "result": "page_content"
+        "id": "page_content"
       }
     },
     {
@@ -283,7 +283,7 @@
         "operator": "screenshot",
         "path": "./screenshots/submission_result.png",
         "full_page": true,
-        "result": "final_screenshot"
+        "id": "final_screenshot"
       }
     },
     {
@@ -295,7 +295,7 @@
       "playwright": {
         "operator": "evaluate",
         "script": "return { url: window.location.href, title: document.title, timestamp: new Date().toISOString() };",
-        "result": "page_info"
+        "id": "page_info"
       }
     },
     {

@@ -135,39 +135,39 @@ class FtpPlugin(PluginBase):
             "execute"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute FTP command.
+        Execute FTP operator.
         
         Args:
-            command: Command to execute
-            config: Configuration for the command
+            operator: Command to execute
+            config: Configuration for the operator
             
         Returns:
-            Result of the command execution
+            Result of the operator execution
         """
-        if command == "setup":
+        if operator == "setup":
             return self._setup_ftp(config)
-        elif command == "connect":
+        elif operator == "connect":
             return self._connect(config)
-        elif command == "disconnect":
+        elif operator == "disconnect":
             return self._disconnect()
-        elif command == "upload":
+        elif operator == "upload":
             return self._upload_file(config)
-        elif command == "download":
+        elif operator == "download":
             return self._download_file(config)
-        elif command == "list":
+        elif operator == "list":
             return self._list_directory(config)
-        elif command == "delete":
+        elif operator == "delete":
             return self._delete_file(config)
-        elif command == "mkdir":
+        elif operator == "mkdir":
             return self._make_directory(config)
-        elif command == "exists":
+        elif operator == "exists":
             return self._file_exists(config.get("remote_path", ""))
-        elif command == "execute":
+        elif operator == "execute":
             return self._execute_command(config)
         else:
-            raise ValueError(f"Unknown FTP command: {command}")
+            raise ValueError(f"Unknown FTP operator: {operator}")
     
     def _setup_ftp(self, ftp_config: dict) -> Dict[str, Any]:
         """Setup and execute complete FTP operation"""

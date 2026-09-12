@@ -11,7 +11,7 @@
       "selenium": {
         "operator": "open",
         "url": "https://www.apple.com",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
@@ -19,28 +19,28 @@
         "operator": "wait",
         "type": "time",
         "seconds": 3,
-        "result": "is_waited"
+        "id": "is_waited"
       }
     },
     {
       "selenium": {
         "operator": "screenshot",
         "file": "./safari_apple.png",
-        "result": "screenshot"
+        "id": "screenshot"
       }
     },
     {
       "selenium": {
         "operator": "find",
         "selector": "nav",
-        "result": "navigation"
+        "id": "navigation"
       }
     },
     {
       "selenium": {
         "operator": "javascript",
         "from_string": "return document.title;",
-        "result": "page_title"
+        "id": "page_title"
       }
     },
     {

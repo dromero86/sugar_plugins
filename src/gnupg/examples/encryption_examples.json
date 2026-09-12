@@ -33,7 +33,7 @@
         "text": "{{mensaje_secreto}}",
         "recipient": "{{recipient_email}}",
         "armor": true,
-        "result": "encrypted_message"
+        "id": "encrypted_message"
       }
     },
     {
@@ -56,7 +56,7 @@
                 "operator": "decrypt_text",
                 "encrypted_text": "{{encrypted_message.encrypted_text}}",
                 "passphrase": "MiPassphraseSegura123!",
-                "result": "decrypted_message"
+                "id": "decrypted_message"
               }
             },
             {
@@ -116,7 +116,7 @@
         "operator": "write",
         "path": "archivo_test.txt",
         "content": "{{contenido_archivo}}",
-        "result": "file_written"
+        "id": "file_written"
       }
     },
     {
@@ -127,7 +127,7 @@
         "passphrase": "MiPassphraseSegura123!",
         "cipher": "AES256",
         "armor": false,
-        "result": "symmetric_encryption"
+        "id": "symmetric_encryption"
       }
     },
     {
@@ -146,7 +146,7 @@
                 "input_file": "archivo_test.txt.gpg",
                 "output_file": "archivo_descifrado.txt",
                 "passphrase": "MiPassphraseSegura123!",
-                "result": "symmetric_decryption"
+                "id": "symmetric_decryption"
               }
             },
             {
@@ -163,7 +163,7 @@
                       "file": {
                         "operator": "read",
                         "path": "archivo_descifrado.txt",
-                        "result": "decrypted_content"
+                        "id": "decrypted_content"
                       }
                     },
                     {

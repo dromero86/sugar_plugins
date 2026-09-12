@@ -33,7 +33,7 @@
         "format": "zip",
         "compression_level": 9,
         "include_hidden": false,
-        "result": "backup_resultado"
+        "id": "backup_resultado"
       }
     },
     {
@@ -50,7 +50,7 @@
               "zip": {
                 "operator": "info",
                 "source": "{{backup_resultado.destination}}",
-                "result": "info_backup"
+                "id": "info_backup"
               }
             },
             {
@@ -77,7 +77,7 @@
               "zip": {
                 "operator": "list",
                 "source": "{{backup_resultado.destination}}",
-                "result": "lista_archivos"
+                "id": "lista_archivos"
               }
             },
             {
@@ -102,7 +102,7 @@
               "zip": {
                 "operator": "test",
                 "source": "{{backup_resultado.destination}}",
-                "result": "verificacion"
+                "id": "verificacion"
               }
             },
             {
@@ -139,7 +139,7 @@
                 "source": "{{backup_resultado.destination}}",
                 "destination": "./{{backup_name}}.tar.gz",
                 "target_format": "tar.gz",
-                "result": "conversion_resultado"
+                "id": "conversion_resultado"
               }
             },
             {
@@ -181,7 +181,7 @@
                 "source": "{{backup_resultado.destination}}",
                 "destination": "./verificacion_backup",
                 "overwrite": true,
-                "result": "extraccion_resultado"
+                "id": "extraccion_resultado"
               }
             },
             {

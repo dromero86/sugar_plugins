@@ -26,7 +26,7 @@
         "operator": "write",
         "path": "documento.txt",
         "content": "{{documento_contenido}}",
-        "result": "file_written"
+        "id": "file_written"
       }
     },
     {
@@ -43,7 +43,7 @@
         "passphrase": "MiPassphraseSegura123!",
         "armor": true,
         "hash_algorithm": "SHA256",
-        "result": "signature_result"
+        "id": "signature_result"
       }
     },
     {
@@ -71,7 +71,7 @@
                 "operator": "verify_signature",
                 "input_file": "documento.txt",
                 "signature_file": "documento.txt.sig",
-                "result": "verification_result"
+                "id": "verification_result"
               }
             },
             {
@@ -138,7 +138,7 @@
         "key_id": "juan.perez@ejemplo.com",
         "passphrase": "MiPassphraseSegura123!",
         "hash_algorithm": "SHA256",
-        "result": "clearsign_result"
+        "id": "clearsign_result"
       }
     },
     {
@@ -165,7 +165,7 @@
               "gnupg": {
                 "operator": "verify_signature",
                 "input_file": "documento.txt.asc",
-                "result": "clearsign_verification"
+                "id": "clearsign_verification"
               }
             },
             {
@@ -223,7 +223,7 @@
         "passphrase": "MiPassphraseSegura123!",
         "armor": true,
         "hash_algorithm": "SHA256",
-        "result": "text_signature"
+        "id": "text_signature"
       }
     },
     {
@@ -246,7 +246,7 @@
                 "operator": "verify_text",
                 "text": "{{texto_para_firmar}}",
                 "signature_text": "{{text_signature.signature_text}}",
-                "result": "text_verification"
+                "id": "text_verification"
               }
             },
             {

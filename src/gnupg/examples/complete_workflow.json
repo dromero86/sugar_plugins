@@ -18,7 +18,7 @@
     {
       "gnupg": {
         "operator": "check_dependencies",
-        "result": "dependency_status"
+        "id": "dependency_status"
       }
     },
     {
@@ -39,7 +39,7 @@
             {
               "gnupg": {
                 "operator": "system_info",
-                "result": "system_info"
+                "id": "system_info"
               }
             },
             {
@@ -55,7 +55,7 @@
             {
               "gnupg": {
                 "operator": "test_functionality",
-                "result": "test_results"
+                "id": "test_results"
               }
             },
             {
@@ -86,7 +86,7 @@
                         "timeout": 3600,
                         "max_cache_ttl": 7200,
                         "default_cache_ttl": 600,
-                        "result": "agent_config"
+                        "id": "agent_config"
                       }
                     },
                     {
@@ -109,7 +109,7 @@
                                 "operator": "check_agent_status",
                                 "check_gpg_agent": true,
                                 "check_ssh_agent": true,
-                                "result": "agent_status"
+                                "id": "agent_status"
                               }
                             },
                             {

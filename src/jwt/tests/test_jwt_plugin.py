@@ -46,7 +46,7 @@ def test_jwt_plugin():
         },
         "key": "{{ secret_key }}",
         "algorithm": "HS256",
-        "result": "encoded_jwt"
+        "id": "encoded_jwt"
     }
     
     try:
@@ -65,7 +65,7 @@ def test_jwt_plugin():
         "key": "{{ secret_key }}",
         "algorithms": ["HS256"],
         "verify": True,
-        "result": "decoded_payload"
+        "id": "decoded_payload"
     }
     
     try:
@@ -84,7 +84,7 @@ def test_jwt_plugin():
         "options": {
             "verify_signature": False
         },
-        "result": "payload_unverified"
+        "id": "payload_unverified"
     }
     
     try:
@@ -102,7 +102,7 @@ def test_jwt_plugin():
         "token": "{{ encoded_jwt }}",
         "key": "{{ secret_key }}",
         "algorithms": ["HS256"],
-        "result": "is_valid"
+        "id": "is_valid"
     }
     
     try:

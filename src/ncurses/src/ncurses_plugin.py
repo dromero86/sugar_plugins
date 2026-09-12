@@ -216,39 +216,39 @@ class NcursesPlugin(PluginBase):
             "create_dialog": self._create_dialog
         }
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute a ncurses command.
+        Execute a ncurses operator.
         
         Args:
-            command: The ncurses command to execute
-            config: Configuration dictionary for the command
+            operator: The ncurses operator to execute
+            config: Configuration dictionary for the operator
             
         Returns:
             Result of the ncurses operation
         """
-        Output.Console(self.plugin_name, f"Executing ncurses command: {command}")
+        Output.Console(self.plugin_name, f"Executing ncurses operator: {operator}")
         
-        if command not in self.commands:
-            raise NcursesError(f"Comando no reconocido: {command}")
+        if operator not in self.commands:
+            raise NcursesError(f"Comando no reconocido: {operator}")
         
         try:
             # Interpolate variables in config
             interpolated_config = self.interpolate_variables(config)
             
-            # Execute the command
-            result = self.commands[command](interpolated_config)
+            # Execute the operator
+            result = self.commands[operator](interpolated_config)
             
             # Store result in context if specified
-            result_key = config.get("result")
+            result_key = config.get("id")
             if result_key and self.context:
                 self.set_variable(result_key, result)
             
             return result
             
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error ejecutando {command}: {str(e)}")
-            raise NcursesError(f"Error ejecutando {command}: {str(e)}")
+            Output.Console(self.plugin_name, f"Error ejecutando {operator}: {str(e)}")
+            raise NcursesError(f"Error ejecutando {operator}: {str(e)}")
     
     def get_available_commands(self) -> List[str]:
         """

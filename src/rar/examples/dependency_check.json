@@ -9,7 +9,7 @@
     {
       "rar": {
         "operator": "check_dependencies",
-        "result": "deps_status"
+        "id": "deps_status"
       }
     },
     {
@@ -75,7 +75,7 @@
     {
       "rar": {
         "operator": "system_info",
-        "result": "sys_info"
+        "id": "sys_info"
       }
     },
     {
@@ -178,7 +178,7 @@
             {
               "rar": {
                 "operator": "test_functionality",
-                "result": "func_test"
+                "id": "func_test"
               }
             },
             {

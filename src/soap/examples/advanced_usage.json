@@ -21,7 +21,7 @@
           "log_requests": true,
           "validate_schema": true
         },
-        "result": "servidor_soap"
+        "id": "servidor_soap"
       }
     },
     {
@@ -81,7 +81,7 @@
             }
           ]
         },
-        "result": "metodo_get"
+        "id": "metodo_get"
       }
     },
     {
@@ -117,7 +117,7 @@
             }
           ]
         },
-        "result": "metodo_create"
+        "id": "metodo_create"
       }
     },
     {
@@ -134,7 +134,7 @@
       "soap_server": {
         "operator": "start",
         "server": "{{servidor_soap}}",
-        "result": "servidor_iniciado"
+        "id": "servidor_iniciado"
       }
     },
     {
@@ -155,7 +155,7 @@
           "timeout": 10,
           "verify_ssl": false
         },
-        "result": "cliente_local"
+        "id": "cliente_local"
       }
     },
     {
@@ -176,7 +176,7 @@
         "parameters": {
           "userId": 123
         },
-        "result": "usuario_obtenido"
+        "id": "usuario_obtenido"
       }
     },
     {
@@ -201,7 +201,7 @@
             "rol": "usuario"
           }
         },
-        "result": "usuario_creado"
+        "id": "usuario_creado"
       }
     },
     {
@@ -225,7 +225,7 @@
               "parameters": {
                 "userId": -1
               },
-              "result": "usuario_invalido"
+              "id": "usuario_invalido"
             }
           }
         ],
@@ -249,7 +249,7 @@
       "soap_server": {
         "operator": "stop",
         "server": "{{servidor_soap}}",
-        "result": "servidor_detenido"
+        "id": "servidor_detenido"
       }
     },
     {

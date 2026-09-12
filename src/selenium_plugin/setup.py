@@ -25,7 +25,7 @@ def read_requirements():
 setup(
     name="sugar-selenium-plugin",
     version="2.0.0",
-    description="Plugin Selenium para Sugar con sintaxis @selenium/",
+    description="Plugin Selenium para Sugar con sintaxis {\"selenium\": {\"operator\": ...}}",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
     author="Sugar Team",

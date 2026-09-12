@@ -54,7 +54,7 @@
                         },
                         "on_error": "skip_row"
                     },
-                    "result": "financial_data"
+                    "id": "financial_data"
                 }
             }
         },

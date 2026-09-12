@@ -15,7 +15,7 @@
           "app": "test_web",
           "environment": "testing"
         },
-        "result": "container_result"
+        "id": "container_result"
       }
     },
     {
@@ -27,7 +27,7 @@
       "docker": {
         "operator": "inspect_container",
         "container_id": "{{container_result.container_id}}",
-        "result": "inspect_result"
+        "id": "inspect_result"
       }
     },
     {
@@ -41,7 +41,7 @@
         "container_id": "{{container_result.container_id}}",
         "tail": "10",
         "timestamps": true,
-        "result": "logs_result"
+        "id": "logs_result"
       }
     },
     {
@@ -54,7 +54,7 @@
         "operator": "exec_container",
         "container_id": "{{container_result.container_id}}",
         "command": "ls -la /usr/share/nginx/html",
-        "result": "exec_result"
+        "id": "exec_result"
       }
     },
     {
@@ -66,7 +66,7 @@
       "docker": {
         "operator": "stats_container",
         "container_id": "{{container_result.container_id}}",
-        "result": "stats_result"
+        "id": "stats_result"
       }
     },
     {
@@ -79,7 +79,7 @@
         "operator": "stop_container",
         "container_id": "{{container_result.container_id}}",
         "timeout": 10,
-        "result": "stop_result"
+        "id": "stop_result"
       }
     },
     {
@@ -93,7 +93,7 @@
         "container_id": "{{container_result.container_id}}",
         "force": true,
         "volumes": true,
-        "result": "remove_result"
+        "id": "remove_result"
       }
     },
     {

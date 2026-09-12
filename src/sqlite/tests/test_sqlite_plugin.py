@@ -211,7 +211,7 @@ class TestSQLitePlugin(unittest.TestCase):
         result = self.plugin._select_data({
             "table": "users",
             "columns": "id, name, email",
-            "result": "users_data"
+            "id": "users_data"
         })
         
         self.assertTrue(result["success"])

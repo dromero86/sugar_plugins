@@ -12,7 +12,7 @@
     {
       "bzip2": {
         "operator": "sdk_info",
-        "result": "sdk_info"
+        "id": "sdk_info"
       }
     },
     {
@@ -27,7 +27,7 @@
     {
       "bzip2": {
         "operator": "test_sdk",
-        "result": "sdk_test"
+        "id": "sdk_test"
       }
     },
     {
@@ -52,7 +52,7 @@
         "source": "test_data.txt",
         "destination": "test_data.txt.bz2",
         "compression_level": 6,
-        "result": "compression_result"
+        "id": "compression_result"
       }
     },
     {
@@ -77,7 +77,7 @@
       "bzip2": {
         "operator": "bzip2_test",
         "source": "test_data.txt.bz2",
-        "result": "test_result"
+        "id": "test_result"
       }
     },
     {
@@ -105,7 +105,7 @@
       "bzip2": {
         "operator": "bzip2_info",
         "source": "test_data.txt.bz2",
-        "result": "info_result"
+        "id": "info_result"
       }
     },
     {
@@ -125,7 +125,7 @@
         "operator": "bzip2_decompress",
         "source": "test_data.txt.bz2",
         "destination": "test_data_decompressed.txt",
-        "result": "decompression_result"
+        "id": "decompression_result"
       }
     },
     {
@@ -144,14 +144,14 @@
       "file": {
         "operator": "read",
         "path": "test_data.txt",
-        "result": "original_content"
+        "id": "original_content"
       }
     },
     {
       "file": {
         "operator": "read",
         "path": "test_data_decompressed.txt",
-        "result": "decompressed_content"
+        "id": "decompressed_content"
       }
     },
     {

@@ -12,7 +12,7 @@
         "baudrate": 57600,
         "session": "modem",
         "rtscts": true,
-        "result": "connection"
+        "id": "connection"
       }
     },
     {
@@ -25,7 +25,7 @@
         "operator": "set_dtr",
         "session": "modem",
         "state": true,
-        "result": "dtr_set"
+        "id": "dtr_set"
       }
     },
     {
@@ -38,7 +38,7 @@
         "operator": "write",
         "session": "modem",
         "data": "ATZ\\r",
-        "result": "reset_cmd"
+        "id": "reset_cmd"
       }
     },
     {
@@ -52,7 +52,7 @@
         "session": "modem",
         "terminator": "OK",
         "timeout": 10.0,
-        "result": "modem_response"
+        "id": "modem_response"
       }
     },
     {
@@ -65,7 +65,7 @@
         "operator": "write",
         "session": "modem",
         "data": "ATI\\r",
-        "result": "info_cmd"
+        "id": "info_cmd"
       }
     },
     {
@@ -79,7 +79,7 @@
         "session": "modem",
         "terminator": "OK",
         "timeout": 5.0,
-        "result": "modem_info"
+        "id": "modem_info"
       }
     },
     {

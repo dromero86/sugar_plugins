@@ -86,7 +86,7 @@
         "y": 6,
         "width": 25,
         "height": 5,
-        "result": "opcion_seleccionada"
+        "id": "opcion_seleccionada"
       }
     },
     {
@@ -105,7 +105,7 @@
         "x": 2,
         "y": 13,
         "max_length": 30,
-        "result": "nombre_usuario"
+        "id": "nombre_usuario"
       }
     },
     {

@@ -46,28 +46,28 @@ class JwtPlugin(PluginBase):
         """
         return ["encode", "decode", "verify"]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute a JWT plugin command.
+        Execute a JWT plugin operator.
         
         Args:
-            command: Command to execute (encode, decode, verify)
+            operator: Command to execute (encode, decode, verify)
             config: Command configuration
             
         Returns:
             Command execution result
         """
         try:
-            if command == "encode":
+            if operator == "encode":
                 return self._encode_jwt(config)
-            elif command == "decode":
+            elif operator == "decode":
                 return self._decode_jwt(config)
-            elif command == "verify":
+            elif operator == "verify":
                 return self._verify_jwt(config)
             else:
-                raise ValueError(f"Unknown command: {command}")
+                raise ValueError(f"Unknown operator: {operator}")
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing {command}: {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing {operator}: {str(e)}")
             raise
     
     def _encode_jwt(self, config: Dict[str, Any]) -> str:
@@ -100,7 +100,7 @@ class JwtPlugin(PluginBase):
             encoded_token = jwt.encode(processed_payload, key, algorithm=algorithm)
             
             # Store result if specified
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, encoded_token)
             
@@ -152,7 +152,7 @@ class JwtPlugin(PluginBase):
                 Output.Console(self.plugin_name, f"JWT decoded successfully with verification using {algorithms}")
             
             # Store result if specified
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, decoded_payload)
             
@@ -196,7 +196,7 @@ class JwtPlugin(PluginBase):
             jwt.decode(token, key, algorithms=algorithms)
             
             # Store result if specified
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, True)
             
@@ -205,13 +205,13 @@ class JwtPlugin(PluginBase):
             
         except jwt.ExpiredSignatureError:
             Output.Console(self.plugin_name, "JWT verification failed: Token has expired")
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, False)
             return False
         except jwt.InvalidTokenError as e:
             Output.Console(self.plugin_name, f"JWT verification failed: {str(e)}")
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, False)
             return False

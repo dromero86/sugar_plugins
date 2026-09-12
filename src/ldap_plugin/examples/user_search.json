@@ -17,7 +17,7 @@
         "base_dn": "ou=users,dc=example,dc=com",
         "search_filter": "(&(objectClass=person)(uid=john*))",
         "attributes": ["cn", "uid", "mail", "sn", "givenName"],
-        "result": "user_results"
+        "id": "user_results"
       }
     },
     {

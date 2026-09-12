@@ -79,25 +79,25 @@ class YAMLPlugin(PluginBase):
             "register_cli"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """Ejecuta un comando del plugin"""
         
         # Verificar dependencias antes de comandos críticos
-        if command in ["process_file", "convert_json_to_yaml"] and not self.dependency_status['all_satisfied']:
+        if operator in ["process_file", "convert_json_to_yaml"] and not self.dependency_status['all_satisfied']:
             raise RuntimeError("Dependencias no satisfechas. Instala PyYAML: pip install pyyaml")
         
-        if command == "process_file":
+        if operator == "process_file":
             return self._process_file(config)
-        elif command == "convert_json_to_yaml":
+        elif operator == "convert_json_to_yaml":
             return self._convert_json_to_yaml(config)
-        elif command == "validate_yaml":
+        elif operator == "validate_yaml":
             return self._validate_yaml(config)
-        elif command == "convert_directory":
+        elif operator == "convert_directory":
             return self._convert_directory(config)
-        elif command == "register_cli":
+        elif operator == "register_cli":
             return self._register_cli_parameters()
         else:
-            raise ValueError(f"Comando desconocido: {command}")
+            raise ValueError(f"Comando desconocido: {operator}")
     
     def _process_file(self, config: Dict[str, Any]) -> Any:
         """Procesa un archivo YAML"""
@@ -120,7 +120,7 @@ class YAMLPlugin(PluginBase):
                 result = {"status": "success", "data": data, "message": f"Archivo YAML parseado: {file_path}"}
             
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
             
@@ -180,7 +180,7 @@ class YAMLPlugin(PluginBase):
             }
             
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             Output.Console(self.plugin_name, f"{result['message']}")
             return result
@@ -211,7 +211,7 @@ class YAMLPlugin(PluginBase):
             result = {"status": "success", "message": f"YAML válido: {yaml_file}"}
             
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             Output.Console(self.plugin_name, f"{result['message']}")
             return result
@@ -251,7 +251,7 @@ class YAMLPlugin(PluginBase):
             if not json_files:
                 result = {"status": "warning", "message": f"No se encontraron archivos JSON en: {input_dir}"}
                 if "result" in config:
-                    self.set_variable(config["result"], result)
+                    self.set_variable(config["id"], result)
                 return result
             
             Output.Console(self.plugin_name, f"Procesando {len(json_files)} archivos JSON...")
@@ -282,7 +282,7 @@ class YAMLPlugin(PluginBase):
             }
             
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             Output.Console(self.plugin_name, f"{result['message']}")
             return result

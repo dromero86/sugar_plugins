@@ -127,41 +127,41 @@ class EnvironmentPlugin(PluginBase):
             "import"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute an environment command.
+        Execute an environment operator.
         
         Args:
-            command: Command to execute
-            config: Configuration for the command
+            operator: Command to execute
+            config: Configuration for the operator
             
         Returns:
             Command result
         """
         try:
-            if command == "set":
+            if operator == "set":
                 return self._set_env(config)
-            elif command == "get":
+            elif operator == "get":
                 return self._get_env(config)
-            elif command == "isset":
+            elif operator == "isset":
                 return self._isset_env(config)
-            elif command == "delete":
+            elif operator == "delete":
                 return self._delete_env(config)
-            elif command == "load":
+            elif operator == "load":
                 return self._load_env(config)
-            elif command == "clear":
+            elif operator == "clear":
                 return self._clear_env(config)
-            elif command == "list":
+            elif operator == "list":
                 return self._list_env(config)
-            elif command == "export":
+            elif operator == "export":
                 return self._export_env(config)
-            elif command == "import":
+            elif operator == "import":
                 return self._import_env(config)
             else:
-                raise ValueError(f"Unknown command: {command}")
+                raise ValueError(f"Unknown operator: {operator}")
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing {command}: {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing {operator}: {str(e)}")
             raise
     
     def _set_env(self, config: Dict[str, Any]) -> bool:
@@ -182,7 +182,7 @@ class EnvironmentPlugin(PluginBase):
     def _get_env(self, config: Dict[str, Any]) -> str:
         """Get an environment variable."""
         name = config.get("name")
-        result_var = config.get("result")
+        result_var = config.get("id")
         default = config.get("default", "")
         
         if not name:
@@ -203,7 +203,7 @@ class EnvironmentPlugin(PluginBase):
     def _isset_env(self, config: Dict[str, Any]) -> bool:
         """Check if an environment variable exists."""
         name = config.get("name")
-        result_var = config.get("result")
+        result_var = config.get("id")
         
         if not name:
             raise ValueError("Variable name required")
@@ -300,7 +300,7 @@ class EnvironmentPlugin(PluginBase):
     def _list_env(self, config: Dict[str, Any]) -> Dict[str, str]:
         """List environment variables."""
         pattern = config.get("pattern", "")
-        result_var = config.get("result")
+        result_var = config.get("id")
         
         env_vars = {}
         for key, value in os.environ.items():

@@ -126,7 +126,7 @@ class SimpleJwtPlugin:
             encoded_token = jwt.encode(processed_payload, key, algorithm=algorithm)
             
             # Store result if specified
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, encoded_token)
             
@@ -176,7 +176,7 @@ class SimpleJwtPlugin:
                 print(f"JWT decoded successfully with verification using {algorithms}")
             
             # Store result if specified
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, decoded_payload)
             
@@ -216,7 +216,7 @@ class SimpleJwtPlugin:
             jwt.decode(token, key, algorithms=algorithms)
             
             # Store result if specified
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, True)
             
@@ -225,13 +225,13 @@ class SimpleJwtPlugin:
             
         except jwt.ExpiredSignatureError:
             print("JWT verification failed: Token has expired")
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, False)
             return False
         except jwt.InvalidTokenError as e:
             print(f"JWT verification failed: {str(e)}")
-            result_var = config.get("result")
+            result_var = config.get("id")
             if result_var:
                 self._set_nested_variable(result_var, False)
             return False
@@ -270,7 +270,7 @@ def test_jwt_functionality():
         },
         "key": "{{ secret_key }}",
         "algorithm": "HS256",
-        "result": "encoded_jwt"
+        "id": "encoded_jwt"
     }
     
     try:
@@ -289,7 +289,7 @@ def test_jwt_functionality():
         "key": "{{ secret_key }}",
         "algorithms": ["HS256"],
         "verify": True,
-        "result": "decoded_payload"
+        "id": "decoded_payload"
     }
     
     try:
@@ -308,7 +308,7 @@ def test_jwt_functionality():
         "options": {
             "verify_signature": False
         },
-        "result": "payload_unverified"
+        "id": "payload_unverified"
     }
     
     try:
@@ -326,7 +326,7 @@ def test_jwt_functionality():
         "token": "{{ encoded_jwt }}",
         "key": "{{ secret_key }}",
         "algorithms": ["HS256"],
-        "result": "is_valid"
+        "id": "is_valid"
     }
     
     try:

@@ -134,37 +134,37 @@ class CurlPlugin(PluginBase):
         
         return commands
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute a curl command.
+        Execute a curl operator.
         
         Args:
-            command: Command to execute
-            config: Configuration for the command
+            operator: Command to execute
+            config: Configuration for the operator
             
         Returns:
             Command result
         """
         try:
-            if command in ["get", "post", "put", "delete", "patch", "head"]:
+            if operator in ["get", "post", "put", "delete", "patch", "head"]:
                 # Set method in config
-                config["method"] = command.upper()
+                config["method"] = operator.upper()
                 return self._execute_request(config)
-            elif command in ["request", "execute"]:
+            elif operator in ["request", "execute"]:
                 return self._execute_request(config)
-            elif command == "test_connection":
+            elif operator == "test_connection":
                 return self._test_connection(config)
-            elif command == "get_info":
+            elif operator == "get_info":
                 return self._get_info(config)
-            elif command == "sdk_info":
+            elif operator == "sdk_info":
                 return self._sdk_info(config)
-            elif command == "sdk_test":
+            elif operator == "sdk_test":
                 return self._sdk_test(config)
             else:
-                raise ValueError(f"Unknown command: {command}")
+                raise ValueError(f"Unknown operator: {operator}")
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing {command}: {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing {operator}: {str(e)}")
             raise
     
     def _execute_request(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -173,7 +173,7 @@ class CurlPlugin(PluginBase):
         # Extract basic parameters
         url = config.get("url")
         method = config.get("method", "GET").upper()
-        result_var = config.get("result")
+        result_var = config.get("id")
         
         if not url:
             raise ValueError("URL is required")

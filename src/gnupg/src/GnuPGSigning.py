@@ -20,22 +20,22 @@ class GnuPGSigning:
         self.plugin = plugin
         self.gpg_path = plugin._find_gpg()
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
-        """Execute signing/verification command."""
-        if command == "sign_file":
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
+        """Execute signing/verification operator."""
+        if operator == "sign_file":
             return self._sign_file(config)
-        elif command == "verify_signature":
+        elif operator == "verify_signature":
             return self._verify_signature(config)
-        elif command == "clearsign":
+        elif operator == "clearsign":
             return self._clearsign(config)
-        elif command == "detached_sign":
+        elif operator == "detached_sign":
             return self._detached_sign(config)
-        elif command == "sign_text":
+        elif operator == "sign_text":
             return self._sign_text(config)
-        elif command == "verify_text":
+        elif operator == "verify_text":
             return self._verify_text(config)
         else:
-            raise ValueError(f"Unknown signing command: {command}")
+            raise ValueError(f"Unknown signing operator: {operator}")
     
     def _sign_file(self, config: Dict[str, Any]) -> Dict[str, Any]:
         """Sign a file (binary signature)."""

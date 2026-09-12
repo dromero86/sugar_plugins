@@ -1,7 +1,7 @@
 {
   "name": "selenium",
   "version": "2.1.0",
-  "description": "Plugin de automatización web para Sugar con sintaxis @selenium/",
+  "description": "Plugin de automatización web para Sugar con sintaxis {\"selenium\": {\"operator\": ...}}",
   "author": "Sugar Team",
   "license": "MIT",
   "main": "src/SeleniumPlugin.py",
@@ -54,7 +54,7 @@
     "pdf"
   ],
   "features": [
-    "Sintaxis unificada @selenium/",
+    "Sintaxis unificada {\"selenium\": {\"operator\": ...}}",
     "Soporte completo de navegadores",
     "Sistema avanzado de cookies",
     "Descarga automática de drivers",

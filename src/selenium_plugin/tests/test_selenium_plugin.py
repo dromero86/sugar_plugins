@@ -44,7 +44,7 @@ class TestSeleniumPlugin(unittest.TestCase):
     def test_plugin_initialization(self):
         """Prueba la inicialización del plugin."""
         self.assertEqual(self.plugin.VERSION, "2.0.0")
-        self.assertEqual(self.plugin.DESCRIPTION, "Plugin Selenium para Sugar con sintaxis @selenium/")
+        self.assertEqual(self.plugin.DESCRIPTION, "Plugin Selenium para Sugar con sintaxis {\"selenium\": {\"operator\": ...}}")
         self.assertEqual(self.plugin.AUTHOR, "Sugar Team")
         self.assertEqual(self.plugin.LICENSE, "MIT")
         self.assertIn("selenium>=4.0.0", self.plugin.DEPENDENCIES)
@@ -92,7 +92,7 @@ class TestSeleniumPlugin(unittest.TestCase):
             'selenium': {
                 'operator': 'click',
                 'selector': '#btn',
-                'result': 'is_clicked'
+                'id': 'is_clicked'
             }
         }
         
@@ -107,7 +107,7 @@ class TestSeleniumPlugin(unittest.TestCase):
         config = {
             'selenium': {
                 'operator': 'click',
-                'result': 'is_clicked'
+                'id': 'is_clicked'
             }
         }
         
@@ -123,7 +123,7 @@ class TestSeleniumPlugin(unittest.TestCase):
             'selenium': {
                 'operator': 'open',
                 'url': 'https://example.com',
-                'result': 'is_open'
+                'id': 'is_open'
             }
         }
         
@@ -139,7 +139,7 @@ class TestSeleniumPlugin(unittest.TestCase):
         config = {
             'selenium': {
                 'operator': 'open',
-                'result': 'is_open'
+                'id': 'is_open'
             }
         }
         
@@ -157,7 +157,7 @@ class TestSeleniumPlugin(unittest.TestCase):
             'selenium': {
                 'operator': 'javascript',
                 'from_string': 'return "test result";',
-                'result': 'js_result'
+                'id': 'js_result'
             }
         }
         
@@ -181,7 +181,7 @@ class TestSeleniumPlugin(unittest.TestCase):
                 'selenium': {
                     'operator': 'javascript',
                     'from_file': temp_file,
-                    'result': 'js_result'
+                    'id': 'js_result'
                 }
             }
             
@@ -204,7 +204,7 @@ class TestSeleniumPlugin(unittest.TestCase):
                 'operator': 'type',
                 'selector': 'input[name="q"]',
                 'value': 'test text',
-                'result': 'is_typed'
+                'id': 'is_typed'
             }
         }
         
@@ -227,7 +227,7 @@ class TestSeleniumPlugin(unittest.TestCase):
                 'selector': 'input[name="q"]',
                 'value': 'test text',
                 'enter': True,
-                'result': 'is_typed'
+                'id': 'is_typed'
             }
         }
         
@@ -246,7 +246,7 @@ class TestSeleniumPlugin(unittest.TestCase):
                 'operator': 'wait',
                 'type': 'time',
                 'seconds': 2,
-                'result': 'is_waited'
+                'id': 'is_waited'
             }
         }
         
@@ -268,7 +268,7 @@ class TestSeleniumPlugin(unittest.TestCase):
                     'operator': 'wait',
                     'type': 'element',
                     'selector': '#content',
-                    'result': 'element_found'
+                    'id': 'element_found'
                 }
             }
             
@@ -283,7 +283,7 @@ class TestSeleniumPlugin(unittest.TestCase):
             'selenium': {
                 'operator': 'screenshot',
                 'file': './test_screenshot.png',
-                'result': 'screenshot'
+                'id': 'screenshot'
             }
         }
         
@@ -299,7 +299,7 @@ class TestSeleniumPlugin(unittest.TestCase):
             'selenium': {
                 'operator': 'navigate',
                 'action': 'refresh',
-                'result': 'navigated'
+                'id': 'navigated'
             }
         }
         
@@ -321,7 +321,7 @@ class TestSeleniumPlugin(unittest.TestCase):
             'selenium': {
                 'operator': 'find',
                 'selector': '.test-element',
-                'result': 'found'
+                'id': 'found'
             }
         }
         
@@ -344,7 +344,7 @@ class TestSeleniumPlugin(unittest.TestCase):
                 'operator': 'find',
                 'selector': '.test-elements',
                 'multiple': True,
-                'result': 'found'
+                'id': 'found'
             }
         }
         
@@ -367,7 +367,7 @@ class TestSeleniumPlugin(unittest.TestCase):
             'selenium': {
                 'operator': 'cookies',
                 'action': 'get',
-                'result': 'cookies'
+                'id': 'cookies'
             }
         }
         
@@ -386,7 +386,7 @@ class TestSeleniumPlugin(unittest.TestCase):
                 'name': 'session_id',
                 'value': 'abc123',
                 'domain': '.example.com',
-                'result': 'cookie_added'
+                'id': 'cookie_added'
             }
         }
         
@@ -406,7 +406,7 @@ class TestSeleniumPlugin(unittest.TestCase):
                     {'name': 'cookie1', 'value': 'value1'},
                     {'name': 'cookie2', 'value': 'value2'}
                 ],
-                'result': 'cookies_added'
+                'id': 'cookies_added'
             }
         }
         
@@ -423,7 +423,7 @@ class TestSeleniumPlugin(unittest.TestCase):
                 'operator': 'cookies',
                 'action': 'delete',
                 'name': 'session_id',
-                'result': 'cookie_deleted'
+                'id': 'cookie_deleted'
             }
         }
         
@@ -439,7 +439,7 @@ class TestSeleniumPlugin(unittest.TestCase):
             'selenium': {
                 'operator': 'cookies',
                 'action': 'clear',
-                'result': 'cookies_cleared'
+                'id': 'cookies_cleared'
             }
         }
         
@@ -459,7 +459,7 @@ class TestSeleniumPlugin(unittest.TestCase):
                 'operator': 'cookies',
                 'action': 'get_by_name',
                 'name': 'session_id',
-                'result': 'cookie_by_name'
+                'id': 'cookie_by_name'
             }
         }
         
@@ -482,7 +482,7 @@ class TestSeleniumPlugin(unittest.TestCase):
                 'operator': 'cookies',
                 'action': 'get_by_domain',
                 'domain': '.example.com',
-                'result': 'cookies_by_domain'
+                'id': 'cookies_by_domain'
             }
         }
         

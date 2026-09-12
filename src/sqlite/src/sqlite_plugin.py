@@ -133,81 +133,81 @@ class SQLitePlugin(PluginBase):
             "release_savepoint"
         ]
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
-        Execute a SQLite command.
+        Execute a SQLite operator.
         
         Args:
-            command: Command to execute
-            config: Configuration for the command
+            operator: Command to execute
+            config: Configuration for the operator
             
         Returns:
             Command result
         """
         try:
-            if command == "connect":
+            if operator == "connect":
                 return self._connect(config)
-            elif command == "disconnect":
+            elif operator == "disconnect":
                 return self._disconnect(config)
-            elif command == "execute":
+            elif operator == "execute":
                 return self._execute_sql(config)
-            elif command == "query":
+            elif operator == "query":
                 return self._query_data(config)
-            elif command == "select":
+            elif operator == "select":
                 return self._select_data(config)
-            elif command == "create_table":
+            elif operator == "create_table":
                 return self._create_table(config)
-            elif command == "insert":
+            elif operator == "insert":
                 return self._insert_data(config)
-            elif command == "update":
+            elif operator == "update":
                 return self._update_data(config)
-            elif command == "delete":
+            elif operator == "delete":
                 return self._delete_data(config)
-            elif command == "list_tables":
+            elif operator == "list_tables":
                 return self._list_tables(config)
-            elif command == "describe_table":
+            elif operator == "describe_table":
                 return self._describe_table(config)
-            elif command == "backup":
+            elif operator == "backup":
                 return self._backup_database(config)
-            elif command == "restore":
+            elif operator == "restore":
                 return self._restore_database(config)
-            elif command == "vacuum":
+            elif operator == "vacuum":
                 return self._vacuum_database(config)
-            elif command == "analyze":
+            elif operator == "analyze":
                 return self._analyze_database(config)
-            elif command == "check_integrity":
+            elif operator == "check_integrity":
                 return self._check_integrity(config)
-            elif command == "get_table_info":
+            elif operator == "get_table_info":
                 return self._get_table_info(config)
-            elif command == "get_indexes":
+            elif operator == "get_indexes":
                 return self._get_indexes(config)
-            elif command == "get_triggers":
+            elif operator == "get_triggers":
                 return self._get_triggers(config)
-            elif command == "get_views":
+            elif operator == "get_views":
                 return self._get_views(config)
-            elif command == "export_data":
+            elif operator == "export_data":
                 return self._export_data(config)
-            elif command == "import_data":
+            elif operator == "import_data":
                 return self._import_data(config)
-            elif command == "begin_transaction":
+            elif operator == "begin_transaction":
                 return self._begin_transaction(config)
-            elif command == "commit":
+            elif operator == "commit":
                 return self._commit_transaction(config)
-            elif command == "rollback":
+            elif operator == "rollback":
                 return self._rollback_transaction(config)
-            elif command == "savepoint":
+            elif operator == "savepoint":
                 return self._create_savepoint(config)
-            elif command == "rollback_to_savepoint":
+            elif operator == "rollback_to_savepoint":
                 return self._rollback_to_savepoint(config)
-            elif command == "release_savepoint":
+            elif operator == "release_savepoint":
                 return self._release_savepoint(config)
-            elif command == "test_connection":
+            elif operator == "test_connection":
                 return self._test_connection(config)
             else:
-                raise ValueError(f"Unknown command: {command}")
+                raise ValueError(f"Unknown operator: {operator}")
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing {command}: {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing {operator}: {str(e)}")
             raise
     
     def _connect(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -316,7 +316,7 @@ class SQLitePlugin(PluginBase):
             raise ValueError("SQL statement is required")
         
         params = config.get("params", [])
-        result_variable = config.get("result")
+        result_variable = config.get("id")
         
         start_time = time.time()
         
@@ -418,7 +418,7 @@ class SQLitePlugin(PluginBase):
         return self._execute_sql({
             "sql": sql,
             "params": params,
-            "result": config.get("result")
+            "result": config.get("id")
         })
     
     def _create_table(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -461,7 +461,7 @@ class SQLitePlugin(PluginBase):
         
         return self._execute_sql({
             "sql": sql,
-            "result": config.get("result")
+            "result": config.get("id")
         })
     
     def _insert_data(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -493,7 +493,7 @@ class SQLitePlugin(PluginBase):
             return self._execute_sql({
                 "sql": sql,
                 "params": values,
-                "result": config.get("result")
+                "result": config.get("id")
             })
         elif isinstance(data, list):
             # Multiple rows insert
@@ -516,8 +516,8 @@ class SQLitePlugin(PluginBase):
             
             cursor.close()
             
-            if config.get("result"):
-                self.set_variable(config["result"], result)
+            if config.get("id"):
+                self.set_variable(config["id"], result)
             
             return result
         else:
@@ -553,7 +553,7 @@ class SQLitePlugin(PluginBase):
         return self._execute_sql({
             "sql": sql,
             "params": params,
-            "result": config.get("result")
+            "result": config.get("id")
         })
     
     def _delete_data(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -582,7 +582,7 @@ class SQLitePlugin(PluginBase):
         return self._execute_sql({
             "sql": sql,
             "params": params,
-            "result": config.get("result")
+            "result": config.get("id")
         })
     
     def _list_tables(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -603,7 +603,7 @@ class SQLitePlugin(PluginBase):
         
         return self._execute_sql({
             "sql": sql,
-            "result": config.get("result")
+            "result": config.get("id")
         })
     
     def _describe_table(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -624,7 +624,7 @@ class SQLitePlugin(PluginBase):
         
         return self._execute_sql({
             "sql": sql,
-            "result": config.get("result")
+            "result": config.get("id")
         })
     
     def _backup_database(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -721,7 +721,7 @@ class SQLitePlugin(PluginBase):
         """
         return self._execute_sql({
             "sql": "VACUUM",
-            "result": config.get("result")
+            "result": config.get("id")
         })
     
     def _analyze_database(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -736,7 +736,7 @@ class SQLitePlugin(PluginBase):
         """
         return self._execute_sql({
             "sql": "ANALYZE",
-            "result": config.get("result")
+            "result": config.get("id")
         })
     
     def _check_integrity(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -751,7 +751,7 @@ class SQLitePlugin(PluginBase):
         """
         return self._execute_sql({
             "sql": "PRAGMA integrity_check",
-            "result": config.get("result")
+            "result": config.get("id")
         })
     
     def _get_table_info(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -770,7 +770,7 @@ class SQLitePlugin(PluginBase):
         
         return self._execute_sql({
             "sql": f"PRAGMA table_info({table})",
-            "result": config.get("result")
+            "result": config.get("id")
         })
     
     def _get_indexes(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -791,7 +791,7 @@ class SQLitePlugin(PluginBase):
         
         return self._execute_sql({
             "sql": sql,
-            "result": config.get("result")
+            "result": config.get("id")
         })
     
     def _get_triggers(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -812,7 +812,7 @@ class SQLitePlugin(PluginBase):
         
         return self._execute_sql({
             "sql": sql,
-            "result": config.get("result")
+            "result": config.get("id")
         })
     
     def _get_views(self, config: Dict[str, Any]) -> Dict[str, Any]:
@@ -833,7 +833,7 @@ class SQLitePlugin(PluginBase):
         
         return self._execute_sql({
             "sql": sql,
-            "result": config.get("result")
+            "result": config.get("id")
         })
     
     def _export_data(self, config: Dict[str, Any]) -> Dict[str, Any]:

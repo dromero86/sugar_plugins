@@ -15,7 +15,7 @@
         "destination": "./backup.zip",
         "format": "zip",
         "compression_level": 6,
-        "result": "compresion"
+        "id": "compresion"
       }
     },
     {

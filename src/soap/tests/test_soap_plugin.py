@@ -49,7 +49,7 @@ class TestSOAPPlugin(unittest.TestCase):
         """Test SOAP client creation"""
         parameters = {
             "wsdl_url": "https://example.com/service?wsdl",
-            "result": "test_client"
+            "id": "test_client"
         }
         
         with patch('urllib.request.urlopen') as mock_urlopen:
@@ -68,7 +68,7 @@ class TestSOAPPlugin(unittest.TestCase):
             "host": "localhost",
             "port": 8080,
             "service_name": "TestService",
-            "result": "test_server"
+            "id": "test_server"
         }
         
         result = self.plugin._create_soap_server(parameters)

@@ -19,7 +19,7 @@
       "selenium": {
         "operator": "open",
         "url": "https://www.microsoft.com",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
@@ -27,14 +27,14 @@
         "operator": "wait",
         "type": "element",
         "selector": "header",
-        "result": "header_ready"
+        "id": "header_ready"
       }
     },
     {
       "selenium": {
         "operator": "screenshot",
         "file": "./edge_microsoft.png",
-        "result": "screenshot"
+        "id": "screenshot"
       }
     },
     {
@@ -42,7 +42,7 @@
         "operator": "find",
         "selector": "a[href*='products']",
         "multiple": true,
-        "result": "product_links"
+        "id": "product_links"
       }
     },
     {

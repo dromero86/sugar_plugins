@@ -16,7 +16,7 @@
       "selenium": {
         "operator": "open",
         "url": "https://example.com",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
@@ -24,14 +24,14 @@
         "operator": "wait",
         "type": "element",
         "selector": "body",
-        "result": "page_loaded"
+        "id": "page_loaded"
       }
     },
     {
       "selenium": {
         "operator": "screenshot",
         "file": "./example_screenshot.png",
-        "result": "screenshot"
+        "id": "screenshot"
       }
     },
     {

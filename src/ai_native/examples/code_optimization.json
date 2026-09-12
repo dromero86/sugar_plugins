@@ -31,7 +31,7 @@
       "ai_native": {
         "operator": "analyze_code",
         "code": "{{bubble_sort_function}}",
-        "result": "original_analysis"
+        "id": "original_analysis"
       }
     },
     {
@@ -63,7 +63,7 @@
           "maintain_api": true,
           "preserve_behavior": true
         },
-        "result": "optimized_function"
+        "id": "optimized_function"
       }
     },
     {
@@ -90,7 +90,7 @@
       "ai_native": {
         "operator": "analyze_code",
         "code": "{{optimized_function}}",
-        "result": "optimized_analysis"
+        "id": "optimized_analysis"
       }
     },
     {
@@ -117,7 +117,7 @@
       "ai_native": {
         "operator": "validate_code",
         "code": "{{optimized_function}}",
-        "result": "optimization_validation"
+        "id": "optimization_validation"
       }
     },
     {

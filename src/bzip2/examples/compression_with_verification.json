@@ -9,7 +9,7 @@
         "source": "archivo_importante.txt",
         "destination": "archivo_importante.txt.bz2",
         "compression_level": 8,
-        "result": "compression_result"
+        "id": "compression_result"
       }
     },
     {
@@ -19,7 +19,7 @@
       "bzip2": {
         "operator": "bzip2_test",
         "source": "archivo_importante.txt.bz2",
-        "result": "test_result"
+        "id": "test_result"
       }
     },
     {

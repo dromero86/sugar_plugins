@@ -11,7 +11,7 @@
       "selenium": {
         "operator": "open",
         "url": "https://example.com",
-        "result": "is_open"
+        "id": "is_open"
       }
     },
     {
@@ -55,14 +55,14 @@
             "expiry": "730d"
           }
         ],
-        "result": "cookies_added"
+        "id": "cookies_added"
       }
     },
     {
       "selenium": {
         "operator": "cookies",
         "action": "get",
-        "result": "all_cookies"
+        "id": "all_cookies"
       }
     },
     {
@@ -70,7 +70,7 @@
         "operator": "cookies",
         "action": "get_by_name",
         "name": "session_id",
-        "result": "session_cookie"
+        "id": "session_cookie"
       }
     },
     {
@@ -78,21 +78,21 @@
         "operator": "cookies",
         "action": "get_by_domain",
         "domain": ".example.com",
-        "result": "domain_cookies"
+        "id": "domain_cookies"
       }
     },
     {
       "selenium": {
         "operator": "navigate",
         "action": "refresh",
-        "result": "refreshed"
+        "id": "refreshed"
       }
     },
     {
       "selenium": {
         "operator": "cookies",
         "action": "get",
-        "result": "cookies_after_refresh"
+        "id": "cookies_after_refresh"
       }
     },
     {
@@ -100,28 +100,28 @@
         "operator": "cookies",
         "action": "delete",
         "name": "analytics_id",
-        "result": "analytics_deleted"
+        "id": "analytics_deleted"
       }
     },
     {
       "selenium": {
         "operator": "cookies",
         "action": "get",
-        "result": "cookies_after_delete"
+        "id": "cookies_after_delete"
       }
     },
     {
       "selenium": {
         "operator": "cookies",
         "action": "clear",
-        "result": "all_cleared"
+        "id": "all_cleared"
       }
     },
     {
       "selenium": {
         "operator": "cookies",
         "action": "get",
-        "result": "final_cookies"
+        "id": "final_cookies"
       }
     }
   ]

@@ -24,7 +24,7 @@ pip install -r plugins/navigator_selenium/requirements.txt
                     "headers": {
                         "User-Agent": "Sugar-Navigator/1.0"
                     },
-                    "result": "response"
+                    "id": "response"
                 }
             }
         }
@@ -43,7 +43,7 @@ pip install -r plugins/navigator_selenium/requirements.txt
                 "command": "javascript",
                 "config": {
                     "code": "return document.title;",
-                    "result": "page_title"
+                    "id": "page_title"
                 }
             }
         }
@@ -67,7 +67,7 @@ pip install -r plugins/navigator_selenium/requirements.txt
             "headers": {
                 "Authorization": "Bearer token123"
             },
-            "result": "api_response"
+            "id": "api_response"
         }
     }
 }
@@ -89,7 +89,7 @@ pip install -r plugins/navigator_selenium/requirements.txt
             "headers": {
                 "Content-Type": "application/json"
             },
-            "result": "create_response"
+            "id": "create_response"
         }
     }
 }
@@ -107,7 +107,7 @@ pip install -r plugins/navigator_selenium/requirements.txt
         "config": {
             "url": "https://example.com",
             "wait_for_load": true,
-            "result": "navigation_result"
+            "id": "navigation_result"
         }
     }
 }
@@ -123,7 +123,7 @@ pip install -r plugins/navigator_selenium/requirements.txt
         "config": {
             "selector": "#submit-button",
             "type": "css",
-            "result": "click_result"
+            "id": "click_result"
         }
     }
 }
@@ -140,7 +140,7 @@ pip install -r plugins/navigator_selenium/requirements.txt
             "selector": "#username",
             "text": "myuser",
             "type": "css",
-            "result": "input_result"
+            "id": "input_result"
         }
     }
 }
@@ -157,7 +157,7 @@ pip install -r plugins/navigator_selenium/requirements.txt
             "type": "element",
             "selector": ".loading-spinner",
             "selector_type": "css",
-            "result": "wait_result"
+            "id": "wait_result"
         }
     }
 }
@@ -172,7 +172,7 @@ pip install -r plugins/navigator_selenium/requirements.txt
         "command": "screenshot",
         "config": {
             "file": "screenshot.png",
-            "result": "screenshot_result"
+            "id": "screenshot_result"
         }
     }
 }
@@ -189,7 +189,7 @@ pip install -r plugins/navigator_selenium/requirements.txt
         "command": "javascript",
         "config": {
             "code": "return document.querySelector('h1').textContent;",
-            "result": "heading_text"
+            "id": "heading_text"
         }
     }
 }
@@ -204,7 +204,7 @@ pip install -r plugins/navigator_selenium/requirements.txt
         "command": "javascript",
         "config": {
             "file": "script.js",
-            "result": "file_result"
+            "id": "file_result"
         }
     }
 }
@@ -300,7 +300,7 @@ pip install -r plugins/navigator_selenium/requirements.txt
                 "command": "http",
                 "config": {
                     "GET": "https://httpbin.org/json",
-                    "result": "api_data"
+                    "id": "api_data"
                 }
             }
         },
@@ -320,7 +320,7 @@ pip install -r plugins/navigator_selenium/requirements.txt
                 "command": "javascript",
                 "config": {
                     "code": "document.title = 'Data: ' + arguments[0];",
-                    "result": "title_change"
+                    "id": "title_change"
                 }
             }
         }

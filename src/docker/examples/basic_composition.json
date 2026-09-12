@@ -72,7 +72,7 @@
             }
           }
         },
-        "result": "composition_result"
+        "id": "composition_result"
       }
     },
     {
@@ -84,7 +84,7 @@
       "docker": {
         "operator": "start_composition",
         "name": "web_app",
-        "result": "start_result"
+        "id": "start_result"
       }
     },
     {
@@ -96,7 +96,7 @@
       "docker": {
         "operator": "status_composition",
         "name": "web_app",
-        "result": "status_result"
+        "id": "status_result"
       }
     },
     {

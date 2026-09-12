@@ -20,28 +20,28 @@ class GnuPGKeyManager:
         self.plugin = plugin
         self.gpg_path = plugin._find_gpg()
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
-        """Execute key management command."""
-        if command == "generate_key":
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
+        """Execute key management operator."""
+        if operator == "generate_key":
             return self._generate_key(config)
-        elif command == "list_keys":
+        elif operator == "list_keys":
             return self._list_keys(config)
-        elif command == "import_key":
+        elif operator == "import_key":
             return self._import_key(config)
-        elif command == "export_key":
+        elif operator == "export_key":
             return self._export_key(config)
-        elif command == "delete_key":
+        elif operator == "delete_key":
             return self._delete_key(config)
-        elif command == "edit_key":
+        elif operator == "edit_key":
             return self._edit_key(config)
-        elif command == "sign_key":
+        elif operator == "sign_key":
             return self._sign_key(config)
-        elif command == "revoke_key":
+        elif operator == "revoke_key":
             return self._revoke_key(config)
-        elif command == "trust_key":
+        elif operator == "trust_key":
             return self._trust_key(config)
         else:
-            raise ValueError(f"Unknown key management command: {command}")
+            raise ValueError(f"Unknown key management operator: {operator}")
     
     def _generate_key(self, config: Dict[str, Any]) -> Dict[str, Any]:
         """Generate a new GnuPG key."""

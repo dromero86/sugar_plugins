@@ -345,38 +345,38 @@ class RarPlugin(PluginBase):
         except:
             return 0
     
-    def execute(self, command: str, config: Dict[str, Any]) -> Any:
+    def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """Ejecutar un comando del plugin"""
-        if command == "rar_compress":
+        if operator == "rar_compress":
             return self._compress_command(config)
-        elif command == "rar_extract":
+        elif operator == "rar_extract":
             return self._extract_command(config)
-        elif command == "rar_info":
+        elif operator == "rar_info":
             return self._info_command(config)
-        elif command == "rar_list":
+        elif operator == "rar_list":
             return self._list_command(config)
-        elif command == "rar_test":
+        elif operator == "rar_test":
             return self._test_command(config)
-        elif command == "rar_convert":
+        elif operator == "rar_convert":
             return self._convert_command(config)
-        elif command == "rar_merge":
+        elif operator == "rar_merge":
             return self._merge_command(config)
-        elif command == "rar_split":
+        elif operator == "rar_split":
             return self._split_command(config)
-        elif command == "sdk_info":
+        elif operator == "sdk_info":
             return self._sdk_info_command(config)
-        elif command == "list_formats":
+        elif operator == "list_formats":
             return self._list_formats_command(config)
-        elif command == "test_sdk":
+        elif operator == "test_sdk":
             return self._test_sdk_command(config)
-        elif command == "check_dependencies":
+        elif operator == "check_dependencies":
             return self._check_dependencies_command(config)
-        elif command == "system_info":
+        elif operator == "system_info":
             return self._system_info_command(config)
-        elif command == "test_functionality":
+        elif operator == "test_functionality":
             return self._test_functionality_command(config)
         else:
-            raise ValueError(f"Comando desconocido: {command}")
+            raise ValueError(f"Comando desconocido: {operator}")
     
     def _compress_command(self, config: Dict[str, Any]) -> Dict[str, Any]:
         """Comprimir archivos o directorios en formato RAR"""
@@ -427,7 +427,7 @@ class RarPlugin(PluginBase):
             }
             
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
             
@@ -441,7 +441,7 @@ class RarPlugin(PluginBase):
             }
             
             if "result" in config:
-                self.set_variable(config["result"], error_result)
+                self.set_variable(config["id"], error_result)
             
             return error_result
     
@@ -480,7 +480,7 @@ class RarPlugin(PluginBase):
             }
             
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
             
@@ -494,7 +494,7 @@ class RarPlugin(PluginBase):
             }
             
             if "result" in config:
-                self.set_variable(config["result"], error_result)
+                self.set_variable(config["id"], error_result)
             
             return error_result
     
@@ -535,7 +535,7 @@ class RarPlugin(PluginBase):
                 info['file_details'] = file_details
                 
                 if "result" in config:
-                    self.set_variable(config["result"], info)
+                    self.set_variable(config["id"], info)
                 
                 return info
                 
@@ -543,7 +543,7 @@ class RarPlugin(PluginBase):
             error_result = {'status': 'error', 'error': str(e)}
             
             if "result" in config:
-                self.set_variable(config["result"], error_result)
+                self.set_variable(config["id"], error_result)
             
             return error_result
     
@@ -571,7 +571,7 @@ class RarPlugin(PluginBase):
                 }
                 
                 if "result" in config:
-                    self.set_variable(config["result"], result)
+                    self.set_variable(config["id"], result)
                 
                 return result
                 
@@ -579,7 +579,7 @@ class RarPlugin(PluginBase):
             error_result = {'status': 'error', 'error': str(e)}
             
             if "result" in config:
-                self.set_variable(config["result"], error_result)
+                self.set_variable(config["id"], error_result)
             
             return error_result
     
@@ -609,7 +609,7 @@ class RarPlugin(PluginBase):
                 }
                 
                 if "result" in config:
-                    self.set_variable(config["result"], result)
+                    self.set_variable(config["id"], result)
                 
                 return result
                 
@@ -621,7 +621,7 @@ class RarPlugin(PluginBase):
             }
             
             if "result" in config:
-                self.set_variable(config["result"], error_result)
+                self.set_variable(config["id"], error_result)
             
             return error_result
     
@@ -748,7 +748,7 @@ class RarPlugin(PluginBase):
             }
             
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
             
@@ -756,7 +756,7 @@ class RarPlugin(PluginBase):
             error_result = {'status': 'error', 'error': str(e)}
             
             if "result" in config:
-                self.set_variable(config["result"], error_result)
+                self.set_variable(config["id"], error_result)
             
             return error_result
     
@@ -784,7 +784,7 @@ class RarPlugin(PluginBase):
         }
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -797,7 +797,7 @@ class RarPlugin(PluginBase):
         }
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -856,7 +856,7 @@ class RarPlugin(PluginBase):
         }
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -865,7 +865,7 @@ class RarPlugin(PluginBase):
         result = self.dependency_status.copy()
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -892,7 +892,7 @@ class RarPlugin(PluginBase):
         }
         
         if "result" in config:
-            self.set_variable(config["result"], result)
+            self.set_variable(config["id"], result)
         
         return result
     
@@ -952,7 +952,7 @@ class RarPlugin(PluginBase):
             }
             
             if "result" in config:
-                self.set_variable(config["result"], result)
+                self.set_variable(config["id"], result)
             
             return result
             
@@ -969,7 +969,7 @@ class RarPlugin(PluginBase):
             }
             
             if "result" in config:
-                self.set_variable(config["result"], error_result)
+                self.set_variable(config["id"], error_result)
             
             return error_result
     

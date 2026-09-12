@@ -15,7 +15,7 @@ Estas funciones permiten interactuar con un navegador web usando el plugin `navi
         "config": {
             "url": "https://example.com",
             "wait_for_load": true,
-            "result": "navigation_result"
+            "id": "navigation_result"
         }
     }
 }
@@ -114,7 +114,7 @@ Estas funciones permiten interactuar con un navegador web usando el plugin `navi
     "command": "javascript",
     "config": {
       "code": "return document.title;",
-      "result": "page_title"
+      "id": "page_title"
     }
   }
 }
@@ -228,7 +228,7 @@ Ejecuta código JavaScript usando el plugin `navigator_selenium`.
         "command": "javascript",
         "config": {
             "code": "return document.title;",
-            "result": "page_title"
+            "id": "page_title"
         }
     }
 }

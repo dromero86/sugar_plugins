@@ -26,7 +26,7 @@
             "constraints": "NOT NULL"
           }
         ],
-        "result": "table_created"
+        "id": "table_created"
       }
     },
     {
@@ -38,7 +38,7 @@
         "data": {
           "name": "Test User"
         },
-        "result": "insert_result"
+        "id": "insert_result"
       }
     },
     {
@@ -47,7 +47,7 @@
     {
       "sqlite.select": {
         "table": "test_table",
-        "result": "users_data"
+        "id": "users_data"
       }
     },
     {

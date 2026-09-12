@@ -831,65 +831,65 @@ class AINativePlugin(PluginBase):
             "combine_providers"
         ]
     
-    def execute(self, command: str, params: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(self, operator: str, params: Dict[str, Any]) -> Dict[str, Any]:
         """Ejecuta un comando del plugin"""
         try:
             # Verificar dependencias antes de comandos críticos
-            if command in ["generate_code", "optimize_code", "nl_to_code"] and not self.dependency_status['all_satisfied']:
+            if operator in ["generate_code", "optimize_code", "nl_to_code"] and not self.dependency_status['all_satisfied']:
                 raise RuntimeError("Dependencias no satisfechas")
             
-            if command == "generate_code":
+            if operator == "generate_code":
                 return self._generate_code(params)
-            elif command == "optimize_code":
+            elif operator == "optimize_code":
                 return self._optimize_code(params)
-            elif command == "nl_to_code":
+            elif operator == "nl_to_code":
                 return self._nl_to_code(params)
-            elif command == "analyze_code":
+            elif operator == "analyze_code":
                 return self._analyze_code(params)
-            elif command == "validate_code":
+            elif operator == "validate_code":
                 return self._validate_code(params)
-            elif command == "get_context":
+            elif operator == "get_context":
                 return self._get_context(params)
-            elif command == "update_context":
+            elif operator == "update_context":
                 return self._update_context(params)
-            elif command == "check_security":
+            elif operator == "check_security":
                 return self._check_security(params)
-            elif command == "get_ai_info":
+            elif operator == "get_ai_info":
                 return self._get_ai_info(params)
-            elif command == "install_dependencies":
+            elif operator == "install_dependencies":
                 return self._install_dependencies(params)
-            elif command == "download_model":
+            elif operator == "download_model":
                 return self._download_model(params)
-            elif command == "switch_model":
+            elif operator == "switch_model":
                 return self._switch_model(params)
-            elif command == "test_model":
+            elif operator == "test_model":
                 return self._test_model(params)
-            elif command == "get_model_info":
+            elif operator == "get_model_info":
                 return self._get_model_info(params)
             # Nuevos operadores de configuración
-            elif command == "setup":
+            elif operator == "setup":
                 return self._setup_provider(params)
-            elif command == "configure":
+            elif operator == "configure":
                 return self._configure_provider(params)
-            elif command == "add_provider":
+            elif operator == "add_provider":
                 return self._add_provider(params)
-            elif command == "remove_provider":
+            elif operator == "remove_provider":
                 return self._remove_provider(params)
-            elif command == "list_providers":
+            elif operator == "list_providers":
                 return self._list_providers(params)
-            elif command == "set_default_provider":
+            elif operator == "set_default_provider":
                 return self._set_default_provider(params)
-            elif command == "get_provider_info":
+            elif operator == "get_provider_info":
                 return self._get_provider_info(params)
-            elif command == "test_provider":
+            elif operator == "test_provider":
                 return self._test_provider(params)
-            elif command == "combine_providers":
+            elif operator == "combine_providers":
                 return self._combine_providers(params)
             else:
-                return {"success": False, "error": f"Comando desconocido: {command}"}
+                return {"success": False, "error": f"Comando desconocido: {operator}"}
                 
         except Exception as e:
-            logger.error(f"Error ejecutando comando {command}: {e}")
+            logger.error(f"Error ejecutando comando {operator}: {e}")
             return {"success": False, "error": str(e)}
     
     async def _execute_ai_task(self, task: AITask) -> AIResult:
@@ -968,7 +968,7 @@ class AINativePlugin(PluginBase):
         description = config.get("description", "")
         context = config.get("context", {"domain": "general"})
         options = config.get("options", {})
-        result_var = config.get("result", "generated_code")
+        result_var = config.get("id", "generated_code")
         
         if not description:
             raise ValueError("generate_code requiere parámetro 'description'")
@@ -1004,7 +1004,7 @@ class AINativePlugin(PluginBase):
         code = config.get("code", "")
         target = config.get("target", "performance")
         constraints = config.get("constraints", {})
-        result_var = config.get("result", "optimized_code")
+        result_var = config.get("id", "optimized_code")
         
         if not code:
             raise ValueError("optimize_code requiere parámetro 'code'")
@@ -1040,7 +1040,7 @@ class AINativePlugin(PluginBase):
         """Convierte consulta NL a código"""
         query = config.get("query", "")
         context = config.get("context", {})
-        result_var = config.get("result", "generated_script")
+        result_var = config.get("id", "generated_script")
         
         if not query:
             raise ValueError("nl_to_code requiere parámetro 'query'")
@@ -1074,7 +1074,7 @@ class AINativePlugin(PluginBase):
     def _analyze_code(self, config: Dict[str, Any]) -> Any:
         """Analiza código para determinar optimizaciones"""
         code = config.get("code", "")
-        result_var = config.get("result", "code_analysis")
+        result_var = config.get("id", "code_analysis")
         
         if not code:
             raise ValueError("analyze_code requiere parámetro 'code'")
@@ -1112,7 +1112,7 @@ class AINativePlugin(PluginBase):
     def _validate_code(self, config: Dict[str, Any]) -> Any:
         """Valida código generado por IA"""
         code = config.get("code", "")
-        result_var = config.get("result", "validation_result")
+        result_var = config.get("id", "validation_result")
         
         if not code:
             raise ValueError("validate_code requiere parámetro 'code'")
@@ -1129,7 +1129,7 @@ class AINativePlugin(PluginBase):
     def _get_context(self, config: Dict[str, Any]) -> Any:
         """Obtiene contexto específico del dominio"""
         domain = config.get("domain", "general")
-        result_var = config.get("result", "domain_context")
+        result_var = config.get("id", "domain_context")
         
         context = asyncio.run(self.context_manager.get_context(domain))
         
@@ -1152,7 +1152,7 @@ class AINativePlugin(PluginBase):
     
     def _check_security(self, config: Dict[str, Any]) -> Any:
         """Verifica configuración de seguridad"""
-        result_var = config.get("result", "security_status")
+        result_var = config.get("id", "security_status")
         
         security_status = {
             "code_validation": self.config["security"]["code_validation"],
@@ -1171,7 +1171,7 @@ class AINativePlugin(PluginBase):
     
     def _get_ai_info(self, config: Dict[str, Any]) -> Any:
         """Obtiene información sobre el plugin AI"""
-        result_var = config.get("result", "ai_info")
+        result_var = config.get("id", "ai_info")
         
         ai_info = {
             "version": self.VERSION,
@@ -1389,7 +1389,7 @@ class AINativePlugin(PluginBase):
     
     def _install_dependencies(self, config: Dict[str, Any]) -> Any:
         """Instala dependencias faltantes"""
-        result_var = config.get("result", "install_result")
+        result_var = config.get("id", "install_result")
         
         try:
             import subprocess
@@ -1445,7 +1445,7 @@ class AINativePlugin(PluginBase):
         """Descarga un modelo local"""
         model_name = config.get("model_name", "codellama-7b-instruct")
         model_path = config.get("model_path", "./models")
-        result_var = config.get("result", "download_result")
+        result_var = config.get("id", "download_result")
         
         try:
             import subprocess
@@ -1495,7 +1495,7 @@ class AINativePlugin(PluginBase):
         """Cambia el modelo actual"""
         model_type = config.get("model_type", "template")  # template, openai, anthropic, local
         model_name = config.get("model_name", None)
-        result_var = config.get("result", "switch_result")
+        result_var = config.get("id", "switch_result")
         
         try:
             # Actualizar configuración
@@ -1540,7 +1540,7 @@ class AINativePlugin(PluginBase):
     def _test_model(self, config: Dict[str, Any]) -> Any:
         """Prueba el modelo actual"""
         test_prompt = config.get("prompt", "Crear una función simple que sume dos números")
-        result_var = config.get("result", "test_result")
+        result_var = config.get("id", "test_result")
         
         try:
             # Crear tarea de prueba
@@ -1580,7 +1580,7 @@ class AINativePlugin(PluginBase):
     
     def _get_model_info(self, config: Dict[str, Any]) -> Any:
         """Obtiene información detallada del modelo actual"""
-        result_var = config.get("result", "model_info")
+        result_var = config.get("id", "model_info")
         
         model_info = {
             "current_model": type(self.ai_model).__name__,

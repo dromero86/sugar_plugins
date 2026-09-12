@@ -12,7 +12,7 @@
         "source": "./documentos",
         "destination": "./backup.rar",
         "compression_level": 3,
-        "result": "compression_result"
+        "id": "compression_result"
       }
     },
     {

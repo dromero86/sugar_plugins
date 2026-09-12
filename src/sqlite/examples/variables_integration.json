@@ -62,7 +62,7 @@
             "constraints": "DEFAULT CURRENT_TIMESTAMP"
           }
         ],
-        "result": "tabla_creada"
+        "id": "tabla_creada"
       }
     },
     {
@@ -101,7 +101,7 @@
                           "salario": 52000
                         }
                       ],
-                      "result": "empleados_it"
+                      "id": "empleados_it"
                     }
                   },
                   {
@@ -129,7 +129,7 @@
                                   "salario": 38000
                                 }
                               ],
-                              "result": "empleados_marketing"
+                              "id": "empleados_marketing"
                             }
                           },
                           {
@@ -152,7 +152,7 @@
                                   "salario": 35000
                                 }
                               ],
-                              "result": "empleados_otros"
+                              "id": "empleados_otros"
                             }
                           },
                           {
@@ -176,7 +176,7 @@
       "sqlite": {
         "operator": "query",
         "sql": "SELECT nombre, apellido, edad, departamento, salario FROM {{table_name}} WHERE edad > ${edad_minima} ORDER BY salario DESC",
-        "result": "empleados_mayores"
+        "id": "empleados_mayores"
       }
     },
     {
@@ -200,7 +200,7 @@
       "sqlite": {
         "operator": "query",
         "sql": "SELECT departamento, COUNT(*) as total, AVG(salario) as salario_promedio FROM {{table_name}} WHERE salario > ${salario_minimo} GROUP BY departamento",
-        "result": "resumen_salarios"
+        "id": "resumen_salarios"
       }
     },
     {
@@ -226,7 +226,7 @@
         "table": "{{table_name}}",
         "data": { "salario": "salario * 1.1" },
         "where": "departamento = 'IT'",
-        "result": "aumento_it"
+        "id": "aumento_it"
       }
     },
     {
@@ -236,7 +236,7 @@
       "sqlite": {
         "operator": "query",
         "sql": "SELECT nombre, apellido, salario FROM {{table_name}} WHERE departamento = 'IT' ORDER BY salario DESC",
-        "result": "salarios_it_actualizados"
+        "id": "salarios_it_actualizados"
       }
     },
     {
@@ -262,7 +262,7 @@
         "table": "{{table_name}}",
         "file_path": "./exports/{{table_name}}_export.csv",
         "format": "csv",
-        "result": "export_result"
+        "id": "export_result"
       }
     },
     {
@@ -272,7 +272,7 @@
       "sqlite": {
         "operator": "backup",
         "backup_path": "./backups/{{table_name}}_backup.db",
-        "result": "backup_result"
+        "id": "backup_result"
       }
     },
     {
