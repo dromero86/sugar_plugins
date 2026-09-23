@@ -51,7 +51,18 @@
     "quit",
     "storage",
     "drag_and_drop",
-    "pdf"
+    "pdf",
+    "timeouts",
+    "actions",
+    "element",
+    "shadow",
+    "cdp",
+    "network",
+    "capabilities",
+    "storage_state",
+    "challenge",
+    "bidi",
+    "downloads"
   ],
   "features": [
     "Sintaxis unificada {\"selenium\": {\"operator\": ...}}",
