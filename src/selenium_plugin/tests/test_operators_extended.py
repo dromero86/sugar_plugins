@@ -35,6 +35,23 @@ class TestExtendedOperators(unittest.TestCase):
         self.driver.implicitly_wait.assert_called_once_with(3)
         self.assertEqual(self.session.implicit_wait, 3)
 
+    def test_type_humanized_moves_mouse_and_types_per_char(self):
+        element = Mock()
+        self.driver.find_element.return_value = element
+        self.session.humanize = {'typing_delay': 0, 'min_delay': 0, 'max_delay': 0}
+        with patch('session.BrowserSession.ActionChains') as chains_cls:
+            chains = chains_cls.return_value
+            chains.move_to_element.return_value = chains
+            chains.pause.return_value = chains
+            result = self.session.execute_command(
+                'type', {'selector': '#q', 'value': 'ab', 'id': 'typed'}
+            )
+        self.assertTrue(result['typed'])
+        chains.move_to_element.assert_called_once_with(element)
+        chains.perform.assert_called_once()
+        self.assertEqual(element.send_keys.call_count, 2)
+        element.clear.assert_called_once()
+
     def test_actions_sequence(self):
         element = Mock()
         self.driver.find_element.return_value = element

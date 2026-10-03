@@ -298,13 +298,22 @@ class BrowserSession:
         Output.Console(self.plugin_name, f"DEBUG: Value: {value}")
 
         element = self._find_element(selector)
+
+        if self.humanize:
+            (ActionChains(self.driver)
+                .move_to_element(element)
+                .pause(Humanize.between_operators_delay(self.humanize))
+                .perform())
+
         element.clear()
 
         if self.humanize and value:
-            delay = Humanize.typing_delay(self.humanize)
             for char in value:
                 element.send_keys(char)
-                time.sleep(delay)
+                time.sleep(Humanize.typing_delay(self.humanize))
+                pause = Humanize.typing_pause(self.humanize)
+                if pause:
+                    time.sleep(pause)
         else:
             element.send_keys(value)
 

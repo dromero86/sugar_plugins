@@ -62,9 +62,64 @@ DEFAULT_WEBGL_VENDOR = 'Intel Inc.'
 DEFAULT_WEBGL_RENDERER = 'Intel Iris OpenGL Engine'
 
 
-def build_script(fingerprint: Optional[Dict[str, Any]]) -> str:
-    """Construye el JS de stealth a partir del fingerprint configurado."""
-    fp = fingerprint or {}
+def _webgl_override(vendor: str, renderer: str) -> str:
+    return (
+        "(function(){"
+        "const gp=WebGLRenderingContext.prototype.getParameter;"
+        "WebGLRenderingContext.prototype.getParameter=function(p){"
+        f"if(p===37445)return {json.dumps(vendor)};if(p===37446)return {json.dumps(renderer)};"
+        "return gp.call(this,p);};"
+        "})();"
+    )
+
+
+def _canvas_noise() -> str:
+    return (
+        "(function(){"
+        "const t=HTMLCanvasElement.prototype.toDataURL;"
+        "HTMLCanvasElement.prototype.toDataURL=function(){"
+        "const c=this.getContext('2d');"
+        "if(c){c.fillStyle='rgba(0,0,0,0.01)';c.fillRect(0,0,1,1);}"
+        "return t.apply(this,arguments);};"
+        "})();"
+    )
+
+
+def _audio_noise() -> str:
+    return (
+        "(function(){"
+        "const o=AnalyserNode.prototype.getFloatFrequencyData;"
+        "AnalyserNode.prototype.getFloatFrequencyData=function(a){"
+        "o.call(this,a);for(let i=0;i<a.length;i++)a[i]+=(Math.random()-0.5)*1e-4;};"
+        "})();"
+    )
+
+
+def _firefox_webdriver_override() -> str:
+    """Oculta navigator.webdriver en Firefox sin delatar el parche.
+
+    Se define el getter en Navigator.prototype (no en la instancia) y se
+    registra el parche de Function.prototype.toString para que el getter
+    siga respondiendo '[native code]' ante un chequeo de integridad.
+    """
+    return (
+        "(function(){"
+        "var orig=Function.prototype.toString;"
+        "var patched=new WeakSet();"
+        "var native='function () { [native code] }';"
+        "var toString=function(){"
+        "if(patched.has(this))return native;"
+        "return orig.call(this);};"
+        "patched.add(toString);"
+        "Function.prototype.toString=toString;"
+        "var getter=function(){return undefined;};"
+        "patched.add(getter);"
+        "try{Object.defineProperty(Navigator.prototype,'webdriver',{get:getter,configurable:true});}catch(e){}"
+        "})();"
+    )
+
+
+def _build_chromium_script(fp: Dict[str, Any]) -> str:
     parts = ["Object.defineProperty(navigator,'webdriver',{get:()=>undefined});"]
 
     if fp.get('chrome', True):
@@ -95,39 +150,66 @@ def build_script(fingerprint: Optional[Dict[str, Any]]) -> str:
         "})();"
     )
 
-    vendor = json.dumps(fp.get('webgl_vendor', DEFAULT_WEBGL_VENDOR))
-    renderer = json.dumps(fp.get('webgl_renderer', DEFAULT_WEBGL_RENDERER))
     if fp.get('webgl', True):
-        parts.append(
-            "(function(){"
-            "const gp=WebGLRenderingContext.prototype.getParameter;"
-            "WebGLRenderingContext.prototype.getParameter=function(p){"
-            f"if(p===37445)return {vendor};if(p===37446)return {renderer};"
-            "return gp.call(this,p);};"
-            "})();"
-        )
+        parts.append(_webgl_override(
+            fp.get('webgl_vendor', DEFAULT_WEBGL_VENDOR),
+            fp.get('webgl_renderer', DEFAULT_WEBGL_RENDERER),
+        ))
 
     if fp.get('canvas_noise'):
-        parts.append(
-            "(function(){"
-            "const t=HTMLCanvasElement.prototype.toDataURL;"
-            "HTMLCanvasElement.prototype.toDataURL=function(){"
-            "const c=this.getContext('2d');"
-            "if(c){c.fillStyle='rgba(0,0,0,0.01)';c.fillRect(0,0,1,1);}"
-            "return t.apply(this,arguments);};"
-            "})();"
-        )
+        parts.append(_canvas_noise())
 
     if fp.get('audio_noise'):
-        parts.append(
-            "(function(){"
-            "const o=AnalyserNode.prototype.getFloatFrequencyData;"
-            "AnalyserNode.prototype.getFloatFrequencyData=function(a){"
-            "o.call(this,a);for(let i=0;i<a.length;i++)a[i]+=(Math.random()-0.5)*1e-4;};"
-            "})();"
-        )
+        parts.append(_audio_noise())
 
     return "\n".join(parts)
+
+
+def _build_firefox_script(fp: Dict[str, Any]) -> str:
+    """Stealth minimo y coherente para Firefox.
+
+    No se emulan rasgos de Chrome (window.chrome, plugins PDF de Chrome,
+    deviceMemory): un Firefox que los exponga es en si mismo un indicio.
+    Solo se neutraliza navigator.webdriver y se aplican las claves del
+    fingerprint que el usuario pidio explicitamente.
+    """
+    parts = [_firefox_webdriver_override()]
+
+    if fp.get('languages'):
+        parts.append(f"Object.defineProperty(navigator,'languages',{{get:()=>{json.dumps(fp['languages'])}}});")
+    if fp.get('platform'):
+        parts.append(f"Object.defineProperty(navigator,'platform',{{get:()=>{json.dumps(fp['platform'])}}});")
+    if fp.get('hardware_concurrency'):
+        parts.append(f"Object.defineProperty(navigator,'hardwareConcurrency',{{get:()=>{int(fp['hardware_concurrency'])}}});")
+    if fp.get('webgl'):
+        parts.append(_webgl_override(
+            fp.get('webgl_vendor', DEFAULT_WEBGL_VENDOR),
+            fp.get('webgl_renderer', DEFAULT_WEBGL_RENDERER),
+        ))
+    if fp.get('canvas_noise'):
+        parts.append(_canvas_noise())
+    if fp.get('audio_noise'):
+        parts.append(_audio_noise())
+
+    return "\n".join(parts)
+
+
+def build_script(fingerprint: Optional[Dict[str, Any]], browser: str = 'chrome') -> str:
+    """Construye el JS de stealth a partir del fingerprint configurado."""
+    fp = fingerprint or {}
+    if browser == 'firefox':
+        return _build_firefox_script(fp)
+    return _build_chromium_script(fp)
+
+
+def build_preload_function(fingerprint: Optional[Dict[str, Any]], browser: str = 'firefox') -> str:
+    """Envuelve el script de stealth en una function declaration.
+
+    BiDi (script.addPreloadScript / driver.script.pin) espera una funcion,
+    no una lista de sentencias: se usa para inyectar en Firefox antes de
+    que corran los scripts de la pagina.
+    """
+    return "() => {\n" + build_script(fingerprint, browser=browser) + "\n}"
 
 
 def _is_chromium(driver) -> bool:
@@ -142,8 +224,52 @@ def install(driver, spec: SessionSpec, browser_name: str, plugin_name: str) -> N
 
     if _is_chromium(driver):
         _install_chromium(driver, spec, plugin_name)
-    elif spec.stealth or spec.timezone or spec.locale or spec.geolocation:
-        unsupported(spec, plugin_name, "stealth/emulacion avanzada no tiene equivalente completo en Firefox (solo accept_language/prefs)")
+        return
+
+    if browser_name == 'firefox':
+        _install_firefox(driver, spec, plugin_name)
+        return
+
+    if spec.stealth or spec.fingerprint or spec.timezone or spec.locale or spec.geolocation:
+        unsupported(spec, plugin_name, f"stealth/emulacion no soportada para navegador {browser_name}")
+
+
+def _install_firefox(driver, spec: SessionSpec, plugin_name: str) -> None:
+    """Stealth para Firefox via BiDi preload script.
+
+    Firefox no soporta CDP. Selenium 4.11+ expone driver.script.pin()
+    (BiDi script.addPreloadScript), que inyecta en cada documento antes
+    de los scripts de la pagina; es el unico punto donde se puede
+    neutralizar navigator.webdriver a tiempo.
+    """
+    if spec.stealth or spec.fingerprint:
+        script = build_preload_function(spec.fingerprint, browser='firefox')
+        _safe(plugin_name, spec, "stealth preload (BiDi/Firefox)", lambda: driver.script.pin(script))
+        Output.Console(plugin_name, "DEBUG: stealth Firefox registrado (BiDi preload)")
+
+    if spec.geolocation:
+        _install_firefox_geolocation(driver, spec, plugin_name)
+
+    if spec.timezone or spec.locale:
+        unsupported(
+            spec, plugin_name,
+            "timezone/locale override no esta expuesto por Selenium para Firefox "
+            "(se usa el del sistema/perfil)",
+        )
+
+
+def _install_firefox_geolocation(driver, spec: SessionSpec, plugin_name: str) -> None:
+    def _apply() -> None:
+        from selenium.webdriver.common.bidi.emulation import GeolocationCoordinates
+        coords = GeolocationCoordinates(
+            latitude=spec.geolocation.get('latitude'),
+            longitude=spec.geolocation.get('longitude'),
+            accuracy=spec.geolocation.get('accuracy', 100),
+        )
+        driver.emulation.set_geolocation_override(
+            coordinates=coords, contexts=[driver.current_window_handle]
+        )
+    _safe(plugin_name, spec, "geolocation override (BiDi/Firefox)", _apply)
 
 
 def _install_chromium(driver, spec: SessionSpec, plugin_name: str) -> None:

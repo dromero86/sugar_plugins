@@ -100,7 +100,7 @@ class BrowserFactory:
 
         browser_config = SUPPORTED_BROWSERS[browser_name]
         options = browser_config['options']()
-        BrowserFactory._apply_bidi(options, spec, plugin_name)
+        BrowserFactory._apply_bidi(options, spec, plugin_name, browser_name)
         BrowserFactory._apply_downloads(options, spec, plugin_name)
         window_size = BrowserFactory._apply_browser_options(options, spec, browser_name, plugin_name)
         BrowserFactory._apply_prefs(options, spec, browser_name, plugin_name)
@@ -211,8 +211,12 @@ class BrowserFactory:
     def _apply_profile(options, spec: SessionSpec, browser_name: str, plugin_name: str) -> None:
         """Carga un perfil de usuario existente.
 
-        Chrome/Edge usan el flag --user-data-dir; Firefox no tiene flag
-        equivalente y necesita options.profile = FirefoxProfile(ruta).
+        Chrome/Edge usan el flag --user-data-dir. Firefox usa '-profile
+        <ruta>': geckodriver respeta esa ruta directamente y los cambios
+        (cookies, historial) persisten. OJO: options.profile =
+        FirefoxProfile(ruta) NO sirve para perfiles persistentes porque
+        Selenium lo manda codificado y geckodriver lo descomprime en un
+        directorio temporal que descarta al salir.
         Si no hay 'profile' pero si 'profiles' (pool), se elige uno segun
         profile_strategy.
         """
@@ -223,7 +227,8 @@ class BrowserFactory:
             raise ValueError(f"Perfil de usuario no encontrado: {profile}")
 
         if browser_name == 'firefox':
-            options.profile = profile
+            options.add_argument('-profile')
+            options.add_argument(profile)
         elif browser_name in ('chrome', 'edge'):
             options.add_argument(f'--user-data-dir={profile}')
         else:
@@ -261,7 +266,10 @@ class BrowserFactory:
             BrowserFactory._apply_user_agent(options, spec.user_agent, browser_name, plugin_name, spec)
 
         if spec.accept_language and browser_name == 'firefox':
-            options.set_preference('intl.accept_languages', spec.accept_language)
+            options.set_preference(
+                'intl.accept_languages',
+                BrowserFactory._normalize_accept_languages(spec.accept_language),
+            )
 
         if spec.proxy:
             BrowserFactory._apply_proxy(options, spec.proxy, browser_name, plugin_name, spec)
@@ -270,9 +278,14 @@ class BrowserFactory:
         BrowserFactory._apply_pref_maps(options, spec, browser_name, plugin_name)
 
     @staticmethod
-    def _apply_bidi(options, spec: SessionSpec, plugin_name: str) -> None:
-        """Habilita la capability webSocketUrl para conectar por BiDi."""
-        if not spec.bidi:
+    def _apply_bidi(options, spec: SessionSpec, plugin_name: str, browser_name: Optional[str] = None) -> None:
+        """Habilita la capability webSocketUrl para conectar por BiDi.
+
+        En Firefox es imprescindible para el stealth (driver.script.pin),
+        por eso se auto-habilita cuando se pide stealth/fingerprint.
+        """
+        needs_bidi = spec.bidi or (browser_name == 'firefox' and (spec.stealth or spec.fingerprint))
+        if not needs_bidi:
             return
         try:
             options.set_capability('webSocketUrl', True)
@@ -290,6 +303,22 @@ class BrowserFactory:
             Output.Console(plugin_name, "DEBUG: Descargas WebDriver habilitadas (se:downloadsEnabled)")
         except Exception as e:  # noqa: BLE001
             Output.Console(plugin_name, f"ADVERTENCIA: no se pudo habilitar downloads: {e}")
+
+    @staticmethod
+    def _normalize_accept_languages(value: str) -> str:
+        """Firefox espera tags limpios en intl.accept_languages.
+
+        Si se le pasa el valor con q-values (formato de header HTTP),
+        navigator.languages expone tokens como 'es;q=0.9'. Firefox arma
+        el header Accept-Language con sus propios q-values a partir de
+        estos tags, asi que se descartan los del usuario.
+        """
+        tags = []
+        for part in str(value).split(','):
+            tag = part.split(';', 1)[0].strip()
+            if tag:
+                tags.append(tag)
+        return ','.join(tags)
 
     @staticmethod
     def _apply_user_agent(options, user_agent: str, browser_name: str, plugin_name: str, spec: Optional[SessionSpec] = None) -> None:

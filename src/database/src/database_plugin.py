@@ -132,27 +132,7 @@ class DatabasePlugin(PluginBase):
         Returns:
             List of available command names
         """
-        return [
-            # Connection management
-            "connect",
-            "disconnect",
-            "test_connection",
-            
-            # Query execution
-            "execute",
-            "execute_many",
-            "query",
-            
-            # Transaction management
-            "begin_transaction",
-            "commit",
-            "rollback",
-            
-            # Connection info
-            "get_connection_info",
-            "list_tables",
-            "describe_table"
-        ]
+        return ["database"]
     
     def execute(self, operator: str, config: Dict[str, Any]) -> Any:
         """
@@ -165,34 +145,35 @@ class DatabasePlugin(PluginBase):
         Returns:
             Command result
         """
+        op = config.get("operator") or operator
         try:
-            if operator == "connect":
+            if op == "connect":
                 return self._connect(config)
-            elif operator == "disconnect":
+            elif op == "disconnect":
                 return self._disconnect(config)
-            elif operator == "execute":
+            elif op == "execute":
                 return self._execute_sql(config)
-            elif operator == "query":
+            elif op == "query":
                 return self._query_data(config)
-            elif operator == "begin_transaction":
+            elif op == "begin_transaction":
                 return self._begin_transaction(config)
-            elif operator == "commit":
+            elif op == "commit":
                 return self._commit_transaction(config)
-            elif operator == "rollback":
+            elif op == "rollback":
                 return self._rollback_transaction(config)
-            elif operator == "test_connection":
+            elif op == "test_connection":
                 return self._test_connection(config)
-            elif operator == "get_connection_info":
+            elif op == "get_connection_info":
                 return self._get_connection_info(config)
-            elif operator == "list_tables":
+            elif op == "list_tables":
                 return self._list_tables(config)
-            elif operator == "describe_table":
+            elif op == "describe_table":
                 return self._describe_table(config)
             else:
-                raise ValueError(f"Unknown operator: {operator}")
+                raise ValueError(f"Unknown operator: {op}")
                 
         except Exception as e:
-            Output.Console(self.plugin_name, f"Error executing {operator}: {str(e)}")
+            Output.Console(self.plugin_name, f"Error executing {op}: {str(e)}")
             raise
     
     def _connect(self, config: Dict[str, Any]) -> bool:
@@ -263,7 +244,8 @@ class DatabasePlugin(PluginBase):
             }
             
         except SQLAlchemyError as e:
-            return self._handle_engine_errors(config, e)
+            self._handle_engine_errors(config, e)
+            raise
         finally:
             if result:
                 result.close()

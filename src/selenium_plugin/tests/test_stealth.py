@@ -45,6 +45,29 @@ class TestStealthScript(unittest.TestCase):
         self.assertIn('toDataURL', script)
         self.assertIn('getFloatFrequencyData', script)
 
+    def test_build_script_firefox_is_not_chrome(self):
+        script = Stealth.build_script({}, browser='firefox')
+        self.assertIn('webdriver', script)
+        self.assertIn('Navigator.prototype', script)
+        self.assertNotIn('window.chrome', script)
+        self.assertNotIn('Chrome PDF Plugin', script)
+        self.assertNotIn('deviceMemory', script)
+        self.assertNotIn('WebGLRenderingContext', script)
+
+    def test_build_script_firefox_optional_fingerprint(self):
+        script = Stealth.build_script(
+            {'languages': ['es-AR', 'es'], 'webgl': True, 'webgl_vendor': 'Acme'},
+            browser='firefox',
+        )
+        self.assertIn('es-AR', script)
+        self.assertIn('WebGLRenderingContext', script)
+        self.assertIn('Acme', script)
+
+    def test_build_preload_function_wraps_in_function(self):
+        fn = Stealth.build_preload_function({}, browser='firefox')
+        self.assertTrue(fn.startswith('() => {'))
+        self.assertTrue(fn.rstrip().endswith('}'))
+
     def test_url_pattern_conversion(self):
         self.assertEqual(Stealth.url_pattern({'type': 'string', 'pattern': 'x'}), {'type': 'string', 'pattern': 'x'})
         self.assertEqual(Stealth.url_pattern('/api'), {'type': 'string', 'pattern': '/api'})
@@ -92,6 +115,27 @@ class TestStealthInstall(unittest.TestCase):
         driver.network.add_auth_handler.assert_called_once_with('user', 'pass')
         driver.network.add_request_handler.assert_called_once()
 
+    def test_install_firefox_pins_preload_script(self):
+        spec = SessionSpec.from_meta({'browser': 'firefox', 'stealth': True})
+        driver = self._driver('firefox')
+        Stealth.install(driver, spec, 'firefox', 'T')
+        driver.script.pin.assert_called_once()
+        script = driver.script.pin.call_args[0][0]
+        self.assertTrue(script.startswith('() => {'))
+
+    def test_install_firefox_stealth_does_not_warn_unsupported(self):
+        spec = SessionSpec.from_meta({
+            'browser': 'firefox', 'stealth': True, 'on_unsupported': 'error',
+        })
+        driver = self._driver('firefox')
+        Stealth.install(driver, spec, 'firefox', 'T')
+
+    def test_install_firefox_noop_without_stealth(self):
+        spec = SessionSpec.from_meta({'browser': 'firefox'})
+        driver = self._driver('firefox')
+        Stealth.install(driver, spec, 'firefox', 'T')
+        driver.script.pin.assert_not_called()
+
 
 class TestHumanize(unittest.TestCase):
     def test_settings_defaults(self):
@@ -110,6 +154,27 @@ class TestHumanize(unittest.TestCase):
         self.assertLessEqual(Humanize.between_operators_delay(cfg), 0.3)
         self.assertEqual(Humanize.mouse_steps(cfg), 5)
         self.assertEqual(Humanize.scroll_step(cfg), 100)
+
+    def test_typing_delay_fixed(self):
+        self.assertEqual(Humanize.typing_delay({'typing_delay': 0.02}), 0.02)
+
+    def test_typing_delay_range(self):
+        cfg = {'typing_delay_range': [0.01, 0.03]}
+        for _ in range(20):
+            delay = Humanize.typing_delay(cfg)
+            self.assertGreaterEqual(delay, 0.01)
+            self.assertLessEqual(delay, 0.03)
+
+    def test_typing_pause_disabled_by_default(self):
+        self.assertEqual(Humanize.typing_pause(None), 0.0)
+        self.assertEqual(Humanize.typing_pause({'typing_pause_chance': 0}), 0.0)
+
+    def test_typing_pause_when_certain(self):
+        cfg = {'typing_pause_chance': 1.0, 'typing_pause_range': [0.1, 0.2]}
+        for _ in range(20):
+            pause = Humanize.typing_pause(cfg)
+            self.assertGreaterEqual(pause, 0.1)
+            self.assertLessEqual(pause, 0.2)
 
 
 class TestAdvancedSpec(unittest.TestCase):
@@ -151,6 +216,29 @@ class TestAdvancedSpec(unittest.TestCase):
         options = FirefoxOptions()
         BrowserFactory._apply_bidi(options, spec, 'T')
         self.assertTrue(options.capabilities['webSocketUrl'])
+
+    def test_apply_bidi_auto_enabled_for_firefox_stealth(self):
+        from selenium.webdriver.firefox.options import Options as FirefoxOptions
+        spec = SessionSpec.from_meta({'browser': 'firefox', 'stealth': True})
+        self.assertFalse(spec.bidi)
+        options = FirefoxOptions()
+        BrowserFactory._apply_bidi(options, spec, 'T', 'firefox')
+        self.assertTrue(options.capabilities['webSocketUrl'])
+
+    def test_apply_bidi_not_forced_for_chrome_stealth(self):
+        from selenium.webdriver.chrome.options import Options as ChromeOptions
+        spec = SessionSpec.from_meta({'browser': 'chrome', 'stealth': True})
+        options = ChromeOptions()
+        BrowserFactory._apply_bidi(options, spec, 'T', 'chrome')
+        self.assertNotIn('webSocketUrl', options.capabilities)
+
+    def test_normalize_accept_languages_strips_qvalues(self):
+        self.assertEqual(
+            BrowserFactory._normalize_accept_languages('es-AR,es;q=0.9,en-US;q=0.8,en;q=0.7'),
+            'es-AR,es,en-US,en',
+        )
+        self.assertEqual(BrowserFactory._normalize_accept_languages('es-AR'), 'es-AR')
+        self.assertEqual(BrowserFactory._normalize_accept_languages(' es , en '), 'es,en')
 
     def test_humanized_window(self):
         spec = SessionSpec.from_meta({

@@ -77,11 +77,12 @@ class TestBrowserFactoryProfile(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.profile_dir, ignore_errors=True)
 
-    def test_firefox_sets_profile_attribute(self):
+    def test_firefox_uses_profile_flag_for_persistence(self):
         spec = SessionSpec.from_meta({'browser': 'firefox', 'profile': self.profile_dir})
         options = Mock()
         BrowserFactory._apply_profile(options, spec, 'firefox', 'T')
-        self.assertEqual(options.profile, self.profile_dir)
+        options.add_argument.assert_any_call('-profile')
+        options.add_argument.assert_any_call(self.profile_dir)
 
     def test_chrome_uses_user_data_dir_flag(self):
         spec = SessionSpec.from_meta({'browser': 'chrome', 'profile': self.profile_dir})
